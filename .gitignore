@@ -269,6 +269,9 @@ marimo/_lsp/
 __marimo__/
 
 ########## TeX ##########
+## Don't commit the pdfs, we can always compile them from the source .tex files
+*.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
