@@ -15,10 +15,14 @@
 \usepackage{listings} % To write code
 \usepackage{xcolor} % To write color text/math by \textcolor{color}{text}
 \usepackage{enumitem} % Better list environment
+\usepackage{fancyhdr} % For custom headers and footers
 % \usepackage{amsthm} % To write theorems and proofs
 % \renewcommand\qedsymbol{$\blacksquare$}
 % \usepackage{algorithm}
 % \usepackage{algpseudocode}
+
+%%%%%%%%%% Configure fancy headers %%%%%%%%%%
+\pagestyle{fancy}
 
 %%%%%%%%%% listings config (for writing code) %%%%%%%%%%
 % \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -81,6 +85,27 @@
 % Introduction
 \section{Introduction}
 
+% Scope
+\section{Scope}
 
+\subsection{Project Overview}
+
+% Assumptions and Dependencies
+\section{Assumptions and Dependencies}
+\begin{table}[h]
+    \centering
+    \caption{Assumptions and Dependencies}
+    \begin{tabular}{ccc}
+        \toprule
+        Assumption No. & Title & Description \\
+        \midrule
+        A1 & Supported OS & to be decided \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:docs_rev_hist}
+\end{table}
+
+% Requirements
+\section{Requirements}
 
 \end{document}
