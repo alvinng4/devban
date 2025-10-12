@@ -109,21 +109,48 @@ QuestList offers multiple useful features, including customizable to-do lists, c
 % Referenced Documents
 \section{Referenced Documents}
 
+\newpage
 % Assumptions and Dependencies
 \section{Assumptions and Dependencies}
 \begin{table}[h]
     \centering
     \caption{Assumptions and Dependencies}
-    \begin{tabular}{ccc}
+    \begin{tabular}{p{2cm} p{3.5cm} p{10cm}}
         \toprule
-        Assumption No. & Title & Description \\
+        Assumption No. 
+        & Title 
+        & Description \\
+        
         \midrule
-        A1 & Supported OS & to be decided \\
+        A1 
+        & Supported OS
+        & iOS, iPadOS, or macOS \\
+
+        \midrule
+        A2
+        & iCloud accounts
+        & Cloud storage and synchronization of tasks, notes, and progress \\
+
+        \midrule
+        D1
+        & RevenueCat 
+        & Subscription management, paywall experiences and unlocking premium features \\
+
+        \midrule
+        D2
+        & NotificationManager 
+        & Schedule reminders and enhance user engagements \\
+
+        \midrule
+        D3
+        & CloudStorage 
+        & Data persistence, settings management, and onboarding flow control \\     
         \bottomrule
     \end{tabular}
     \label{tab:docs_rev_hist}
 \end{table}
 
+\newpage
 % Requirements
 \section{Requirements}
 
@@ -151,6 +178,9 @@ QuestList offers multiple useful features, including customizable to-do lists, c
 Specification}
 
 \subsubsection{Operating System and Environment}
+
+This application is developed and deployed for Apple devices running iOS, iPadOS, and macOS, which require iOS 18, iPadOS 18, or macOS Sequoia 15 (or later), as per the latest Apple developer policies.
+
 
 \subsubsection{Code}
 
