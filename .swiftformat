@@ -1,2 +1,4 @@
 --allman true
 --indent 4
+--disable redundantParens
+--indentcase true
