@@ -29,26 +29,28 @@ final class ThemeManager
 
     var backgroundColor: Color
     var buttonColor: Color
-    
+
     @MainActor
     func updateTheme(colorScheme: ColorScheme)
     {
         self.backgroundColor = ThemeManager.getBackgroundColor(colorScheme: colorScheme)
         self.buttonColor = ThemeManager.getButtonColor()
     }
-    
+
     @MainActor
     static func getBackgroundColor(colorScheme: ColorScheme) -> Color
     {
-        return (colorScheme == .dark) ? ThemeManager.Constants.defaultBackgroundDarkColor : ThemeManager.Constants.defaultBackgroundColor
+        return (
+            colorScheme == .dark
+        ) ? ThemeManager.Constants.defaultBackgroundDarkColor : ThemeManager.Constants.defaultBackgroundColor
     }
-    
+
     @MainActor
     static func getButtonColor() -> Color
     {
         return ThemeManager.Constants.defaultButtonColor
     }
-    
+
     /// Default hard-coded color values (orange) for basic theme. Will be updated if support custom theme
     private struct Constants
     {
@@ -62,7 +64,7 @@ final class ThemeManager
             blue: defaultBackgroundB,
             opacity: defaultBackgroundOpacity
         )
-        
+
         static let defaultBackgroundDarkR: CGFloat = 0.325
         static let defaultBackgroundDarkG: CGFloat = 0.208
         static let defaultBackgroundDarkB: CGFloat = 0.0510
@@ -73,7 +75,7 @@ final class ThemeManager
             blue: defaultBackgroundDarkB,
             opacity: defaultBackgroundDarkOpacity
         )
-        
+
         static let defaultButtonR: CGFloat = 0.953
         static let defaultButtonG: CGFloat = 0.686
         static let defaultButtonB: CGFloat = 0.239

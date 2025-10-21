@@ -3,7 +3,7 @@ import SwiftUI
 struct MainView: View
 {
     @Environment(\.colorScheme) private var colorScheme
-    
+
     var body: some View
     {
         mainContent
@@ -17,14 +17,14 @@ struct MainView: View
                 ThemeManager.shared.updateTheme(colorScheme: colorScheme)
             }
     }
-    
+
     private var mainContent: some View
     {
         // Demo content (to be removed later)
         ZStack
         {
             ThemeManager.shared.backgroundColor
-        
+
             VStack
             {
                 Text("Hello, world!")
