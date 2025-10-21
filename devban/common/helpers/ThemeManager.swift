@@ -18,13 +18,13 @@ import SwiftUI
 final class ThemeManager
 {
     @MainActor
-    static let shared: ThemeManager = ThemeManager()
+    static let shared: ThemeManager = .init()
 
     @MainActor
     private init()
     {
-        self.backgroundColor = ThemeManager.getBackgroundColor(colorScheme: .light)
-        self.buttonColor = ThemeManager.getButtonColor()
+        backgroundColor = ThemeManager.getBackgroundColor(colorScheme: .light)
+        buttonColor = ThemeManager.getButtonColor()
     }
 
     var backgroundColor: Color
@@ -33,8 +33,8 @@ final class ThemeManager
     @MainActor
     func updateTheme(colorScheme: ColorScheme)
     {
-        self.backgroundColor = ThemeManager.getBackgroundColor(colorScheme: colorScheme)
-        self.buttonColor = ThemeManager.getButtonColor()
+        backgroundColor = ThemeManager.getBackgroundColor(colorScheme: colorScheme)
+        buttonColor = ThemeManager.getButtonColor()
     }
 
     @MainActor
@@ -52,13 +52,13 @@ final class ThemeManager
     }
 
     /// Default hard-coded color values (orange) for basic theme. Will be updated if support custom theme
-    private struct Constants
+    private enum Constants
     {
         static let defaultBackgroundR: CGFloat = 0.988
         static let defaultBackgroundG: CGFloat = 0.929
         static let defaultBackgroundB: CGFloat = 0.843
         static let defaultBackgroundOpacity: CGFloat = 1.0
-        static let defaultBackgroundColor: Color = Color(
+        static let defaultBackgroundColor: Color = .init(
             red: defaultBackgroundR,
             green: defaultBackgroundG,
             blue: defaultBackgroundB,
@@ -69,7 +69,7 @@ final class ThemeManager
         static let defaultBackgroundDarkG: CGFloat = 0.208
         static let defaultBackgroundDarkB: CGFloat = 0.0510
         static let defaultBackgroundDarkOpacity: CGFloat = 1.0
-        static let defaultBackgroundDarkColor: Color = Color(
+        static let defaultBackgroundDarkColor: Color = .init(
             red: defaultBackgroundDarkR,
             green: defaultBackgroundDarkG,
             blue: defaultBackgroundDarkB,
@@ -80,7 +80,7 @@ final class ThemeManager
         static let defaultButtonG: CGFloat = 0.686
         static let defaultButtonB: CGFloat = 0.239
         static let defaultButtonOpacity: CGFloat = 1.0
-        static let defaultButtonColor: Color = Color(
+        static let defaultButtonColor: Color = .init(
             red: defaultButtonR,
             green: defaultButtonG,
             blue: defaultButtonB,
