@@ -14,6 +14,9 @@ enum NeobrutalismConstants
     // Rounded rectangle
     static let roundedRectangleCornerRadius: CGFloat = 6
 
-    // Animation (e.g. Button click)
+    /// For animation (e.g. Button click)
     static let animationDuration: Double = 0.15
+
+    /// For pressable element to stay pressed when user dragged away
+    static let dragTolerance: CGFloat = 150
 }
