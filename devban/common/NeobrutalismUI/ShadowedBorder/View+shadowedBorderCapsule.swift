@@ -3,7 +3,7 @@ import SwiftUI
 extension View
 {
     /// Modifies the view with a shadowed border effect with capsule shape, and a background depending on the
-    /// environment colorScheme
+    /// environment colorScheme.
     ///
     /// - Parameters:
     ///     - borderColor: Color of the border.
@@ -11,7 +11,7 @@ extension View
     ///     - shadowColor: Color of the shadow.
     ///     - shadowOffset; x and y offset of the applied shadow effect.
     ///
-    /// - Returns: modified View
+    /// - Returns: modified View.
     ///
     /// ## Usage
     /// ```swift
@@ -24,7 +24,7 @@ extension View
         borderColor: Color = NeobrutalismConstants.borderColor,
         borderWidth: CGFloat = NeobrutalismConstants.borderWidth,
         shadowColor: Color = NeobrutalismConstants.shadowColor,
-        shadowOffset: CGSize = NeobrutalismConstants.shadowOffset
+        shadowOffset: CGSize = NeobrutalismConstants.shadowOffset,
     ) -> some View
     {
         modifier(
@@ -32,8 +32,8 @@ extension View
                 borderColor: borderColor,
                 borderWidth: borderWidth,
                 shadowColor: shadowColor,
-                shadowOffset: shadowOffset
-            )
+                shadowOffset: shadowOffset,
+            ),
         )
     }
 }
@@ -54,12 +54,12 @@ private struct ShadowedBorderCapsuleModifier: ViewModifier
             .clipShape(Capsule())
             .overlay(
                 Capsule()
-                    .stroke(borderColor, lineWidth: borderWidth)
+                    .stroke(borderColor, lineWidth: borderWidth),
             )
             .background(
                 Capsule()
                     .foregroundStyle(shadowColor)
-                    .offset(shadowOffset)
+                    .offset(shadowOffset),
             )
     }
 }

@@ -3,17 +3,17 @@ import SwiftUI
 extension View
 {
     /// Modifies the view with a shadowed border effect with rounded rectangle shape, and a background depending on the
-    /// environment colorScheme
+    /// environment colorScheme.
     ///
     /// - Parameters:
-    ///     - cornerRadius: Corner radius for the rounded rectangle border
+    ///     - cornerRadius: Corner radius for the rounded rectangle border.
     ///     - borderColor: Color of the border.
     ///     - borderWidth: Width of the border.
     ///     - shadowColor: Color of the shadow.
     ///     - shadowOffset; x and y offset of the applied shadow effect.
     ///
-    /// - Returns: modified View
-    /// 
+    /// - Returns: modified View.
+    ///
     /// ## Usage
     /// ```swift
     /// Text("Hello, world!")
@@ -26,7 +26,7 @@ extension View
         borderColor: Color = NeobrutalismConstants.borderColor,
         borderWidth: CGFloat = NeobrutalismConstants.borderWidth,
         shadowColor: Color = NeobrutalismConstants.shadowColor,
-        shadowOffset: CGSize = NeobrutalismConstants.shadowOffset
+        shadowOffset: CGSize = NeobrutalismConstants.shadowOffset,
     ) -> some View
     {
         modifier(
@@ -35,8 +35,8 @@ extension View
                 borderColor: borderColor,
                 borderWidth: borderWidth,
                 shadowColor: shadowColor,
-                shadowOffset: shadowOffset
-            )
+                shadowOffset: shadowOffset,
+            ),
         )
     }
 }
@@ -58,12 +58,12 @@ private struct ShadowedBorderRoundedRectangleModifier: ViewModifier
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(borderColor, lineWidth: borderWidth)
+                    .stroke(borderColor, lineWidth: borderWidth),
             )
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundStyle(shadowColor)
-                    .offset(shadowOffset)
+                    .offset(shadowOffset),
             )
     }
 }

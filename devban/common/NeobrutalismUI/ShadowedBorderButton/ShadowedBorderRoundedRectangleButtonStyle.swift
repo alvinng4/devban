@@ -4,7 +4,7 @@ import SwiftUI
 /// background is applied depending on the environment colorScheme.
 ///
 /// - Parameters:
-///     - cornerRadius: Corner radius for the rounded rectangle border
+///     - cornerRadius: Corner radius for the rounded rectangle border.
 ///     - borderColor: Color of the border.
 ///     - borderWidth: Width of the border.
 ///     - shadowColor: Color of the shadow.
