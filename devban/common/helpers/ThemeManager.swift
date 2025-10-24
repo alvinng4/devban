@@ -41,7 +41,7 @@ final class ThemeManager
     static func getBackgroundColor(colorScheme: ColorScheme) -> Color
     {
         return (
-            colorScheme == .dark
+            colorScheme == .dark,
         ) ? ThemeManager.Constants.defaultBackgroundDarkColor : ThemeManager.Constants.defaultBackgroundColor
     }
 
@@ -62,7 +62,7 @@ final class ThemeManager
             red: defaultBackgroundR,
             green: defaultBackgroundG,
             blue: defaultBackgroundB,
-            opacity: defaultBackgroundOpacity
+            opacity: defaultBackgroundOpacity,
         )
 
         static let defaultBackgroundDarkR: CGFloat = 0.325
@@ -73,7 +73,7 @@ final class ThemeManager
             red: defaultBackgroundDarkR,
             green: defaultBackgroundDarkG,
             blue: defaultBackgroundDarkB,
-            opacity: defaultBackgroundDarkOpacity
+            opacity: defaultBackgroundDarkOpacity,
         )
 
         static let defaultButtonR: CGFloat = 0.953
@@ -84,7 +84,7 @@ final class ThemeManager
             red: defaultButtonR,
             green: defaultButtonG,
             blue: defaultButtonB,
-            opacity: defaultButtonOpacity
+            opacity: defaultButtonOpacity,
         )
     }
 }
