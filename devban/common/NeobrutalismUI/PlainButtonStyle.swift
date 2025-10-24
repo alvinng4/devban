@@ -5,7 +5,8 @@ struct PlainButtonStyle: ButtonStyle
 {
     func makeBody(configuration: Configuration) -> some View
     {
-        // Simply return the label without doing anything
-        configuration.label
+        // Only apply content shape to make it clickable everywhere within the button
+        return configuration.label
+            .contentShape(Rectangle())
     }
 }
