@@ -20,16 +20,6 @@ struct MainView: View
 
     private var mainContent: some View
     {
-        // Demo content (to be removed later)
-        ZStack
-        {
-            ThemeManager.shared.backgroundColor
-
-            VStack
-            {
-                Text("Hello, world!")
-            }
-            .padding()
-        }
+        AskLLMView()
     }
 }
