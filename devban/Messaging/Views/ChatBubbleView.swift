@@ -53,6 +53,7 @@ struct ChatBubbleView: View
     @ViewBuilder
     private func codeBlock(_ configuration: CodeBlockConfiguration) -> some View
     {
+        /// Get the name of the language
         var language: String
         {
             if let lang = configuration.language,
@@ -66,6 +67,8 @@ struct ChatBubbleView: View
 
         VStack(spacing: 0)
         {
+            // MARK: Tool bar showing the language name and copy button
+
             HStack
             {
                 Text(language)
@@ -77,25 +80,24 @@ struct ChatBubbleView: View
 
                 Button
                 {
-                    // TODO: Implement copy to clipboard
-//                    copyToClipboard(configuration.content)
+                    TextEditingHelper.copyToClipboard(configuration.content)
                 }
                 label:
                 {
-                    Image(systemName: "clipboard")
+                    Image(systemName: "document.on.document")
+                        .textEditorToolBarButtonImage()
                         .foregroundStyle(.gray)
+                        .padding(4)
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1),
-                )
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
             .background(Color(theme.backgroundColor))
 
             Divider()
+
+            // MARK: Showing the acutal code content
 
             ScrollView(.horizontal)
             {

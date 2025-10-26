@@ -5,9 +5,9 @@ import SwiftUI
 /// Splash code syntax highlighter to be used with MarkdownUI and Splash.
 ///
 /// Originally from MarkdownUI library demo to render code blocks with syntax highlighting
-/// (https://github.com/gonzalezreal/swift-markdown-ui/)
+/// (https://github.com/gonzalezreal/swift-markdown-ui/).
 ///
-/// - Parameters: theme: Splash Theme
+/// - Parameters: theme: Splash Theme.
 struct SplashCodeSyntaxHighlighter: CodeSyntaxHighlighter
 {
     private let syntaxHighlighter: SyntaxHighlighter<TextOutputFormat>
