@@ -4,7 +4,7 @@ import Foundation
 ///
 /// - Parameters:
 ///     - senderID: The sender user id.
-///     - content: The message content
+///     - content: The message content.
 ///     - sentDate: Exact timestamp when the message is sent.
 struct ChatMessage: Identifiable, Codable
 {
