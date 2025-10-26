@@ -1,7 +1,10 @@
 disabled_rules:
     - opening_brace
     - control_statement
+    - function_body_length
     - switch_case_alignment
+    - statement_position
+    - trailing_comma
 
 type_name:
     max_length:
