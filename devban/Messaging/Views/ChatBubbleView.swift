@@ -1,3 +1,4 @@
+import MarkdownUI
 import SwiftUI
 
 /// A SwiftUI view that renders a single chat bubble.
@@ -32,7 +33,7 @@ struct ChatBubbleView: View
 
     var body: some View
     {
-        Text(chatMessage.content)
+        Markdown(chatMessage.content)
             .padding()
             .background(backgroundColor)
             .cornerRadius(12)

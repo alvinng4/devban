@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7A90FEB82EADF8A4009E9D17 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 7A90FEB72EADF8A4009E9D17 /* MarkdownUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		7A867CB12EA72C3D00C4C6B1 /* devban.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = devban.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ABEAE7A2EA7C54700106B30 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -24,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A90FEB82EADF8A4009E9D17 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +73,7 @@
 			);
 			name = devban;
 			packageProductDependencies = (
+				7A90FEB72EADF8A4009E9D17 /* MarkdownUI */,
 			);
 			productName = devban;
 			productReference = 7A867CB12EA72C3D00C4C6B1 /* devban.app */;
@@ -99,6 +105,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7ABEAE752EA7C43900106B30 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7A867CB22EA72C3D00C4C6B1 /* Products */;
@@ -366,6 +373,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
 		7ABEAE752EA7C43900106B30 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -377,6 +392,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7A90FEB72EADF8A4009E9D17 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
 		7ABEAE762EA7C46500106B30 /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7ABEAE752EA7C43900106B30 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
