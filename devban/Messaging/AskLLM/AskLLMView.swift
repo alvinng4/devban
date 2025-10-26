@@ -4,7 +4,7 @@ import SwiftUI
 struct AskLLMView: View
 {
     static let defaultGreeting: String = "Hello! How may I assist you today?"
-    static let prompt: String = "Please show me the code for Hello, world in SwiftUI."
+    static let prompt: String = "Please show me the code for Hello, world in Python. Also show me the output in Python interpreter."
 
     @State private var displayText: String?
 

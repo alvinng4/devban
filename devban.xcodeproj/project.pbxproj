@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7A90FEB82EADF8A4009E9D17 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 7A90FEB72EADF8A4009E9D17 /* MarkdownUI */; };
+		7A90FEBB2EADF985009E9D17 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 7A90FEBA2EADF985009E9D17 /* Splash */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A90FEB82EADF8A4009E9D17 /* MarkdownUI in Frameworks */,
+				7A90FEBB2EADF985009E9D17 /* Splash in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +76,7 @@
 			name = devban;
 			packageProductDependencies = (
 				7A90FEB72EADF8A4009E9D17 /* MarkdownUI */,
+				7A90FEBA2EADF985009E9D17 /* Splash */,
 			);
 			productName = devban;
 			productReference = 7A867CB12EA72C3D00C4C6B1 /* devban.app */;
@@ -106,6 +109,7 @@
 			packageReferences = (
 				7ABEAE752EA7C43900106B30 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 				7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				7A90FEB92EADF985009E9D17 /* XCRemoteSwiftPackageReference "Splash" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7A867CB22EA72C3D00C4C6B1 /* Products */;
@@ -381,6 +385,14 @@
 				minimumVersion = 2.4.1;
 			};
 		};
+		7A90FEB92EADF985009E9D17 /* XCRemoteSwiftPackageReference "Splash" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/Splash";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.0;
+			};
+		};
 		7ABEAE752EA7C43900106B30 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -396,6 +408,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		7A90FEBA2EADF985009E9D17 /* Splash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A90FEB92EADF985009E9D17 /* XCRemoteSwiftPackageReference "Splash" */;
+			productName = Splash;
 		};
 		7ABEAE762EA7C46500106B30 /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;

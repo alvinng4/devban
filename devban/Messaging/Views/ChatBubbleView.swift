@@ -1,4 +1,5 @@
 import MarkdownUI
+import Splash
 import SwiftUI
 
 /// A SwiftUI view that renders a single chat bubble.
@@ -19,10 +20,13 @@ struct ChatBubbleView: View
         isCurrentUser = (chatMessage.senderID != nil)
     }
 
-    let chatMessage: ChatMessage
-    let isCurrentUser: Bool
+    @Environment(\.colorScheme) private var colorScheme
 
-    var backgroundColor: Color
+    private let chatMessage: ChatMessage
+    private let isCurrentUser: Bool
+    private let theme: Splash.Theme = .wwdc17(withFont: .init(size: 16))
+
+    private var backgroundColor: SwiftUI.Color
     {
         if (isCurrentUser)
         {
@@ -34,10 +38,79 @@ struct ChatBubbleView: View
     var body: some View
     {
         Markdown(chatMessage.content)
+            .markdownBlockStyle(\.codeBlock)
+            {
+                codeBlock($0)
+            }
+            .markdownCodeSyntaxHighlighter(.splash(theme: theme))
             .padding()
             .background(backgroundColor)
             .cornerRadius(12)
             .padding(isCurrentUser ? .leading : .trailing, 20)
             .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
+    }
+
+    @ViewBuilder
+    private func codeBlock(_ configuration: CodeBlockConfiguration) -> some View
+    {
+        var language: String
+        {
+            if let lang = configuration.language,
+               !lang.isEmptyOrWhitespace()
+            {
+                return lang
+            }
+
+            return "plain text"
+        }
+
+        VStack(spacing: 0)
+        {
+            HStack
+            {
+                Text(language)
+                    .font(.system(.caption, design: .monospaced))
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color(theme.plainTextColor))
+
+                Spacer()
+
+                Button
+                {
+                    // TODO: Implement copy to clipboard
+//                    copyToClipboard(configuration.content)
+                }
+                label:
+                {
+                    Image(systemName: "clipboard")
+                        .foregroundStyle(.gray)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray, lineWidth: 1),
+                )
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color(theme.backgroundColor))
+
+            Divider()
+
+            ScrollView(.horizontal)
+            {
+                configuration.label
+                    .relativeLineSpacing(.em(0.25))
+                    .markdownTextStyle
+                    {
+                        FontFamilyVariant(.monospaced)
+                        FontSize(.em(0.85))
+                    }
+                    .padding()
+            }
+        }
+        .background(.darkBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .markdownMargin(top: .zero, bottom: .em(0.8))
     }
 }
