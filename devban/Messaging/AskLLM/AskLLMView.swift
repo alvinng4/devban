@@ -145,6 +145,39 @@ struct AskLLMView: View
                             }
 
                             Spacer()
+
+                            // Stop model
+                            Button
+                            {
+                                viewModel.stopModel()
+                            }
+                            label:
+                            {
+                                Image(systemName: "stop.circle")
+                                    .textEditorToolBarButtonImage()
+                            }
+
+                            // Clear context
+                            Button
+                            {
+                                viewModel.clearContext()
+                            }
+                            label:
+                            {
+                                Image(systemName: "paintbrush.fill")
+                                    .textEditorToolBarButtonImage()
+                            }
+
+                            // Restart conversation
+                            Button
+                            {
+                                viewModel.restart()
+                            }
+                            label:
+                            {
+                                Image(systemName: "clear")
+                                    .textEditorToolBarButtonImage()
+                            }
                         }
                         .foregroundStyle(.secondary)
                         .padding(.horizontal)

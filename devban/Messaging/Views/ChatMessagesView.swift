@@ -30,6 +30,13 @@ struct ChatMessagesView: View
                     ForEach(messages)
                     { msg in
                         ChatBubbleView(msg)
+
+                        if (msg.LLMContextClearedAfter)
+                        {
+                            HorizontalLabelledDivider(
+                                label: "Context Cleared",
+                            )
+                        }
                     }
 
                     // MARK: Render partial content streamed from LLM output.

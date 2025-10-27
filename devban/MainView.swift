@@ -21,5 +21,6 @@ struct MainView: View
     private var mainContent: some View
     {
         AskLLMView()
+            .tint(ThemeManager.shared.buttonColor)
     }
 }
