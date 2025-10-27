@@ -48,6 +48,7 @@ final class AskLLMViewModel
                 for try await partial in stream
                 {
                     isThinking = false
+                    isResponding = true
 
                     if (LLMStreamingContent == nil)
                     {
@@ -68,7 +69,7 @@ final class AskLLMViewModel
                         for character in newCharacters
                         {
                             LLMStreamingContent?.append(character)
-                            try await Task.sleep(nanoseconds: 1_000_000) // 5 ms
+                            try await Task.sleep(nanoseconds: 1_000_000) // 1 ms
                         }
                     }
                     else
@@ -79,13 +80,9 @@ final class AskLLMViewModel
 
                 guard !Task.isCancelled else { return }
 
-                messages.append(
-                    ChatMessage(
-                        senderID: nil,
-                        content: LLMStreamingContent ?? "",
-                    ),
-                )
+                storeLLMOutputToMessages()
 
+                isThinking = false
                 isResponding = false
                 LLMStreamingContent = nil
                 streamingTask = nil
@@ -93,18 +90,82 @@ final class AskLLMViewModel
             catch
             {
                 print("AskLLM Error: \(error)")
-                messages.append(
-                    ChatMessage(
-                        senderID: nil,
-                        content: "Error: \(error.localizedDescription)",
-                    ),
-                )
 
                 isThinking = false
                 isResponding = false
                 LLMStreamingContent = nil
                 streamingTask = nil
+
+                // Ignores CancellationError as it is requested by User (i.e. expected behaviour)
+                if !(error is CancellationError)
+                {
+                    messages.append(
+                        ChatMessage(
+                            senderID: nil,
+                            content: "Error: \(error.localizedDescription)",
+                        ),
+                    )
+                }
             }
         }
+    }
+
+    func stopModel()
+    {
+        isThinking = false
+        isResponding = false
+
+        streamingTask?.cancel()
+        streamingTask = nil
+
+        if let LLMStreamingContent,
+           !LLMStreamingContent.isEmptyOrWhitespace()
+        {
+            storeLLMOutputToMessages()
+        }
+
+        LLMStreamingContent = nil
+    }
+
+    func clearContext()
+    {
+        if (isThinking || isResponding)
+        {
+            storeLLMOutputToMessages()
+            resetModel()
+        }
+
+        guard !messages.isEmpty else { return }
+        messages[messages.count - 1].LLMContextClearedAfter = true
+    }
+
+    func restart()
+    {
+        resetModel()
+        messages = [
+            ChatMessage(senderID: nil, content: AskLLMViewModel.defaultGreeting),
+        ]
+    }
+
+    private func storeLLMOutputToMessages()
+    {
+        messages.append(
+            ChatMessage(
+                senderID: nil,
+                content: LLMStreamingContent ?? "",
+            ),
+        )
+    }
+
+    private func resetModel()
+    {
+        isThinking = false
+        isResponding = false
+
+        streamingTask?.cancel()
+        streamingTask = nil
+
+        session = LanguageModelSession()
+        LLMStreamingContent = nil
     }
 }
