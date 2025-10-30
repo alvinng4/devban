@@ -9,7 +9,7 @@ final class AskLLMViewModel
     {
         session = LanguageModelSession()
         messages = [
-            ChatMessage(senderID: nil, content: AskLLMViewModel.defaultGreeting),
+            AskLLMViewModel.getGreetingMessage(),
         ]
     }
 
@@ -23,7 +23,37 @@ final class AskLLMViewModel
     private(set) var LLMStreamingContent: String.PartiallyGenerated?
     private var streamingTask: Task<Void, Never>?
 
-    static let defaultGreeting: String = "Hello! How may I assist you today?"
+    static func getGreetingMessage() -> ChatMessage
+    {
+        switch SystemLanguageModel.default.availability
+        {
+            case .available:
+                return ChatMessage(
+                    senderID: nil,
+                    content: "Hello! How may I assist you today?"
+                )
+            case .unavailable(.deviceNotEligible):
+                return ChatMessage(
+                    senderID: nil,
+                    content: "Error: Your device is not eligible for Apple Intelligence."
+                )
+            case .unavailable(.appleIntelligenceNotEnabled):
+                return ChatMessage(
+                    senderID: nil,
+                    content: "Error: To use this feature, please turn on Apple Intelligence."
+                )
+            case .unavailable(.modelNotReady):
+                return ChatMessage(
+                    senderID: nil,
+                    content: "Error: Model is not ready. Please try again later."
+                )
+            case _:
+                return ChatMessage(
+                    senderID: nil,
+                    content: "Error: Apple Intelligence / LLM model is unavailable for unknown reason."
+                )
+        }
+    }
 
     func sendMessage()
     {
@@ -143,7 +173,7 @@ final class AskLLMViewModel
     {
         resetModel()
         messages = [
-            ChatMessage(senderID: nil, content: AskLLMViewModel.defaultGreeting),
+            AskLLMViewModel.getGreetingMessage(),
         ]
     }
 
