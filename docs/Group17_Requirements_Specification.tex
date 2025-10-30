@@ -58,7 +58,7 @@
         Ng Ching Yin & (1155175606) \\
         Lam Hoi Chun & (1155192755) \\
         Lai Wing Fai & () \\
-        Zou Zhi Hong & ()
+        Zou Zhihong & (1155204947)
     \end{tabular}
 }
 \date{\today}
@@ -180,18 +180,58 @@ recurring activities easily. Furthermore, the integrated calendar and note funct
 user’s ability to plan future tasks, reflect on previous achievements, and maintain organized records
 of the tasks.
 
-\subsection{Software Requirements}
-\subsubsection{User Interface}
+\subsection{Functional Requirements}
+
+\subsubsection{FR1: User Registration and Authentication}
 \begin{itemize}
-    \item Message Area: "AskLLM"
-    \begin{itemize}
+    \item The system shall allow users to create an account, log in, and log out securely.
+\end{itemize}
+
+\subsubsection{FR2: Task Management (Kanban Board)}
+    Users shall be able to:
+\begin{itemize}
+
+  \item create, update, and delete tasks;
+  \item assign tasks to team members;
+  \item move tasks between “To Do”, “In Progress”, and “Done” columns.
+\end{itemize}
+
+\subsubsection{FR3: Messaging System}
+\begin{itemize}
+    \item Users shall communicate through an integrated real-time chat system.
+\end{itemize}
+
+\subsubsection{FR4: LLM Chat Assistant}
+The system shall provide a chat interface with an LLM called "AskLLM" that can:
+\begin{itemize}
         \item Scrollable list of chat bubbles (user vs. LLM) with the newest chats at the bottom
         \item Input area containing a multiline text editor with a Submit button
-    \end{itemize}
+\end{itemize}
+
+
+\subsection{Non-Functional Requirements}
+
+\subsubsection{Performance Requirements}
+\begin{itemize}
+  \item The system shall handle message delivery latency below 200 ms.
+  \item The Kanban interface shall render task updates within 100 ms.
+\end{itemize}
+
+\subsubsection{Availability}
+\begin{itemize}
+  \item The system shall maintain 99.5\% uptime.
+\end{itemize}
+
+\subsubsection{Security}
+\begin{itemize}
+  \item All communication shall be encrypted using HTTPS.
+  \item Authentication shall be handled via JWT tokens.
 \end{itemize}
 
 \subsubsection{Operating System and Environment}
-This application is developed and deployed for Apple devices running iOS, iPadOS, and macOS, which require iOS 26, iPadOS 26, or macOS Sequoia 26 as per the latest Apple developer policies.
+\begin{itemize}
+  \item This application is developed and deployed for Apple devices running iOS, iPadOS, and macOS, which require iOS 26, iPadOS 26, or macOS Sequoia 26 as per the latest Apple developer policies.
+\end{itemize}
 
 % \appendix
 % \addcontentsline{toc}{section}{Appendix}
