@@ -187,7 +187,7 @@ enum TextEditingHelper
             placeholder: "link",
         )
     }
-    
+
     static func resetFocus()
     {
         UIApplication.shared.sendAction(

@@ -23,9 +23,15 @@ enum NeobrutalismConstants
     /// Max width for large screens
     static let maxWidthLarge: CGFloat = 1280
 
-    /// Horizontal padding length for main content
-    static let mainContentPaddingHorizontal: CGFloat = 30
+    /// Horizontal padding length for main content (compact)
+    static let mainContentPaddingHorizontalCompact: CGFloat = 10
 
-    /// Vertical padding length for main content
-    static let mainContentPaddingVertical: CGFloat = 30
+    /// Horizontal padding length for main content (regular)
+    static let mainContentPaddingHorizontalRegular: CGFloat = 30
+
+    /// Vertical padding length for main content  (compact)
+    static let mainContentPaddingVerticalCompact: CGFloat = 10
+
+    /// Vertical padding length for main content  (regular)
+    static let mainContentPaddingVerticalRegular: CGFloat = 30
 }

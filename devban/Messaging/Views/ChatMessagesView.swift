@@ -33,9 +33,15 @@ struct ChatMessagesView: View
 
                         if (msg.LLMContextClearedAfter)
                         {
-                            HorizontalLabelledDivider(
-                                label: "Context Cleared",
-                            )
+                            VStack(spacing: 5)
+                            {
+                                Divider()
+
+                                Text("Context Cleared")
+                                    .foregroundColor(.gray)
+
+                                Divider()
+                            }
                         }
                     }
 
