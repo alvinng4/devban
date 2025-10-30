@@ -3,10 +3,11 @@ import SwiftUI
 struct MainView: View
 {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View
     {
-        mainContent
+        getMainContent()
             // Theme
             .onAppear
             {
@@ -18,9 +19,30 @@ struct MainView: View
             }
     }
 
-    private var mainContent: some View
+    private func getMainContent() -> some View
     {
-        AskLLMView()
-            .tint(ThemeManager.shared.buttonColor)
+        let isCompact: Bool = (horizontalSizeClass == .compact)
+
+        return ZStack
+        {
+            ThemeManager.shared.backgroundColor
+                .ignoresSafeArea()
+
+            AskLLMView()
+                .tint(ThemeManager.shared.buttonColor)
+                .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
+                .padding(
+                    .horizontal,
+                    isCompact ?
+                        NeobrutalismConstants.mainContentPaddingHorizontalCompact :
+                        NeobrutalismConstants.mainContentPaddingHorizontalRegular,
+                )
+                .padding(
+                    .vertical,
+                    isCompact ?
+                        NeobrutalismConstants.mainContentPaddingVerticalCompact :
+                        NeobrutalismConstants.mainContentPaddingVerticalRegular,
+                )
+        }
     }
 }
