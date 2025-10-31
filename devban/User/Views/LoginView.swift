@@ -2,38 +2,41 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var authVM: UserAuthViewModel
+    @State private var showRegister = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Welcome to Devban")
-                .font(.largeTitle.bold())
-
-            TextField("Username", text: $authVM.username)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-
-            SecureField("Password", text: $authVM.password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-
-            if let error = authVM.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.footnote)
-            }
-
-            HStack {
+        NavigationStack {
+            VStack(spacing: 20) {
+                TextField("Username", text: $authVM.username)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .autocapitalization(.none)
+                
+                SecureField("Password", text: $authVM.password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                if let error = authVM.errorMessage {
+                    Text(error)
+                        .foregroundColor(.red)
+                }
+                
                 Button("Login") {
                     authVM.login()
                 }
-                .buttonStyle(.borderedProminent)
-
+                .padding()
+                
                 Button("Register") {
-                    authVM.register()
+                    showRegister = true
                 }
-                .buttonStyle(.bordered)
+                .padding()
+                .foregroundColor(.blue)
+                
+            }
+            .padding()
+            .navigationTitle("Login")
+            .navigationDestination(isPresented: $showRegister) {
+                RegisterView()
+                    .environmentObject(authVM)
             }
         }
-        .padding()
     }
 }

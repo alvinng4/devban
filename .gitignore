@@ -611,6 +611,9 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
+## UserDefaults（PW）
+*.plist
+
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
