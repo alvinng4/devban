@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+
+skinparam Component {
+  BackgroundColor #EAF2FB
+  BorderColor #4E79A7
+  FontColor #1F2D3D
+}
+skinparam Package {
+  BackgroundColor #F8F9FB
+  BorderColor #93B5E1
+  FontColor #1F2D3D
+}
+
+rectangle "GUI" as GUI
+
+package "ViewModel / Model" as Core {
+  component "User Profile" as Auth
+  component "Kanban" as Kanban
+  component "Calendar" as Calendar
+  component "Messaging" as Messaging
+  component "LLM" as LLM
+}
+
+database "devban DB" as DB #FFF4E6
+cloud "User Management System\n(External IdP)" as UMS #F0F7F0
+cloud "LLM Provider API" as LLMAPI #F0F7F0
+
+' GUI -> Services
+GUI --> Auth
+GUI --> Kanban
+GUI --> Calendar
+GUI --> Messaging
+GUI --> LLM
+
+' Auth and user management
+Auth --> UMS
+Auth --> DB
+
+' Persistence
+Kanban --> DB
+Calendar --> DB
+Messaging --> DB
+
+' LLM integration
+LLM --> DB : LLM chat history
+LLM --> LLMAPI : prompts
+
+@enduml
