@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A725D4F2EB605C200CC3EE8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7A725D4E2EB605C200CC3EE8 /* FirebaseAuth */; };
+		7A725D512EB6143900CC3EE8 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A725D502EB6143900CC3EE8 /* FirebaseCore */; };
+		7A725D552EB6166C00CC3EE8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7A725D542EB6166C00CC3EE8 /* FirebaseAnalytics */; };
 		7A90FEB82EADF8A4009E9D17 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 7A90FEB72EADF8A4009E9D17 /* MarkdownUI */; };
 		7A90FEBB2EADF985009E9D17 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 7A90FEBA2EADF985009E9D17 /* Splash */; };
 /* End PBXBuildFile section */
@@ -30,6 +33,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A90FEB82EADF8A4009E9D17 /* MarkdownUI in Frameworks */,
+				7A725D4F2EB605C200CC3EE8 /* FirebaseAuth in Frameworks */,
+				7A725D512EB6143900CC3EE8 /* FirebaseCore in Frameworks */,
+				7A725D552EB6166C00CC3EE8 /* FirebaseAnalytics in Frameworks */,
 				7A90FEBB2EADF985009E9D17 /* Splash in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +83,9 @@
 			packageProductDependencies = (
 				7A90FEB72EADF8A4009E9D17 /* MarkdownUI */,
 				7A90FEBA2EADF985009E9D17 /* Splash */,
+				7A725D4E2EB605C200CC3EE8 /* FirebaseAuth */,
+				7A725D502EB6143900CC3EE8 /* FirebaseCore */,
+				7A725D542EB6166C00CC3EE8 /* FirebaseAnalytics */,
 			);
 			productName = devban;
 			productReference = 7A867CB12EA72C3D00C4C6B1 /* devban.app */;
@@ -110,6 +119,7 @@
 				7ABEAE752EA7C43900106B30 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 				7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				7A90FEB92EADF985009E9D17 /* XCRemoteSwiftPackageReference "Splash" */,
+				7A725D4D2EB605C200CC3EE8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7A867CB22EA72C3D00C4C6B1 /* Products */;
@@ -379,6 +389,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7A725D4D2EB605C200CC3EE8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
 		7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -406,6 +424,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7A725D4E2EB605C200CC3EE8 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A725D4D2EB605C200CC3EE8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		7A725D502EB6143900CC3EE8 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A725D4D2EB605C200CC3EE8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		7A725D542EB6166C00CC3EE8 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A725D4D2EB605C200CC3EE8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
 		7A90FEB72EADF8A4009E9D17 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7A90FEB62EADF8A4009E9D17 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
