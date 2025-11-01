@@ -10,7 +10,7 @@ struct devbanApp: App {
                 MainView()
                     .environmentObject(authVM)
             } else {
-                LoginView()
+                LoginViewWithRegisterOverlay()
                     .environmentObject(authVM)
             }
         }
