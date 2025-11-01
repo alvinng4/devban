@@ -13,4 +13,13 @@ final class DevbanUser
     var uid: String?
     var email: String?
     var photoUrl: String?
+
+    func loginUser(with userData: AuthDataResultModel)
+    {
+        uid = userData.uid
+        email = userData.email
+        photoUrl = userData.photoURL
+
+        loggedIn = true
+    }
 }

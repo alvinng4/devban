@@ -7,10 +7,11 @@ struct MainView: View
     var body: some View
     {
         getMainContent()
-            // Theme
             .tint(ThemeManager.shared.buttonColor)
             .onAppear
             {
+                AuthenticationHelper.initializeUser()
+
                 ThemeManager.shared.updateTheme(colorScheme: colorScheme)
             }
             .onChange(of: colorScheme)
