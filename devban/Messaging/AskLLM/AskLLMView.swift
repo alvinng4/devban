@@ -9,141 +9,164 @@ struct AskLLMView: View
         viewModel = AskLLMViewModel()
     }
 
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     @State private var viewModel: AskLLMViewModel
 
     var body: some View
     {
-        VStack(spacing: 10)
+        let isCompact: Bool = (horizontalSizeClass == .compact)
+
+        ZStack
         {
-            Text("AskLLM")
-                .customTitle()
+            ThemeManager.shared.backgroundColor
+                .ignoresSafeArea()
 
-            VStack(spacing: 0)
+            VStack(spacing: 10)
             {
-                // TODO: Change the senderID to actual user ID after User is implemented
-                // MARK: Renders the chat messages
+                Text("AskLLM")
+                    .customTitle()
 
-                ChatMessagesView(
-                    messages: viewModel.messages,
-                    isLoading: viewModel.isThinking,
-                    LLMStreamingContent: viewModel.LLMStreamingContent,
-                    userInput: viewModel.userInput,
-                )
-
-                // MARK: User text editor
-
-                VStack
+                VStack(spacing: 0)
                 {
-                    Divider()
-                        .padding(.vertical, 2)
-                        .foregroundStyle(.secondary)
+                    // TODO: Change the senderID to actual user ID after User is implemented
+                    // MARK: Renders the chat messages
 
-                    // MARK: Tool bar for text editing
+                    ChatMessagesView(
+                        messages: viewModel.messages,
+                        isLoading: viewModel.isThinking,
+                        LLMStreamingContent: viewModel.LLMStreamingContent,
+                        userInput: viewModel.userInput,
+                    )
 
-                    HStack(spacing: 16)
+                    // MARK: User text editor
+
+                    VStack
                     {
-                        // Stop model
-                        Button
-                        {
-                            viewModel.stopModel()
-                        }
-                        label:
-                        {
-                            Image(systemName: "stop.circle")
-                                .textEditorToolBarButtonImage()
-                        }
+                        Divider()
+                            .padding(.vertical, 2)
+                            .foregroundStyle(.secondary)
 
-                        // Clear context
-                        Button
+                        // MARK: Tool bar for text editing
+
+                        HStack(spacing: 16)
                         {
-                            viewModel.clearContext()
-                        }
-                        label:
-                        {
-                            Image(systemName: "paintbrush.fill")
-                                .textEditorToolBarButtonImage()
-                        }
-
-                        // Restart conversation
-                        Button
-                        {
-                            viewModel.restart()
-                        }
-                        label:
-                        {
-                            Image(systemName: "clear")
-                                .textEditorToolBarButtonImage()
-                        }
-
-                        Spacer()
-
-                        // Remove keyboard
-                        Button
-                        {
-                            TextEditingHelper.resetFocus()
-                        }
-                        label:
-                        {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                                .textEditorToolBarButtonImage()
-                        }
-                    }
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal)
-
-                    Divider()
-                        .padding(.vertical, 2)
-                        .foregroundStyle(.secondary)
-
-                    // MARK: Text editor
-
-                    HStack
-                    {
-                        CustomTextEditor(
-                            text: $viewModel.userInput,
-                            selectedRange: $viewModel.userInputSelectedRange,
-                        )
-                        .padding(.leading, 8)
-
-                        // Submit button
-                        VStack(spacing: 0)
-                        {
-                            Spacer()
-
+                            // Stop model
                             Button
                             {
-                                viewModel.sendMessage()
+                                viewModel.stopModel()
+                            }
+                            label:
+                            {
+                                Image(systemName: "stop.circle")
+                                    .textEditorToolBarButtonImage()
+                            }
+
+                            // Clear context
+                            Button
+                            {
+                                viewModel.clearContext()
+                            }
+                            label:
+                            {
+                                Image(systemName: "paintbrush.fill")
+                                    .textEditorToolBarButtonImage()
+                            }
+
+                            // Restart conversation
+                            Button
+                            {
+                                viewModel.restart()
+                            }
+                            label:
+                            {
+                                Image(systemName: "clear")
+                                    .textEditorToolBarButtonImage()
+                            }
+
+                            Spacer()
+
+                            // Remove keyboard
+                            Button
+                            {
                                 TextEditingHelper.resetFocus()
                             }
                             label:
                             {
-                                HStack(spacing: 5)
-                                {
-                                    Image(systemName: "pointer.arrow.ipad")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 15, height: 15)
-                                        .rotationEffect(.degrees(70))
-
-                                    Text("Submit")
-                                        .lineLimit(1)
-                                        .font(.system(size: 15))
-                                }
-                                .padding(.horizontal, 15)
-                                .padding(.vertical, 12)
-                                .foregroundStyle(.white)
-                                .background(ThemeManager.shared.buttonColor)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .padding(.trailing, 5)
+                                Image(systemName: "keyboard.chevron.compact.down")
+                                    .textEditorToolBarButtonImage()
                             }
-                            .keyboardShortcut(.defaultAction)
                         }
-                        .padding(.bottom, 10)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+
+                        Divider()
+                            .padding(.vertical, 2)
+                            .foregroundStyle(.secondary)
+
+                        // MARK: Text editor
+
+                        HStack
+                        {
+                            CustomTextEditor(
+                                text: $viewModel.userInput,
+                                selectedRange: $viewModel.userInputSelectedRange,
+                            )
+                            .padding(.leading, 8)
+
+                            // Submit button
+                            VStack(spacing: 0)
+                            {
+                                Spacer()
+
+                                Button
+                                {
+                                    viewModel.sendMessage()
+                                    TextEditingHelper.resetFocus()
+                                }
+                                label:
+                                {
+                                    HStack(spacing: 5)
+                                    {
+                                        Image(systemName: "pointer.arrow.ipad")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 15, height: 15)
+                                            .rotationEffect(.degrees(70))
+
+                                        Text("Submit")
+                                            .lineLimit(1)
+                                            .font(.system(size: 15))
+                                    }
+                                    .padding(.horizontal, 15)
+                                    .padding(.vertical, 12)
+                                    .foregroundStyle(.white)
+                                    .background(ThemeManager.shared.buttonColor)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .padding(.trailing, 5)
+                                }
+                                .keyboardShortcut(.defaultAction)
+                            }
+                            .padding(.bottom, 10)
+                        }
+                        .frame(height: 120)
                     }
-                    .frame(height: 120)
                 }
+                .shadowedBorderRoundedRectangle()
             }
-            .shadowedBorderRoundedRectangle()
         }
+        .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
+        .padding(
+            .horizontal,
+            isCompact ?
+                NeobrutalismConstants.mainContentPaddingHorizontalCompact :
+                NeobrutalismConstants.mainContentPaddingHorizontalRegular,
+        )
+        .padding(
+            .vertical,
+            isCompact ?
+                NeobrutalismConstants.mainContentPaddingVerticalCompact :
+                NeobrutalismConstants.mainContentPaddingVerticalRegular,
+        )
     }
 }

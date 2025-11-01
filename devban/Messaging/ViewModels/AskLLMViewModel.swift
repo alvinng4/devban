@@ -30,27 +30,27 @@ final class AskLLMViewModel
             case .available:
                 return ChatMessage(
                     senderID: nil,
-                    content: "Hello! How may I assist you today?"
+                    content: "Hello! How may I assist you today?",
                 )
             case .unavailable(.deviceNotEligible):
                 return ChatMessage(
                     senderID: nil,
-                    content: "Error: Your device is not eligible for Apple Intelligence."
+                    content: "Error: Your device is not eligible for Apple Intelligence.",
                 )
             case .unavailable(.appleIntelligenceNotEnabled):
                 return ChatMessage(
                     senderID: nil,
-                    content: "Error: To use this feature, please turn on Apple Intelligence."
+                    content: "Error: To use this feature, please turn on Apple Intelligence.",
                 )
             case .unavailable(.modelNotReady):
                 return ChatMessage(
                     senderID: nil,
-                    content: "Error: Model is not ready. Please try again later."
+                    content: "Error: Model is not ready. Please try again later.",
                 )
             case _:
                 return ChatMessage(
                     senderID: nil,
-                    content: "Error: Apple Intelligence / LLM model is unavailable for unknown reason."
+                    content: "Error: Apple Intelligence / LLM model is unavailable for unknown reason.",
                 )
         }
     }
