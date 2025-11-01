@@ -6,6 +6,7 @@ enum AuthenticationHelper
     static func initializeUser()
     {
         guard let user = Auth.auth().currentUser else { return }
+        guard user.emailVerified() else { return }
 
         DevbanUser.shared.loginUser(
             with: AuthDataResultModel(user: user),
