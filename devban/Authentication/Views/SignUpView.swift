@@ -5,9 +5,8 @@ struct SignUpView: View
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var showReturnAlert: Bool = false
+    @State private var viewModel: SignUpViewModel = SignUpViewModel()
+
     @FocusState private var isTextFocused: Bool
 
     var body: some View
@@ -18,7 +17,7 @@ struct SignUpView: View
         {
             ThemeManager.shared.backgroundColor
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 10)
             {
                 // MARK: Tool bar
@@ -28,7 +27,7 @@ struct SignUpView: View
                     // Back button
                     Button
                     {
-                        dismissOrShowAlert()
+                        viewModel.dismissOrShowAlert()
                     }
                     label:
                     {
@@ -53,7 +52,7 @@ struct SignUpView: View
                             .fontDesign(.rounded)
                             .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                        TextField("Email address", text: $email)
+                        TextField("Email address", text: $viewModel.email)
                             .font(.headline)
                             .focused($isTextFocused)
                             .padding(10)
@@ -69,7 +68,7 @@ struct SignUpView: View
                             .fontDesign(.rounded)
                             .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                        SecureField("Password", text: $password)
+                        SecureField("Password", text: $viewModel.password)
                             .font(.headline)
                             .focused($isTextFocused)
                             .padding(10)
@@ -81,8 +80,7 @@ struct SignUpView: View
 
                     Button
                     {
-                        print("Sign up")
-                        DevbanUser.shared.loggedIn = true
+                        viewModel.signUp()
                     }
                     label:
                     {
@@ -93,6 +91,18 @@ struct SignUpView: View
                             .frame(height: 55)
                             .background(ThemeManager.shared.buttonColor)
                             .cornerRadius(10)
+                    }
+
+                    if (viewModel.showInvalidInputWarning)
+                    {
+                        Text(viewModel.invalidInputWarningString)
+                            .foregroundStyle(.red)
+                    }
+
+                    if (viewModel.showEmailVerificationString)
+                    {
+                        Text(viewModel.emailVerificationString)
+                            .foregroundStyle(ThemeManager.shared.buttonColor)
                     }
                 }
                 .padding(25)
@@ -117,13 +127,13 @@ struct SignUpView: View
         }
         .onBackSwipe
         {
-            dismissOrShowAlert()
+            viewModel.dismissOrShowAlert()
         }
-        .alert("Return to last page?", isPresented: $showReturnAlert)
+        .alert("Return to last page?", isPresented: $viewModel.showReturnAlert)
         {
             Button("Cancel", role: .cancel)
             {
-                showReturnAlert = false
+                viewModel.showReturnAlert = false
             }
 
             Button("Return", role: .destructive)
@@ -135,17 +145,9 @@ struct SignUpView: View
         {
             Text("The filled information will be lost.")
         }
-    }
-
-    private func dismissOrShowAlert()
-    {
-        if (email.isEmptyOrWhitespace() && password.isEmptyOrWhitespace())
+        .onChange(of: viewModel.dismiss)
         {
             dismiss()
-        }
-        else
-        {
-            showReturnAlert = true
         }
     }
 }

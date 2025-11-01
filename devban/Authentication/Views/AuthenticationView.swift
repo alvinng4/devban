@@ -4,21 +4,21 @@ struct AuthenticationView: View
 {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @State private var viewModel: AuthenticationViewModel = AuthenticationViewModel()
+
     @FocusState private var isTextFocused: Bool
 
     var body: some View
     {
         let isCompact: Bool = (horizontalSizeClass == .compact)
-        
+
         NavigationStack
         {
             ZStack
             {
                 ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
-                
+
                 VStack(spacing: 10)
                 {
                     Text("Sign In")
@@ -32,7 +32,7 @@ struct AuthenticationView: View
                                 .fontDesign(.rounded)
                                 .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                            TextField("Email address", text: $email)
+                            TextField("Email address", text: $viewModel.email)
                                 .font(.headline)
                                 .focused($isTextFocused)
                                 .padding(10)
@@ -48,7 +48,7 @@ struct AuthenticationView: View
                                 .fontDesign(.rounded)
                                 .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                            SecureField("Password", text: $password)
+                            SecureField("Password", text: $viewModel.password)
                                 .font(.headline)
                                 .focused($isTextFocused)
                                 .padding(10)
@@ -60,7 +60,7 @@ struct AuthenticationView: View
 
                         Button
                         {
-                            DevbanUser.shared.loggedIn = true
+                            viewModel.signIn()
                         }
                         label:
                         {
@@ -71,6 +71,12 @@ struct AuthenticationView: View
                                 .frame(height: 55)
                                 .background(ThemeManager.shared.buttonColor)
                                 .cornerRadius(10)
+                        }
+
+                        if (viewModel.showErrorMessage)
+                        {
+                            Text(viewModel.errorMessage)
+                                .foregroundStyle(.red)
                         }
 
                         Divider()
