@@ -1,13 +1,22 @@
-import Foundation
+import SwiftUI
 
-extension String
+extension View
 {
-    /// Check whether a string is empty or consists of only white spaces
+    /// Perform action when back swipe gesture is detected (i.e. swiping right)
     ///
-    /// - Returns:
-    ///     - Whether the string is empty or consists of only white spaces
-    func isEmptyOrWhitespace() -> Bool
+    /// - Parameter action: The action to be performed.
+    func onBackSwipe(perform action: @escaping () -> Void) -> some View
     {
-        return trimmingCharacters(in: .whitespaces).isEmpty
+        gesture(
+            DragGesture()
+                .onEnded(
+                    { value in
+                        if value.startLocation.x < 50, value.translation.width > 80
+                        {
+                            action()
+                        }
+                    },
+                ),
+        )
     }
 }
