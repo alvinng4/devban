@@ -21,10 +21,16 @@ struct MainView: View
 
     private func getMainContent() -> some View
     {
-        AskLLMView()
-            .fullScreenCover(isPresented: .constant(true))
+        Group
+        {
+            if (DevbanUser.shared.loggedIn)
+            {
+                AskLLMView()
+            }
+            else
             {
                 AuthenticationView()
             }
+        }
     }
 }

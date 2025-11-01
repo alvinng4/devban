@@ -154,19 +154,19 @@ struct AskLLMView: View
                 }
                 .shadowedBorderRoundedRectangle()
             }
+            .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
+            .padding(
+                .horizontal,
+                isCompact ?
+                    NeobrutalismConstants.mainContentPaddingHorizontalCompact :
+                    NeobrutalismConstants.mainContentPaddingHorizontalRegular,
+            )
+            .padding(
+                .vertical,
+                isCompact ?
+                    NeobrutalismConstants.mainContentPaddingVerticalCompact :
+                    NeobrutalismConstants.mainContentPaddingVerticalRegular,
+            )
         }
-        .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
-        .padding(
-            .horizontal,
-            isCompact ?
-                NeobrutalismConstants.mainContentPaddingHorizontalCompact :
-                NeobrutalismConstants.mainContentPaddingHorizontalRegular,
-        )
-        .padding(
-            .vertical,
-            isCompact ?
-                NeobrutalismConstants.mainContentPaddingVerticalCompact :
-                NeobrutalismConstants.mainContentPaddingVerticalRegular,
-        )
     }
 }
