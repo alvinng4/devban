@@ -7,6 +7,7 @@ final class AuthenticationViewModel
     var password: String = ""
     var showErrorMessage: Bool = false
     var errorMessage: String = ""
+    var waitingServerResponse: Bool = false
     var dismiss: Bool = false
 
     func signIn()
@@ -14,13 +15,15 @@ final class AuthenticationViewModel
         errorMessage = ""
         showErrorMessage = false
 
-        guard (!email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace())
+        guard isInputValid()
         else
         {
             errorMessage = "Invalid email or password"
             showErrorMessage = true
             return
         }
+
+        waitingServerResponse = true
 
         Task
         {
@@ -31,12 +34,27 @@ final class AuthenticationViewModel
                     password: password,
                 )
                 DevbanUser.shared.loginUser(with: authDataResult)
+                waitingServerResponse = false
             }
             catch
             {
+                waitingServerResponse = false
                 errorMessage = error.localizedDescription
                 showErrorMessage = true
             }
         }
+    }
+
+    func isInputValid() -> Bool
+    {
+        return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
+    }
+
+    func disableSubmit() -> Bool
+    {
+        return (
+            !isInputValid()
+                || waitingServerResponse,
+        )
     }
 }

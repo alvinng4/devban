@@ -53,6 +53,7 @@ struct SignUpView: View
                             .frame(maxWidth: .infinity, alignment: .topLeading)
 
                         TextField("Email address", text: $viewModel.email)
+                            .autocorrectionDisabled(true)
                             .font(.headline)
                             .focused($isTextFocused)
                             .padding(10)
@@ -89,8 +90,18 @@ struct SignUpView: View
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 55)
-                            .background(ThemeManager.shared.buttonColor)
+                            .background(
+                                viewModel.disableSubmit() ?
+                                    Color.gray :
+                                    ThemeManager.shared.buttonColor,
+                            )
                             .cornerRadius(10)
+                    }
+                    .disabled(viewModel.disableSubmit())
+
+                    if (viewModel.waitingServerResponse)
+                    {
+                        Text("Waiting server response...")
                     }
 
                     if (viewModel.showInvalidInputWarning)

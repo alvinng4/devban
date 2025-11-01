@@ -10,16 +10,18 @@ final class SignUpViewModel
     var invalidInputWarningString: String = ""
     var showEmailVerificationString: Bool = false
     var emailVerificationString: String = ""
+    var waitingServerResponse: Bool = false
     var dismiss: Bool = false
 
     func signUp()
     {
+        waitingServerResponse = true
         invalidInputWarningString = ""
         showInvalidInputWarning = false
         emailVerificationString = ""
         showEmailVerificationString = false
 
-        guard (!email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace())
+        guard isInputValid()
         else
         {
             invalidInputWarningString = "Invalid email or password"
@@ -33,15 +35,25 @@ final class SignUpViewModel
             {
                 try await AuthenticationHelper.createUser(email: email, password: password)
 
+                waitingServerResponse = false
                 emailVerificationString = "Success! Please check your email address (\(email)) for verification email."
                 showEmailVerificationString = true
+
+                email = ""
+                password = ""
             }
             catch
             {
+                waitingServerResponse = false
                 invalidInputWarningString = error.localizedDescription
                 showInvalidInputWarning = true
             }
         }
+    }
+
+    func isInputValid() -> Bool
+    {
+        return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
     }
 
     func dismissOrShowAlert()
@@ -54,5 +66,13 @@ final class SignUpViewModel
         {
             showReturnAlert = true
         }
+    }
+
+    func disableSubmit() -> Bool
+    {
+        return (
+            !isInputValid()
+                || waitingServerResponse,
+        )
     }
 }
