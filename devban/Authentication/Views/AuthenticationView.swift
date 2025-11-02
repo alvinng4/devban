@@ -79,6 +79,11 @@ struct AuthenticationView: View
                         }
                         .disabled(viewModel.disableSubmit())
 
+                        if (viewModel.waitingServerResponse)
+                        {
+                            Text("Waiting server response...")
+                        }
+
                         if (viewModel.showErrorMessage)
                         {
                             Text(viewModel.errorMessage)
