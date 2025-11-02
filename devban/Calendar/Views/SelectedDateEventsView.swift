@@ -104,7 +104,7 @@ struct EventRowView: View
                     .strikethrough(event.isCompleted)
                     .foregroundStyle(event.isCompleted ? .secondary : .primary)
 
-                if let timeText = timeText
+                if let timeText
                 {
                     Text(timeText)
                         .font(.system(size: 12, design: .rounded))

@@ -113,7 +113,7 @@ struct CalendarView: View
             }
             .onChange(of: eventToEdit)
             {
-                if eventToEdit != nil && !showAddEventSheet
+                if eventToEdit != nil, !showAddEventSheet
                 {
                     showAddEventSheet = true
                 }

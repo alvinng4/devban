@@ -24,8 +24,8 @@ struct CalendarDayCell: View
                     .font(.system(size: 14, weight: isSelected ? .bold : .regular, design: .rounded))
                     .foregroundStyle(
                         isSelected ? .white :
-                        isToday ? ThemeManager.shared.buttonColor :
-                        .primary,
+                            isToday ? ThemeManager.shared.buttonColor :
+                            .primary,
                     )
 
                 if eventsCount > 0
@@ -33,7 +33,7 @@ struct CalendarDayCell: View
                     Circle()
                         .fill(
                             isSelected ? .white :
-                            ThemeManager.shared.buttonColor,
+                                ThemeManager.shared.buttonColor,
                         )
                         .frame(width: 4, height: 4)
                 }

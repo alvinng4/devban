@@ -54,7 +54,7 @@ struct CalendarGridView: View
 
     private func eventsCount(for date: Date) -> Int
     {
-        events.filter { calendar.isDate($0.date, inSameDayAs: date) }.count
+        events.count(where: { calendar.isDate($0.date, inSameDayAs: date) })
     }
 
     private func isDateSelected(_ date: Date) -> Bool
@@ -89,8 +89,8 @@ struct CalendarGridView: View
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 4)
             {
                 ForEach(Array(calendarDays.enumerated()), id: \.offset)
-                { index, date in
-                    if let date = date
+                { _, date in
+                    if let date
                     {
                         CalendarDayCell(
                             date: date,
