@@ -9,6 +9,9 @@ final class AuthenticationViewModel
     var errorMessage: String = ""
     var waitingServerResponse: Bool = false
     var dismiss: Bool = false
+    var showForgetPasswordAlert: Bool = false
+    var showSpecialMessage: Bool = false
+    var specialMessage: String = ""
 
     func signIn()
     {
@@ -18,8 +21,7 @@ final class AuthenticationViewModel
         guard isInputValid()
         else
         {
-            errorMessage = "Invalid email or password"
-            showErrorMessage = true
+            showErrorMessage("Invalid email or password")
             return
         }
 
@@ -38,8 +40,7 @@ final class AuthenticationViewModel
             catch
             {
                 waitingServerResponse = false
-                errorMessage = error.localizedDescription
-                showErrorMessage = true
+                showErrorMessage(error.localizedDescription)
             }
         }
     }
@@ -55,5 +56,39 @@ final class AuthenticationViewModel
             !isInputValid()
                 || waitingServerResponse,
         )
+    }
+
+    func forgetPassword()
+    {
+        showForgetPasswordAlert = true
+    }
+
+    func confirmForgetPassword()
+    {
+        guard !email.isEmptyOrWhitespace()
+        else
+        {
+            showErrorMessage("Failed to send reset password email. Reason: invalid email address.")
+            return
+        }
+
+        AuthenticationHelper.sendForgetPasswordEmail(to: email)
+        showSpecialMessage("A reset password email has been sent to your email address: \(email).")
+    }
+
+    private func showErrorMessage(_ message: String)
+    {
+        showSpecialMessage = false
+        specialMessage = ""
+        errorMessage = message
+        showErrorMessage = true
+    }
+
+    private func showSpecialMessage(_ message: String)
+    {
+        showErrorMessage = false
+        errorMessage = ""
+        specialMessage = message
+        showSpecialMessage = true
     }
 }
