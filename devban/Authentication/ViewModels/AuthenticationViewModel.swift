@@ -1,22 +1,25 @@
 import Foundation
+import GoogleSignIn
+import GoogleSignInSwift
 
 @Observable
 final class AuthenticationViewModel
 {
     var email: String = ""
     var password: String = ""
-    var showErrorMessage: Bool = false
+
+    var isPresentErrorMessage: Bool = false
     var errorMessage: String = ""
+    var isPresentSpecialMessage: Bool = false
+    var specialMessage: String = ""
     var waitingServerResponse: Bool = false
     var dismiss: Bool = false
-    var showForgetPasswordAlert: Bool = false
-    var showSpecialMessage: Bool = false
-    var specialMessage: String = ""
+    var isPresentForgetPasswordAlert: Bool = false
 
     func signIn()
     {
         errorMessage = ""
-        showErrorMessage = false
+        isPresentErrorMessage = false
 
         guard isInputValid()
         else
@@ -60,7 +63,7 @@ final class AuthenticationViewModel
 
     func forgetPassword()
     {
-        showForgetPasswordAlert = true
+        isPresentForgetPasswordAlert = true
     }
 
     func confirmForgetPassword()
@@ -78,17 +81,17 @@ final class AuthenticationViewModel
 
     private func showErrorMessage(_ message: String)
     {
-        showSpecialMessage = false
+        isPresentSpecialMessage = false
         specialMessage = ""
         errorMessage = message
-        showErrorMessage = true
+        isPresentErrorMessage = true
     }
 
     private func showSpecialMessage(_ message: String)
     {
-        showErrorMessage = false
+        isPresentErrorMessage = false
         errorMessage = ""
         specialMessage = message
-        showSpecialMessage = true
+        isPresentSpecialMessage = true
     }
 }

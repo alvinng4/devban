@@ -1,3 +1,5 @@
+import GoogleSignIn
+import GoogleSignInSwift
 import SwiftUI
 
 struct SignUpView: View
@@ -104,17 +106,28 @@ struct SignUpView: View
                         Text("Waiting server response...")
                     }
 
-                    if (viewModel.showInvalidInputWarning)
+                    if (viewModel.isPresentErrorMessage)
                     {
-                        Text(viewModel.invalidInputWarningString)
+                        Text(viewModel.errorMessage)
                             .foregroundStyle(.red)
                     }
 
-                    if (viewModel.showEmailVerificationString)
+                    if (viewModel.isPresentSpecialMessage)
                     {
-                        Text(viewModel.emailVerificationString)
+                        Text(viewModel.specialMessage)
                             .foregroundStyle(ThemeManager.shared.buttonColor)
                     }
+
+                    Divider()
+
+                    GoogleSignInButton(
+                        viewModel: GoogleSignInButtonViewModel(
+                            scheme: .dark,
+                            style: .wide,
+                            state: .normal,
+                        ),
+                    )
+                    {}
                 }
                 .padding(25)
                 .shadowedBorderRoundedRectangle()
@@ -140,15 +153,18 @@ struct SignUpView: View
         {
             viewModel.dismissOrShowAlert()
         }
-        .alert("Return to last page?", isPresented: $viewModel.showReturnAlert)
+        .alert("Return to last page?", isPresented: $viewModel.isPresentReturnAlert)
         {
             Button("Cancel", role: .cancel)
             {
-                viewModel.showReturnAlert = false
+                viewModel.isPresentReturnAlert = false
             }
 
             Button("Return", role: .destructive)
             {
+                viewModel.email = ""
+                viewModel.password = ""
+                viewModel.dismiss = false
                 dismiss()
             }
         }
@@ -158,7 +174,13 @@ struct SignUpView: View
         }
         .onChange(of: viewModel.dismiss)
         {
-            dismiss()
+            if (viewModel.dismiss)
+            {
+                viewModel.email = ""
+                viewModel.password = ""
+                viewModel.dismiss = false
+                dismiss()
+            }
         }
     }
 }
