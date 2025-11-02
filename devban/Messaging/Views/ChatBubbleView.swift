@@ -15,9 +15,7 @@ struct ChatBubbleView: View
     {
         self.chatMessage = chatMessage
 
-        // TODO: After User is implemented, verify whether senderID equals to current user
-        // Currently: Since we are only talking with LLM, we know it is LLM when senderID is nil.
-        isCurrentUser = (chatMessage.senderID != nil)
+        isCurrentUser = (chatMessage.senderID != DevbanUser.shared.uid)
     }
 
     @Environment(\.colorScheme) private var colorScheme

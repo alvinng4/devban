@@ -48,7 +48,7 @@ final class AuthenticationViewModel
             }
         }
     }
-    
+
     func signInGoogle()
     {
         guard let clientID: String = FirebaseApp.app()?.options.clientID else { return }

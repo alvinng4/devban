@@ -62,9 +62,8 @@ final class AskLLMViewModel
 
         isThinking = true
 
-        // TODO: Change the senderID to actual user ID after User is implemented
         messages.append(
-            ChatMessage(senderID: UUID(), content: userInput),
+            ChatMessage(senderID: DevbanUser.shared.uid, content: userInput),
         )
         let msgContent: String = userInput
         userInput = ""
