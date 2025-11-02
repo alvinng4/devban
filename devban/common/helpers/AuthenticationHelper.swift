@@ -43,6 +43,17 @@ enum AuthenticationHelper
         AuthenticationHelper.updateUserAuthStatus()
     }
 
+    static func signInWithGoogle(googleSignInResult: GoogleSignInResult) async throws
+    {
+        let credential: AuthCredential = GoogleAuthProvider.credential(
+            withIDToken: googleSignInResult.idToken,
+            accessToken: googleSignInResult.accessToken
+        )
+        try await Auth.auth().signIn(with: credential)
+
+        AuthenticationHelper.updateUserAuthStatus()
+    }
+
     static func signOutUser() throws
     {
         try Auth.auth().signOut()

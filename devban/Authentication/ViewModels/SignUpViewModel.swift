@@ -1,3 +1,4 @@
+import Firebase
 import Foundation
 
 @Observable
@@ -44,6 +45,25 @@ final class SignUpViewModel
             catch
             {
                 waitingServerResponse = false
+                showErrorMessage(error.localizedDescription)
+            }
+        }
+    }
+
+    func signUpGoogle()
+    {
+        guard let clientID: String = FirebaseApp.app()?.options.clientID else { return }
+        let helper: SignInWithGoogleHelper = SignInWithGoogleHelper(GIDClientID: clientID)
+
+        Task
+        {
+            do
+            {
+                let signInResult: GoogleSignInResult = try await helper.signIn()
+                try await AuthenticationHelper.signInWithGoogle(googleSignInResult: signInResult)
+            }
+            catch
+            {
                 showErrorMessage(error.localizedDescription)
             }
         }

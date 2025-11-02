@@ -127,7 +127,9 @@ struct SignUpView: View
                             state: .normal,
                         ),
                     )
-                    {}
+                    {
+                        viewModel.signUpGoogle()
+                    }
                 }
                 .padding(25)
                 .shadowedBorderRoundedRectangle()
