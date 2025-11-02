@@ -4,13 +4,15 @@ struct MainView: View
 {
     @Environment(\.colorScheme) private var colorScheme
 
+    @State private var selectedTab: String = "askLLM"
+
     var body: some View
     {
         getMainContent()
             .tint(ThemeManager.shared.buttonColor)
             .onAppear
             {
-                AuthenticationHelper.initializeUser()
+                AuthenticationHelper.updateUserAuthStatus()
 
                 ThemeManager.shared.updateTheme(colorScheme: colorScheme)
             }
@@ -26,24 +28,30 @@ struct MainView: View
         {
             if (DevbanUser.shared.loggedIn)
             {
-                NeobrutalismRoundedRectangleTabView(
-                    options: ["AskLLM", "Calendar"],
-                    defaultSelection: "AskLLM",
+                TabView(
+                    selection: $selectedTab,
                 )
-                { option in
-                    Group
-                    {
-                        if option == "AskLLM"
+                {
+                    CalendarView()
+                        .tabItem
                         {
-                            AskLLMView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            Label("Calendar", systemImage: "calendar")
                         }
-                        else
+                        .tag("calendar")
+
+                    AskLLMView()
+                        .tabItem
                         {
-                            CalendarView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            Label("AskLLM", systemImage: "apple.intelligence")
                         }
-                    }
+                        .tag("askLLM")
+
+                    ProfileView()
+                        .tabItem
+                        {
+                            Label("Profile", systemImage: "person.crop.circle")
+                        }
+                        .tag("profile")
                 }
             }
             else
