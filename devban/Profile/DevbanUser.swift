@@ -22,7 +22,7 @@ final class DevbanUser
 
         loggedIn = true
     }
-    
+
     func logoutUser()
     {
         loggedIn = false

@@ -45,9 +45,22 @@ struct AuthenticationView: View
 
                         VStack(spacing: 4)
                         {
-                            Text("Password")
-                                .fontDesign(.rounded)
-                                .frame(maxWidth: .infinity, alignment: .topLeading)
+                            HStack(spacing: 0)
+                            {
+                                Text("Password")
+                                    .fontDesign(.rounded)
+                                    .frame(maxWidth: .infinity, alignment: .topLeading)
+
+                                Button
+                                {
+                                    viewModel.forgetPassword()
+                                }
+                                label:
+                                {
+                                    Text("Forget password?")
+                                        .fontDesign(.rounded)
+                                }
+                            }
 
                             SecureField("Password", text: $viewModel.password)
                                 .font(.headline)
@@ -90,6 +103,12 @@ struct AuthenticationView: View
                                 .foregroundStyle(.red)
                         }
 
+                        if (viewModel.showSpecialMessage)
+                        {
+                            Text(viewModel.specialMessage)
+                                .foregroundStyle(ThemeManager.shared.buttonColor)
+                        }
+
                         Divider()
 
                         HStack
@@ -122,6 +141,23 @@ struct AuthenticationView: View
                 .toolbar(.hidden)
                 .scrollContentBackground(.hidden)
             }
+        }
+        .alert("Forget password?", isPresented: $viewModel.showForgetPasswordAlert)
+        {
+            Button("Cancel", role: .cancel)
+            {
+                viewModel.showForgetPasswordAlert = false
+            }
+
+            Button("Confirm", role: .confirm)
+            {
+                viewModel.confirmForgetPassword()
+                viewModel.showForgetPasswordAlert = false
+            }
+        }
+        message:
+        {
+            Text("A reset password email will be sent to your email address (\(viewModel.email)).")
         }
     }
 }

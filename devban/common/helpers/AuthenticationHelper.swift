@@ -48,4 +48,9 @@ enum AuthenticationHelper
         try Auth.auth().signOut()
         AuthenticationHelper.updateUserAuthStatus()
     }
+
+    static func sendForgetPasswordEmail(to email: String)
+    {
+        Auth.auth().sendPasswordReset(withEmail: email)
+    }
 }
