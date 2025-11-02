@@ -29,11 +29,10 @@ final class AuthenticationViewModel
         {
             do
             {
-                let authDataResult: AuthDataResultModel = try await AuthenticationHelper.signInUser(
+                try await AuthenticationHelper.signInUser(
                     email: email,
                     password: password,
                 )
-                DevbanUser.shared.loginUser(with: authDataResult)
                 waitingServerResponse = false
             }
             catch

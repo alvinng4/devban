@@ -22,4 +22,12 @@ final class DevbanUser
 
         loggedIn = true
     }
+    
+    func logoutUser()
+    {
+        loggedIn = false
+        uid = nil
+        email = nil
+        photoUrl = nil
+    }
 }

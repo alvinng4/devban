@@ -4,13 +4,15 @@ struct MainView: View
 {
     @Environment(\.colorScheme) private var colorScheme
 
+    @State private var selectedTab: String = "askLLM"
+
     var body: some View
     {
         getMainContent()
             .tint(ThemeManager.shared.buttonColor)
             .onAppear
             {
-                AuthenticationHelper.initializeUser()
+                AuthenticationHelper.updateUserAuthStatus()
 
                 ThemeManager.shared.updateTheme(colorScheme: colorScheme)
             }
@@ -26,7 +28,24 @@ struct MainView: View
         {
             if (DevbanUser.shared.loggedIn)
             {
-                AskLLMView()
+                TabView(
+                    selection: $selectedTab,
+                )
+                {
+                    AskLLMView()
+                        .tabItem
+                        {
+                            Label("AskLLM", systemImage: "apple.intelligence")
+                        }
+                        .tag("askLLM")
+
+                    ProfileView()
+                        .tabItem
+                        {
+                            Label("Profile", systemImage: "person.crop.circle")
+                        }
+                        .tag("profile")
+                }
             }
             else
             {
