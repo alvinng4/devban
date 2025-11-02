@@ -121,7 +121,9 @@ struct AuthenticationView: View
                                 state: .normal,
                             ),
                         )
-                        {}
+                        {
+                            viewModel.signInGoogle()
+                        }
 
                         HStack
                         {

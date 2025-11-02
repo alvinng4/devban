@@ -1,3 +1,4 @@
+import Firebase
 import Foundation
 import GoogleSignIn
 import GoogleSignInSwift
@@ -43,6 +44,25 @@ final class AuthenticationViewModel
             catch
             {
                 waitingServerResponse = false
+                showErrorMessage(error.localizedDescription)
+            }
+        }
+    }
+    
+    func signInGoogle()
+    {
+        guard let clientID: String = FirebaseApp.app()?.options.clientID else { return }
+        let helper: SignInWithGoogleHelper = SignInWithGoogleHelper(GIDClientID: clientID)
+
+        Task
+        {
+            do
+            {
+                let signInResult: GoogleSignInResult = try await helper.signIn()
+                try await AuthenticationHelper.signInWithGoogle(googleSignInResult: signInResult)
+            }
+            catch
+            {
                 showErrorMessage(error.localizedDescription)
             }
         }
