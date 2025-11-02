@@ -15,7 +15,7 @@ struct ChatBubbleView: View
     {
         self.chatMessage = chatMessage
 
-        isCurrentUser = (chatMessage.senderID != DevbanUser.shared.uid)
+        isCurrentUser = (chatMessage.senderID == DevbanUser.shared.uid)
     }
 
     @Environment(\.colorScheme) private var colorScheme
@@ -35,17 +35,26 @@ struct ChatBubbleView: View
 
     var body: some View
     {
-        Markdown(chatMessage.content)
-            .markdownBlockStyle(\.codeBlock)
-            {
-                codeBlock($0)
-            }
-            .markdownCodeSyntaxHighlighter(.splash(theme: theme))
-            .padding()
-            .background(backgroundColor)
-            .cornerRadius(12)
-            .padding(isCurrentUser ? .leading : .trailing, 20)
-            .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
+        VStack(spacing: 0)
+        {
+            Markdown(chatMessage.content)
+                .markdownBlockStyle(\.codeBlock)
+                {
+                    codeBlock($0)
+                }
+                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
+                .padding()
+                .background(backgroundColor)
+                .cornerRadius(12)
+                .padding(isCurrentUser ? .leading : .trailing, 20)
+                .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
+
+            Text(chatMessage.sentDate.formatted(date: .abbreviated, time: .shortened))
+                .foregroundStyle(.tertiary)
+                .font(.footnote)
+                .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
+                .padding(.horizontal, 2)
+        }
     }
 
     @ViewBuilder
