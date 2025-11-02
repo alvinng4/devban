@@ -32,6 +32,13 @@ struct MainView: View
                     selection: $selectedTab,
                 )
                 {
+                    CalendarView()
+                        .tabItem
+                        {
+                            Label("Calendar", systemImage: "calendar")
+                        }
+                        .tag("calendar")
+
                     AskLLMView()
                         .tabItem
                         {
