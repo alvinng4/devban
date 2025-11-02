@@ -47,7 +47,7 @@ enum AuthenticationHelper
     {
         let credential: AuthCredential = GoogleAuthProvider.credential(
             withIDToken: googleSignInResult.idToken,
-            accessToken: googleSignInResult.accessToken
+            accessToken: googleSignInResult.accessToken,
         )
         try await Auth.auth().signIn(with: credential)
 

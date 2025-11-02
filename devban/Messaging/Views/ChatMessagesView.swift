@@ -66,10 +66,9 @@ struct ChatMessagesView: View
                     if let userInput,
                        !userInput.isEmptyOrWhitespace()
                     {
-                        // TODO: After User is implemented, change senderID to actual user id
                         ChatBubbleView(
                             ChatMessage(
-                                senderID: UUID(),
+                                senderID: DevbanUser.shared.uid,
                                 content: userInput,
                             ),
                         )

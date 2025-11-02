@@ -29,9 +29,6 @@ struct AskLLMView: View
 
                 VStack(spacing: 0)
                 {
-                    // TODO: Change the senderID to actual user ID after User is implemented
-                    // MARK: Renders the chat messages
-
                     ChatMessagesView(
                         messages: viewModel.messages,
                         isLoading: viewModel.isThinking,

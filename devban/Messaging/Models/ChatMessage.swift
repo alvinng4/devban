@@ -10,7 +10,7 @@ import Foundation
 struct ChatMessage: Codable, Equatable, Identifiable
 {
     init(
-        senderID: UUID?,
+        senderID: String?,
         content: String,
         sentDate: Date = Date(),
         LLMContextClearedAfter: Bool = false,
@@ -24,7 +24,7 @@ struct ChatMessage: Codable, Equatable, Identifiable
     }
 
     let id: UUID
-    let senderID: UUID?
+    let senderID: String?
     let content: String
     let sentDate: Date
     var LLMContextClearedAfter: Bool
