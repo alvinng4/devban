@@ -26,7 +26,25 @@ struct MainView: View
         {
             if (DevbanUser.shared.loggedIn)
             {
-                AskLLMView()
+                NeobrutalismRoundedRectangleTabView(
+                    options: ["AskLLM", "Calendar"],
+                    defaultSelection: "AskLLM",
+                )
+                { option in
+                    Group
+                    {
+                        if option == "AskLLM"
+                        {
+                            AskLLMView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                        else
+                        {
+                            CalendarView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                    }
+                }
             }
             else
             {
