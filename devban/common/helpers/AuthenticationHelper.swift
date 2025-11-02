@@ -3,10 +3,15 @@ import Foundation
 
 enum AuthenticationHelper
 {
-    static func initializeUser()
+    static func updateUserAuthStatus()
     {
-        guard let user = Auth.auth().currentUser else { return }
-        guard user.emailVerified() else { return }
+        guard let user = Auth.auth().currentUser,
+              user.emailVerified()
+        else
+        {
+            DevbanUser.shared.logoutUser()
+            return
+        }
 
         DevbanUser.shared.loginUser(
             with: AuthDataResultModel(user: user),
@@ -19,7 +24,7 @@ enum AuthenticationHelper
         try await authDataResult.user.sendEmailVerification()
     }
 
-    static func signInUser(email: String, password: String) async throws -> AuthDataResultModel
+    static func signInUser(email: String, password: String) async throws
     {
         let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
         guard authDataResult.user.emailVerified()
@@ -35,6 +40,17 @@ enum AuthenticationHelper
             )
         }
 
-        return AuthDataResultModel(user: authDataResult.user)
+        AuthenticationHelper.updateUserAuthStatus()
+    }
+
+    static func signOutUser() throws
+    {
+        try Auth.auth().signOut()
+        AuthenticationHelper.updateUserAuthStatus()
+    }
+
+    static func sendForgetPasswordEmail(to email: String)
+    {
+        Auth.auth().sendPasswordReset(withEmail: email)
     }
 }
