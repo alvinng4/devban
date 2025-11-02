@@ -1,7 +1,10 @@
+import GoogleSignIn
+import GoogleSignInSwift
 import SwiftUI
 
 struct AuthenticationView: View
 {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @State private var viewModel: AuthenticationViewModel = AuthenticationViewModel()
@@ -97,19 +100,28 @@ struct AuthenticationView: View
                             Text("Waiting server response...")
                         }
 
-                        if (viewModel.showErrorMessage)
+                        if (viewModel.isPresentErrorMessage)
                         {
                             Text(viewModel.errorMessage)
                                 .foregroundStyle(.red)
                         }
 
-                        if (viewModel.showSpecialMessage)
+                        if (viewModel.isPresentSpecialMessage)
                         {
                             Text(viewModel.specialMessage)
                                 .foregroundStyle(ThemeManager.shared.buttonColor)
                         }
 
                         Divider()
+
+                        GoogleSignInButton(
+                            viewModel: GoogleSignInButtonViewModel(
+                                scheme: .dark,
+                                style: .wide,
+                                state: .normal,
+                            ),
+                        )
+                        {}
 
                         HStack
                         {
@@ -142,22 +154,25 @@ struct AuthenticationView: View
                 .scrollContentBackground(.hidden)
             }
         }
-        .alert("Forget password?", isPresented: $viewModel.showForgetPasswordAlert)
+        .alert("Forget password?", isPresented: $viewModel.isPresentForgetPasswordAlert)
         {
             Button("Cancel", role: .cancel)
             {
-                viewModel.showForgetPasswordAlert = false
+                viewModel.isPresentForgetPasswordAlert = false
             }
 
             Button("Confirm", role: .confirm)
             {
                 viewModel.confirmForgetPassword()
-                viewModel.showForgetPasswordAlert = false
+                viewModel.isPresentForgetPasswordAlert = false
             }
+
+            TextField("Email address", text: $viewModel.email)
+                .autocorrectionDisabled(true)
         }
         message:
         {
-            Text("A reset password email will be sent to your email address (\(viewModel.email)).")
+            Text("A reset password email will be sent to your email address.")
         }
     }
 }

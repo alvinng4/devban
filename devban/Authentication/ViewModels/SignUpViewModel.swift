@@ -5,29 +5,29 @@ final class SignUpViewModel
 {
     var email: String = ""
     var password: String = ""
-    var showReturnAlert: Bool = false
-    var showInvalidInputWarning: Bool = false
-    var invalidInputWarningString: String = ""
-    var showEmailVerificationString: Bool = false
-    var emailVerificationString: String = ""
+
+    var isPresentErrorMessage: Bool = false
+    var errorMessage: String = ""
+    var isPresentSpecialMessage: Bool = false
+    var specialMessage: String = ""
+
+    var isPresentReturnAlert: Bool = false
     var waitingServerResponse: Bool = false
     var dismiss: Bool = false
 
     func signUp()
     {
-        waitingServerResponse = true
-        invalidInputWarningString = ""
-        showInvalidInputWarning = false
-        emailVerificationString = ""
-        showEmailVerificationString = false
+        errorMessage = ""
+        isPresentErrorMessage = false
 
         guard isInputValid()
         else
         {
-            invalidInputWarningString = "Invalid email or password"
-            showInvalidInputWarning = true
+            showErrorMessage("Invalid email or password")
             return
         }
+
+        waitingServerResponse = true
 
         Task
         {
@@ -36,8 +36,7 @@ final class SignUpViewModel
                 try await AuthenticationHelper.createUser(email: email, password: password)
 
                 waitingServerResponse = false
-                emailVerificationString = "Success! Please check your email address (\(email)) for verification email."
-                showEmailVerificationString = true
+                showSpecialMessage("Success! Please check your email address (\(email)) for verification email.")
 
                 email = ""
                 password = ""
@@ -45,8 +44,7 @@ final class SignUpViewModel
             catch
             {
                 waitingServerResponse = false
-                invalidInputWarningString = error.localizedDescription
-                showInvalidInputWarning = true
+                showErrorMessage(error.localizedDescription)
             }
         }
     }
@@ -64,7 +62,7 @@ final class SignUpViewModel
         }
         else
         {
-            showReturnAlert = true
+            isPresentReturnAlert = true
         }
     }
 
@@ -74,5 +72,21 @@ final class SignUpViewModel
             !isInputValid()
                 || waitingServerResponse,
         )
+    }
+
+    private func showErrorMessage(_ message: String)
+    {
+        isPresentSpecialMessage = false
+        specialMessage = ""
+        errorMessage = message
+        isPresentErrorMessage = true
+    }
+
+    private func showSpecialMessage(_ message: String)
+    {
+        isPresentErrorMessage = false
+        errorMessage = ""
+        specialMessage = message
+        isPresentSpecialMessage = true
     }
 }
