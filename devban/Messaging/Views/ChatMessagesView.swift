@@ -5,13 +5,13 @@ import SwiftUI
 ///
 /// - Parameters:
 ///     - messages: The messages to be rendered.
-///     - isLoading: Boolean variable to indicate whether the opponent message is loading.
+///     - responseStatus: Response status of the sender.
 ///     - LLMStreamingContent: Partial content streamed from LLM output.
 ///     - userInput: Partial user input for preview.
 struct ChatMessagesView: View
 {
     let messages: [ChatMessage]
-    let isLoading: Bool
+    let responseStatus: ResponseStatus
     let LLMStreamingContent: String.PartiallyGenerated?
     let userInput: String?
 
@@ -47,18 +47,20 @@ struct ChatMessagesView: View
 
                     // MARK: Render partial content streamed from LLM output.
 
-                    if let LLMStreamingContent
+                    if (responseStatus == .thinking)
                     {
+                        ProgressView()
+                    }
+                    else if let LLMStreamingContent,
+                        !LLMStreamingContent.isEmptyOrWhitespace()
+                    {
+                        let trimmed: String = LLMStreamingContent.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(
                             ChatMessage(
                                 senderID: nil,
-                                content: LLMStreamingContent,
+                                content: trimmed,
                             ),
                         )
-                    }
-                    else if (isLoading)
-                    {
-                        ProgressView()
                     }
 
                     // MARK: Render user input preview.
@@ -66,10 +68,11 @@ struct ChatMessagesView: View
                     if let userInput,
                        !userInput.isEmptyOrWhitespace()
                     {
+                        let trimmed: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(
                             ChatMessage(
                                 senderID: DevbanUser.shared.uid,
-                                content: userInput,
+                                content: trimmed,
                             ),
                         )
                     }
