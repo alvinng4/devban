@@ -31,7 +31,7 @@ struct AskLLMView: View
                 {
                     ChatMessagesView(
                         messages: viewModel.messages,
-                        isLoading: viewModel.isThinking,
+                        responseStatus: viewModel.responseStatus,
                         LLMStreamingContent: viewModel.LLMStreamingContent,
                         userInput: viewModel.userInput,
                     )
@@ -73,7 +73,7 @@ struct AskLLMView: View
                             // Restart conversation
                             Button
                             {
-                                viewModel.restart()
+                                viewModel.resetSession()
                             }
                             label:
                             {

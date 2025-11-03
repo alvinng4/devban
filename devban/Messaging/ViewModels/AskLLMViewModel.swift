@@ -7,21 +7,29 @@ final class AskLLMViewModel
 {
     init()
     {
-        session = LanguageModelSession()
+        resetStreamingTask()
         messages = [
             AskLLMViewModel.getGreetingMessage(),
         ]
     }
 
-    private var session: LanguageModelSession
-    private(set) var messages: [ChatMessage]
+    private var session: LanguageModelSession = LanguageModelSession()
+    private(set) var messages: [ChatMessage] = []
     var userInput: String = ""
     var userInputSelectedRange = NSRange(location: 0, length: 0)
 
-    private(set) var isThinking: Bool = false
-    private(set) var isResponding: Bool = false
+    private(set) var responseStatus: ResponseStatus = .idle
     private(set) var LLMStreamingContent: String.PartiallyGenerated?
     private var streamingTask: Task<Void, Never>?
+
+    func resetSession()
+    {
+        resetStreamingTask()
+        session = LanguageModelSession()
+        messages = [
+            AskLLMViewModel.getGreetingMessage(),
+        ]
+    }
 
     static func getGreetingMessage() -> ChatMessage
     {
@@ -57,32 +65,40 @@ final class AskLLMViewModel
 
     func sendMessage()
     {
-        guard !(isThinking || isResponding) else { return }
+        guard (responseStatus == .idle) else { return } // For askLLM only
         guard !userInput.isEmptyOrWhitespace() else { return }
 
-        isThinking = true
+        let trimmed: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
 
         messages.append(
-            ChatMessage(senderID: DevbanUser.shared.uid, content: userInput),
+            ChatMessage(senderID: DevbanUser.shared.uid, content: trimmed),
         )
-        let msgContent: String = userInput
+        let prompt: String = userInput
         userInput = ""
 
+        // Get response from LLM
+        promptLLM(prompt)
+    }
+
+    private func promptLLM(_ prompt: String)
+    {
+        guard (responseStatus == .idle) else { return }
+
+        responseStatus = .thinking
+
+        // Cancel any existing streaming task before starting a new one
+        streamingTask?.cancel()
         streamingTask = Task
         {
             do
             {
-                let stream = session.streamResponse(to: msgContent)
+                let stream = session.streamResponse(to: prompt)
+                LLMStreamingContent = ""
 
                 for try await partial in stream
                 {
-                    isThinking = false
-                    isResponding = true
-
-                    if (LLMStreamingContent == nil)
-                    {
-                        LLMStreamingContent = ""
-                    }
+                    responseStatus = .responding
 
                     let originalLength: Int = LLMStreamingContent?.count ?? 0
 
@@ -98,7 +114,7 @@ final class AskLLMViewModel
                         for character in newCharacters
                         {
                             LLMStreamingContent?.append(character)
-                            try await Task.sleep(nanoseconds: 1_000_000) // 1 ms
+                            try await Task.sleep(nanoseconds: 100_000) // 0.1 ms
                         }
                     }
                     else
@@ -107,23 +123,19 @@ final class AskLLMViewModel
                     }
                 }
 
-                guard !Task.isCancelled else { return }
-
                 storeLLMOutputToMessages()
 
-                isThinking = false
-                isResponding = false
-                LLMStreamingContent = nil
-                streamingTask = nil
+                // Cancel task is set to false because
+                // 1. The task is already completed successfully at this point.
+                // 2. It is better not to cancel the task within the task itself.
+                resetStreamingTask(cancelTask: false)
             }
             catch
             {
-                print("AskLLM Error: \(error)")
+                // There may be some output before the error occurred
+                storeLLMOutputToMessages()
 
-                isThinking = false
-                isResponding = false
-                LLMStreamingContent = nil
-                streamingTask = nil
+                print("AskLLM Error: \(error)")
 
                 // Ignores CancellationError as it is requested by User (i.e. expected behaviour)
                 if !(error is CancellationError)
@@ -135,66 +147,56 @@ final class AskLLMViewModel
                         ),
                     )
                 }
+
+                // Cancel task is set to false because
+                // 1. The task is already completed successfully at this point.
+                // 2. It is better not to cancel the task within the task itself.
+                resetStreamingTask(cancelTask: false)
             }
         }
     }
 
     func stopModel()
     {
-        isThinking = false
-        isResponding = false
-
-        streamingTask?.cancel()
-        streamingTask = nil
-
-        if let LLMStreamingContent,
-           !LLMStreamingContent.isEmptyOrWhitespace()
-        {
-            storeLLMOutputToMessages()
-        }
-
-        LLMStreamingContent = nil
+        storeLLMOutputToMessages()
+        resetStreamingTask()
     }
 
     func clearContext()
     {
-        if (isThinking || isResponding)
-        {
-            storeLLMOutputToMessages()
-            resetModel()
-        }
+        stopModel()
+        session = LanguageModelSession()
 
         guard !messages.isEmpty else { return }
         messages[messages.count - 1].LLMContextClearedAfter = true
     }
 
-    func restart()
+    private func resetStreamingTask(cancelTask: Bool = true)
     {
-        resetModel()
-        messages = [
-            AskLLMViewModel.getGreetingMessage(),
-        ]
+        if (cancelTask)
+        {
+            streamingTask?.cancel()
+        }
+        streamingTask = nil
+        LLMStreamingContent = nil
+
+        responseStatus = .idle
     }
 
     private func storeLLMOutputToMessages()
     {
-        messages.append(
-            ChatMessage(
-                senderID: nil,
-                content: LLMStreamingContent ?? "",
-            ),
-        )
-    }
+        if let LLMStreamingContent,
+           !LLMStreamingContent.isEmptyOrWhitespace()
+        {
+            let trimmed: String = LLMStreamingContent.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { return }
 
-    private func resetModel()
-    {
-        isThinking = false
-        isResponding = false
-
-        streamingTask?.cancel()
-        streamingTask = nil
-
-        session = LanguageModelSession()
-        LLMStreamingContent = nil
+            messages.append(
+                ChatMessage(
+                    senderID: nil,
+                    content: trimmed,
+                ),
+            )
+        }
     }
 }
