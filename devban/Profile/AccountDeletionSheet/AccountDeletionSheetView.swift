@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 /// A view that presents a confirmation sheet for permanent account deletion.
 ///
 /// The sheet asks the user to confirm by typing "YES" before allowing deletion.

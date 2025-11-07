@@ -2,22 +2,24 @@ import SwiftUI
 
 extension AccountDeletionSheetView
 {
+    /// Message types shown in the deletion sheet.
     enum MessageType
     {
-        case normal
-        case special
-        case error
+        case normal, special, error
     }
 
+    /// Handles input validation and account deletion logic.
     @Observable
     final class AccountDeletionSheetViewModel
     {
+        /// User’s confirmation text
         var userInput: String = ""
 
         private(set) var messageType: MessageType = .normal
         private(set) var isShowMessage: Bool = false
         private(set) var message: String = ""
 
+        /// Deletes account after user confirms with "YES"
         func deleteAccount()
         {
             guard !disableSubmit
@@ -43,11 +45,13 @@ extension AccountDeletionSheetView
             }
         }
 
+        /// True if user input is not "YES"
         var disableSubmit: Bool
         {
             return userInput != "YES"
         }
 
+         /// Color for current message type
         var messageColor: Color
         {
             switch (messageType)
