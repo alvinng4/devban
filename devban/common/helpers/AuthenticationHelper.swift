@@ -64,4 +64,23 @@ enum AuthenticationHelper
     {
         Auth.auth().sendPasswordReset(withEmail: email)
     }
+
+    static func deleteAccount() async throws
+    {
+        guard let user = Auth.auth().currentUser
+        else
+        {
+            throw NSError(
+                domain: "Auth",
+                code: 401,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "User not logged in. Please log in and try again.",
+                ],
+            )
+        }
+
+        try await user.delete()
+        AuthenticationHelper.updateUserAuthStatus()
+    }
 }
