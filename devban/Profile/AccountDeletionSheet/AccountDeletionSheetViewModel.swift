@@ -18,24 +18,6 @@ extension AccountDeletionSheetView
         private(set) var isShowMessage: Bool = false
         private(set) var message: String = ""
 
-        var disableSubmit: Bool
-        {
-            return userInput != "YES"
-        }
-
-        var messageColor: Color
-        {
-            switch (messageType)
-            {
-                case .normal:
-                    return .primary
-                case .special:
-                    return ThemeManager.shared.buttonColor
-                case .error:
-                    return .red
-            }
-        }
-
         func deleteAccount()
         {
             guard !disableSubmit
@@ -58,6 +40,24 @@ extension AccountDeletionSheetView
                 {
                     showErrorMessage("Error: \(error.localizedDescription)")
                 }
+            }
+        }
+
+        var disableSubmit: Bool
+        {
+            return userInput != "YES"
+        }
+
+        var messageColor: Color
+        {
+            switch (messageType)
+            {
+                case .normal:
+                    return .primary
+                case .special:
+                    return ThemeManager.shared.buttonColor
+                case .error:
+                    return .red
             }
         }
 
