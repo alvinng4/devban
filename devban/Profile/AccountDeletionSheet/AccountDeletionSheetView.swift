@@ -1,12 +1,33 @@
 import SwiftUI
 
+
+/// A view that presents a confirmation sheet for permanent account deletion.
+///
+/// The sheet asks the user to confirm by typing "YES" before allowing deletion.
+/// It provides user feedback messages and disables the delete button until
+/// the confirmation input is valid.
+///
+/// ## Overview
+/// `AccountDeletionSheetView` displays a modal confirmation dialog that includes:
+/// - A dismiss button
+/// - A confirmation text field
+/// - A delete action button
+/// - Optional feedback message after the delete attempt
+///
+/// This view is controlled by `AccountDeletionSheetViewModel`,
+/// which handles input validation and the deletion logic.
 struct AccountDeletionSheetView: View
 {
+    /// Dismiss action for the sheet, provided by SwiftUI environment.    
     @Environment(\.dismiss) private var dismiss
 
+    /// The view model that manages the account deletion logic and UI states.
     @State private var viewModel: AccountDeletionSheetViewModel = AccountDeletionSheetViewModel()
+
+    /// Tracks whether the confirmation text field is currently focused.
     @FocusState private var isTextFocused: Bool
 
+    /// The main content of the account deletion confirmation sheet.
     var body: some View
     {
         VStack(spacing: 20)
