@@ -52,7 +52,7 @@ struct ChatMessagesView: View
                         ProgressView()
                     }
                     else if let LLMStreamingContent,
-                        !LLMStreamingContent.isEmptyOrWhitespace()
+                            !LLMStreamingContent.isEmptyOrWhitespace()
                     {
                         let trimmed: String = LLMStreamingContent.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(

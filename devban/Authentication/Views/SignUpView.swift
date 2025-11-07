@@ -55,7 +55,7 @@ struct SignUpView: View
                             .frame(maxWidth: .infinity, alignment: .topLeading)
 
                         TextField("Email address", text: $viewModel.email)
-                            .autocorrectionDisabled(true)
+                            .autocorrectionDisabled()
                             .font(.headline)
                             .focused($isTextFocused)
                             .padding(10)

@@ -4,6 +4,8 @@ struct ProfileView: View
 {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    @State private var showAccountDeletionSheetView: Bool = false
+
     var body: some View
     {
         let isCompact: Bool = (horizontalSizeClass == .compact)
@@ -20,8 +22,17 @@ struct ProfileView: View
                     Text("Profile")
                         .customTitle()
 
-                    VStack(spacing: 0)
+                    VStack(spacing: 10)
                     {
+                        Button(role: .destructive)
+                        {
+                            showAccountDeletionSheetView = true
+                        }
+                        label:
+                        {
+                            Text("Delete account")
+                        }
+
                         Button
                         {
                             do
@@ -37,9 +48,9 @@ struct ProfileView: View
                         {
                             Text("Logout")
                         }
-                        .padding()
                         .frame(maxWidth: .infinity)
                     }
+                    .padding()
                     .shadowedBorderRoundedRectangle()
                 }
                 .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
@@ -59,6 +70,10 @@ struct ProfileView: View
                 .toolbar(.hidden)
                 .scrollContentBackground(.hidden)
             }
+        }
+        .sheet(isPresented: $showAccountDeletionSheetView)
+        {
+            AccountDeletionSheetView()
         }
     }
 }
