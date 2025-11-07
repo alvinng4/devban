@@ -101,21 +101,10 @@ struct SignUpView: View
                     }
                     .disabled(viewModel.disableSubmit())
 
-                    if (viewModel.waitingServerResponse)
+                    if (viewModel.isShowMessage)
                     {
-                        Text("Waiting server response...")
-                    }
-
-                    if (viewModel.isPresentErrorMessage)
-                    {
-                        Text(viewModel.errorMessage)
-                            .foregroundStyle(.red)
-                    }
-
-                    if (viewModel.isPresentSpecialMessage)
-                    {
-                        Text(viewModel.specialMessage)
-                            .foregroundStyle(ThemeManager.shared.buttonColor)
+                        Text(viewModel.message)
+                            .foregroundStyle(viewModel.messageColor)
                     }
 
                     Divider()
