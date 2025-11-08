@@ -3,27 +3,51 @@ import SwiftUI
 
 extension SignUpView
 {
+    /// Enum representing types of messages displayed in the signup UI.
+    ///
+    /// Used to categorize feedback like errors or status updates, affecting color and handling.
     enum MessageType
     {
         case normal
         case special
         case error
     }
-
+    /// View model for managing signup states and logic in SignUpView.
+    ///
+    /// This class handles user input validation, signup processes (email/password and Google),
+    /// back navigation alerts, and UI feedback messages. It uses observables for reactive updates.
+    ///
+    /// ## Overview
+    /// `SignUpViewModel` coordinates:
+    /// - Input fields (email, password) with validation
+    /// - Asynchronous signup tasks with error handling
+    /// - Message display for user feedback
+    /// - Alert triggers for unsaved changes on dismiss
+    ///
+    /// Properties are observable via @Observable for SwiftUI bindings.
     @Observable
     final class SignUpViewModel
     {
+        /// The user's email address input.
         var email: String = ""
+        /// The user's password input (secure field).
         var password: String = ""
-
+        /// Flag indicating if a feedback message should be shown in the UI.
         var isShowMessage: Bool = false
+        /// The current feedback message text.
         var message: String = ""
+        /// The type of the current message, determining its color and style.
         var messageType: MessageType = .normal
-
+        /// Flag to present the return confirmation alert.
         var isPresentReturnAlert: Bool = false
+        /// Flag tracking if the view model is awaiting a server response.
         var waitingServerResponse: Bool = false
+        /// Flag to dismiss the view after successful signup or confirmation.
         var dismiss: Bool = false
-
+        /// Initiates the email/password signup process asynchronously.
+        ///
+        /// Validates input, shows waiting message, and calls the helper to create a user.
+        /// Updates UI states on success (with verification email note) or error.
         func signUp()
         {
             resetMessage()
@@ -57,7 +81,11 @@ extension SignUpView
                 }
             }
         }
-
+        
+        /// Initiates the Google signup process asynchronously.
+        ///
+        /// Retrieves client ID, uses Google helper for signup, and authenticates with Firebase.
+        /// Handles errors and updates UI feedback.
         func signUpGoogle()
         {
             resetMessage()
@@ -89,12 +117,16 @@ extension SignUpView
                 }
             }
         }
-
+        
+        /// Checks if the email and password inputs are valid (non-empty and non-whitespace).
+        ///
+        /// - Returns: True if both inputs are valid; false otherwise.
         func isInputValid() -> Bool
         {
             return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
         }
-
+        
+        /// Handles dismiss logic by checking for unsaved inputs and showing an alert if needed.
         func dismissOrShowAlert()
         {
             if (email.isEmptyOrWhitespace() && password.isEmptyOrWhitespace())
@@ -106,7 +138,10 @@ extension SignUpView
                 isPresentReturnAlert = true
             }
         }
-
+        
+        /// Determines if the signup submit button should be disabled.
+        ///
+        /// - Returns: True if input is invalid or awaiting server response; false otherwise.
         func disableSubmit() -> Bool
         {
             return (
@@ -114,7 +149,8 @@ extension SignUpView
                     || waitingServerResponse,
             )
         }
-
+        
+        /// Computed property for the color of the feedback message based on its type.
         var messageColor: Color
         {
             switch (messageType)
