@@ -1,17 +1,31 @@
 import SwiftUI
 
 /// Renders the user interface for Calendar.
+///
+/// This is the main calendar view that combines the calendar header, grid, and event list.
+/// It manages the calendar view model and handles adding/editing events through a sheet presentation.
 struct CalendarView: View
 {
+    /// Creates a new calendar view.
+    ///
+    /// Initializes the view with a new `CalendarViewModel` instance.
     init()
     {
         viewModel = CalendarViewModel()
     }
 
+    /// The horizontal size class of the current environment.
+    ///
+    /// Used to adjust layout for compact (iPhone) vs regular (iPad) sizes.
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    /// The view model that manages calendar state and events.
     @State private var viewModel: CalendarViewModel
+
+    /// Whether the add/edit event sheet is currently presented.
     @State private var showAddEventSheet: Bool = false
+
+    /// The event to edit, or `nil` if creating a new event.
     @State private var eventToEdit: CalendarEvent?
 
     var body: some View

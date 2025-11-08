@@ -1,14 +1,30 @@
 import SwiftUI
 
 /// Individual day cell in the calendar grid.
+///
+/// This view displays a single day in the calendar grid, showing the day number and an
+/// indicator if there are events on that day. The cell can be selected and highlights
+/// today's date differently.
 struct CalendarDayCell: View
 {
+    /// The date represented by this cell.
     let date: Date
+
+    /// Whether this cell is currently selected.
     let isSelected: Bool
+
+    /// Whether this cell represents today's date.
     let isToday: Bool
+
+    /// The number of events on this date.
     let eventsCount: Int
+
+    /// The action to perform when the cell is tapped.
     let onTap: () -> Void
 
+    /// The day number extracted from the date.
+    ///
+    /// - Returns: The day of the month (1-31).
     private var dayNumber: Int
     {
         Calendar.current.component(.day, from: date)

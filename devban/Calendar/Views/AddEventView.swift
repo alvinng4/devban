@@ -1,33 +1,64 @@
 import SwiftUI
 
 /// View for adding or editing calendar events.
+///
+/// This view provides a form interface for creating new calendar events or editing existing ones.
+/// It supports optional time ranges and validates input before allowing the user to save.
 struct AddEventView: View
 {
     @Environment(\.dismiss) private var dismiss
 
+    /// The view model that manages calendar events.
     let viewModel: CalendarViewModel
+
+    /// The event to edit, or `nil` if creating a new event.
     let eventToEdit: CalendarEvent?
 
+    /// The title of the event being created or edited.
     @State private var title: String = ""
+
+    /// The selected date for the event.
     @State private var selectedDate: Date = Date()
+
+    /// Whether the event includes a specific time.
     @State private var hasTime: Bool = false
+
+    /// The start time for the event, if time is included.
     @State private var startTime: Date = Date()
+
+    /// Whether the event includes an end time.
     @State private var hasEndTime: Bool = false
+
+    /// The end time for the event, if an end time is included.
     @State private var endTime: Date = Date().addingTimeInterval(3600) // 1 hour later
 
+    /// Focus state for the title text field.
     @FocusState private var isTitleFocused: Bool
 
+    /// Creates a new add/edit event view.
+    ///
+    /// - Parameters:
+    ///   - viewModel: The view model that manages calendar events.
+    ///   - eventToEdit: The event to edit, or `nil` to create a new event.
     init(viewModel: CalendarViewModel, eventToEdit: CalendarEvent?)
     {
         self.viewModel = viewModel
         self.eventToEdit = eventToEdit
     }
 
+    /// Returns `true` if the view is in editing mode.
+    ///
+    /// - Returns: `true` if `eventToEdit` is not `nil`; otherwise, `false`.
     private var isEditing: Bool
     {
         eventToEdit != nil
     }
 
+    /// Returns `true` if the form can be saved.
+    ///
+    /// The form can be saved if the title is not empty or whitespace-only.
+    ///
+    /// - Returns: `true` if the title is valid; otherwise, `false`.
     private var canSave: Bool
     {
         !title.isEmptyOrWhitespace()
@@ -178,6 +209,11 @@ struct AddEventView: View
         }
     }
 
+    /// Saves the event to the view model.
+    ///
+    /// If time is specified, combines the selected date with the start time to create a
+    /// complete timestamp. If editing an existing event, updates it; otherwise, creates
+    /// a new event. After saving, dismisses the view.
     private func saveEvent()
     {
         var finalDate = selectedDate
