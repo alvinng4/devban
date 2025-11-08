@@ -2,11 +2,23 @@ import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
 
+/// A view that handles user signup, including email/password creation and Google signup.
+///
+/// The view displays input fields, buttons, and feedback messages, with a back button and alert for unsaved changes.
+/// It is controlled by `SignUpViewModel`, which manages validation, API calls, and UI states.
+///
+/// ## Overview
+/// `SignUpView` presents a full-screen signup interface that includes:
+/// - Email and password fields with validation
+/// - Signup button and Google signup integration
+/// - Toolbar back button with confirmation alert
+/// - Dynamic feedback for errors or success
+/// - Adaptive padding based on device size class
 struct SignUpView: View
 {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-
+    /// The view model that manages signup states, input validation, and signup logic.
     @State private var viewModel: SignUpViewModel = SignUpViewModel()
 
     @FocusState private var isTextFocused: Bool

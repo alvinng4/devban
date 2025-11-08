@@ -2,11 +2,25 @@ import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
 
+/// A view that handles user authentication, including email/password sign-in, Google sign-in, and forget password functionality.
+///
+/// The view displays input fields, buttons, and feedback messages, with navigation to signup.
+/// It is controlled by `AuthenticationViewModel`, which manages validation, API calls, and UI states.
+///
+/// ## Overview
+/// `AuthenticationView` presents a full-screen authentication interface that includes:
+/// - Email and password fields with validation
+/// - Sign-in button and Google sign-in integration
+/// - Forget password alert and signup link
+/// - Dynamic feedback for errors or success
+/// - Adaptive padding based on device size class
+
 struct AuthenticationView: View
 {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-
+    
+    /// The view model that manages authentication states, input validation, and sign-in logic.
     @State private var viewModel: AuthenticationViewModel = AuthenticationViewModel()
 
     @FocusState private var isTextFocused: Bool
