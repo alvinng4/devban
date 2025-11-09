@@ -12,3 +12,7 @@ type_name:
         error: 60
     excluded:
         - devbanApp
+
+nesting:
+    type_level:
+        warning: 2
