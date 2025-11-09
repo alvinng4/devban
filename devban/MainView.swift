@@ -9,17 +9,18 @@ struct MainView: View
     var body: some View
     {
         getMainContent()
-            .tint(ThemeManager.shared.buttonColor)
+            .tint(DevbanUser.shared.buttonColor)
             .onAppear
             {
                 AuthenticationHelper.updateUserAuthStatus()
 
-                ThemeManager.shared.updateTheme(colorScheme: colorScheme)
+                DevbanUser.shared.updateTheme(colorScheme: colorScheme)
             }
             .onChange(of: colorScheme)
             {
-                ThemeManager.shared.updateTheme(colorScheme: colorScheme)
+                DevbanUser.shared.updateTheme(colorScheme: colorScheme)
             }
+            .preferredColorScheme(DevbanUser.shared.getActualColorScheme(colorScheme))
     }
 
     private func getMainContent() -> some View

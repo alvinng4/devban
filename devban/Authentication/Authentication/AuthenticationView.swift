@@ -2,7 +2,8 @@ import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
 
-/// A view that handles user authentication, including email/password sign-in, Google sign-in, and forget password functionality.
+/// A view that handles user authentication, including email/password sign-in, Google sign-in, and forget password
+/// functionality.
 ///
 /// The view displays input fields, buttons, and feedback messages, with navigation to signup.
 /// It is controlled by `AuthenticationViewModel`, which manages validation, API calls, and UI states.
@@ -19,7 +20,7 @@ struct AuthenticationView: View
 {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    
+
     /// The view model that manages authentication states, input validation, and sign-in logic.
     @State private var viewModel: AuthenticationViewModel = AuthenticationViewModel()
 
@@ -33,7 +34,7 @@ struct AuthenticationView: View
         {
             ZStack
             {
-                ThemeManager.shared.backgroundColor
+                DevbanUser.shared.backgroundColor
                     .ignoresSafeArea()
 
                 VStack(spacing: 10)
@@ -103,7 +104,7 @@ struct AuthenticationView: View
                                 .background(
                                     viewModel.disableSubmit() ?
                                         Color.gray :
-                                        ThemeManager.shared.buttonColor,
+                                        DevbanUser.shared.buttonColor,
                                 )
                                 .cornerRadius(10)
                         }

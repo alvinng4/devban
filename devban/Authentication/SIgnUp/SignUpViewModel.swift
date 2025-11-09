@@ -12,6 +12,7 @@ extension SignUpView
         case special
         case error
     }
+
     /// View model for managing signup states and logic in SignUpView.
     ///
     /// This class handles user input validation, signup processes (email/password and Google),
@@ -81,7 +82,7 @@ extension SignUpView
                 }
             }
         }
-        
+
         /// Initiates the Google signup process asynchronously.
         ///
         /// Retrieves client ID, uses Google helper for signup, and authenticates with Firebase.
@@ -117,7 +118,7 @@ extension SignUpView
                 }
             }
         }
-        
+
         /// Checks if the email and password inputs are valid (non-empty and non-whitespace).
         ///
         /// - Returns: True if both inputs are valid; false otherwise.
@@ -125,7 +126,7 @@ extension SignUpView
         {
             return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
         }
-        
+
         /// Handles dismiss logic by checking for unsaved inputs and showing an alert if needed.
         func dismissOrShowAlert()
         {
@@ -138,7 +139,7 @@ extension SignUpView
                 isPresentReturnAlert = true
             }
         }
-        
+
         /// Determines if the signup submit button should be disabled.
         ///
         /// - Returns: True if input is invalid or awaiting server response; false otherwise.
@@ -149,7 +150,7 @@ extension SignUpView
                     || waitingServerResponse,
             )
         }
-        
+
         /// Computed property for the color of the feedback message based on its type.
         var messageColor: Color
         {
@@ -158,7 +159,7 @@ extension SignUpView
                 case .normal:
                     return .primary
                 case .special:
-                    return ThemeManager.shared.buttonColor
+                    return DevbanUser.shared.buttonColor
                 case .error:
                     return .red
             }

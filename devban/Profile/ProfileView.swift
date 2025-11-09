@@ -2,9 +2,12 @@ import SwiftUI
 
 struct ProfileView: View
 {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @State private var showAccountDeletionSheetView: Bool = false
+    @State private var settingsIsGeneralExpanded: Bool = true
+    @State private var settingsIsAccountExpanded: Bool = true
 
     var body: some View
     {
@@ -14,7 +17,7 @@ struct ProfileView: View
         {
             ZStack
             {
-                ThemeManager.shared.backgroundColor
+                DevbanUser.shared.backgroundColor
                     .ignoresSafeArea()
 
                 VStack(spacing: 10)
@@ -24,36 +27,198 @@ struct ProfileView: View
 
                     VStack(spacing: 10)
                     {
-                        Button(role: .destructive)
-                        {
-                            showAccountDeletionSheetView = true
-                        }
-                        label:
-                        {
-                            Text("Delete account")
-                        }
-
-                        Button
-                        {
-                            do
-                            {
-                                try AuthenticationHelper.signOutUser()
-                            }
-                            catch
-                            {
-                                print(error.localizedDescription)
-                            }
-                        }
-                        label:
-                        {
-                            Text("Logout")
-                        }
-                        .frame(maxWidth: .infinity)
+                        Text("User Profile")
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .padding()
                     .shadowedBorderRoundedRectangle()
+
+                    Text("Settings")
+                        .customTitle()
+
+                    VStack(spacing: 0)
+                    {
+                        DisclosureGroup(isExpanded: $settingsIsGeneralExpanded)
+                        {
+                            VStack(spacing: 15)
+                            {
+                                Divider()
+
+                                HStack(spacing: 0)
+                                {
+                                    Label("Dark mode", systemImage: "moon")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                                    Menu
+                                    {
+                                        Picker(
+                                            selection: Binding(
+                                                get: { DevbanUser.shared.preferredColorScheme },
+                                                set: { DevbanUser.shared.preferredColorScheme = $0 },
+                                            ),
+                                        )
+                                        {
+                                            Text("Auto")
+                                                .tag(DevbanUser.PreferredColorScheme.auto)
+
+                                            Text("Dark")
+                                                .tag(DevbanUser.PreferredColorScheme.dark)
+
+                                            Text("Light")
+                                                .tag(DevbanUser.PreferredColorScheme.light)
+                                        }
+                                        label:
+                                        {
+                                            Label("Dark mode", systemImage: "moon")
+                                        }
+                                    }
+                                    label:
+                                    {
+                                        HStack(spacing: 5)
+                                        {
+                                            Text(DevbanUser.shared.preferredColorScheme.rawValue)
+                                            Image(systemName: "chevron.up.chevron.down")
+                                        }
+                                    }
+                                    .onChange(of: DevbanUser.shared.preferredColorScheme)
+                                    {
+                                        DevbanUser.shared.updateTheme(
+                                            colorScheme: colorScheme,
+                                        )
+                                    }
+                                }
+
+                                Divider()
+
+                                HStack(spacing: 0)
+                                {
+                                    Label("Theme", systemImage: "paintpalette")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                                    Menu
+                                    {
+                                        Picker(
+                                            selection: Binding(
+                                                get: { DevbanUser.shared.theme },
+                                                set: { DevbanUser.shared.theme = $0 },
+                                            ),
+                                        )
+                                        {
+                                            Text("Blue")
+                                                .tag(DevbanUser.DefaultTheme.blue)
+
+                                            Text("Green")
+                                                .tag(DevbanUser.DefaultTheme.green)
+
+                                            Text("Orange")
+                                                .tag(DevbanUser.DefaultTheme.orange)
+                                        }
+                                        label:
+                                        {
+                                            Label("Theme", systemImage: "paintpalette")
+                                        }
+                                    }
+                                    label:
+                                    {
+                                        HStack(spacing: 5)
+                                        {
+                                            Text(DevbanUser.shared.theme.rawValue)
+                                            Image(systemName: "chevron.up.chevron.down")
+                                        }
+                                    }
+                                }
+                                .onChange(of: DevbanUser.shared.theme)
+                                {
+                                    DevbanUser.shared.updateTheme(
+                                        theme: DevbanUser.shared.theme,
+                                        colorScheme: colorScheme,
+                                    )
+                                }
+
+//                                Divider()
+//
+//                                HStack(spacing: 0)
+//                                {
+//                                    Label("Sound effects", systemImage: "music.note")
+//                                        .frame(maxWidth: .infinity, alignment: .leading)
+//
+//                                    Toggle("", isOn: $settingsSoundEffect)
+//                                        .fixedSize()
+//                                }
+//
+//                                Divider()
+//
+//                                HStack(spacing: 0)
+//                                {
+//                                    Label("Haptic effects", systemImage: "iphone.gen1.radiowaves.left.and.right")
+//                                        .frame(maxWidth: .infinity, alignment: .leading)
+//
+//                                    Toggle("", isOn: $settingsHapticEffect)
+//                                        .fixedSize()
+//                                }
+                            }
+                            .padding(.top, 20)
+                            .padding(.horizontal, 5)
+                        }
+                        label:
+                        {
+                            Label("General", systemImage: "gearshape")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .foregroundStyle(.primary)
+                        .padding()
+
+                        Divider()
+
+                        DisclosureGroup(isExpanded: $settingsIsAccountExpanded)
+                        {
+                            VStack(spacing: 15)
+                            {
+                                Button
+                                {
+                                    do
+                                    {
+                                        try AuthenticationHelper.signOutUser()
+                                    }
+                                    catch
+                                    {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                                label:
+                                {
+                                    Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .frame(maxWidth: .infinity)
+
+                                Divider()
+
+                                Button
+                                {
+                                    showAccountDeletionSheetView = true
+                                }
+                                label:
+                                {
+                                    Label("Delete account", systemImage: "exclamationmark.triangle")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .padding(.top, 20)
+                            .padding(.horizontal, 5)
+                        }
+                        label:
+                        {
+                            Label("Account", systemImage: "person.crop.circle")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .foregroundStyle(.primary)
+                        .padding()
+                    }
+                    .shadowedBorderRoundedRectangle()
                 }
-                .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
+                .frame(maxWidth: NeobrutalismConstants.maxWidthSmall)
                 .padding(
                     .horizontal,
                     isCompact ?

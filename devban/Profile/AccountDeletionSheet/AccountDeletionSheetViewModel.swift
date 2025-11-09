@@ -11,6 +11,7 @@ extension AccountDeletionSheetView
         case special
         case error
     }
+
     /// View model for managing the account deletion confirmation sheet's states and logic.
     ///
     /// This class handles user input validation ("YES" confirmation), deletion calls, and UI feedback messages.
@@ -62,6 +63,7 @@ extension AccountDeletionSheetView
                 }
             }
         }
+
         /// Computed property to determine if the delete button should be disabled.
         ///
         /// - Returns: True if user input is not "YES"; false otherwise.
@@ -69,6 +71,7 @@ extension AccountDeletionSheetView
         {
             return userInput != "YES"
         }
+
         /// Computed property for the color of the feedback message based on its type.
         var messageColor: Color
         {
@@ -77,7 +80,7 @@ extension AccountDeletionSheetView
                 case .normal:
                     return .primary
                 case .special:
-                    return ThemeManager.shared.buttonColor
+                    return DevbanUser.shared.buttonColor
                 case .error:
                     return .red
             }
