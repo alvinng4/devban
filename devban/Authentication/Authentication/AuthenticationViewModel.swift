@@ -13,6 +13,7 @@ extension AuthenticationView
         case special
         case error
     }
+
     /// View model for managing authentication states and logic in AuthenticationView.
     ///
     /// This class handles user input validation, sign-in processes (email/password and Google),
@@ -40,13 +41,13 @@ extension AuthenticationView
         /// The type of the current message, determining its color and style.
         private(set) var messageType: MessageType = .normal
         private var waitingServerResponse: Bool = false
-        
+
         /// Flag to dismiss the view after successful authentication.
         var dismiss: Bool = false
-        
+
         /// Flag to present the forget password alert.
         var isPresentForgetPasswordAlert: Bool = false
-        
+
         /// Initiates the email/password sign-in process asynchronously.
         /// Validates input, shows waiting message, and calls the helper for authentication.
         /// Updates UI states on success or error.
@@ -82,7 +83,7 @@ extension AuthenticationView
                 }
             }
         }
-        
+
         /// Initiates the Google sign-in process asynchronously.
         /// Retrieves client ID, uses Google helper for sign-in, and authenticates with Firebase.
         /// Handles errors and updates UI feedback.
@@ -117,7 +118,7 @@ extension AuthenticationView
                 }
             }
         }
-        
+
         /// Checks if the email and password inputs are valid (non-empty and non-whitespace).
         ///
         /// - Returns: True if both inputs are valid; false otherwise.
@@ -125,9 +126,9 @@ extension AuthenticationView
         {
             return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
         }
-        
+
         /// Determines if the sign-in submit button should be disabled.
-        /// 
+        ///
         /// - Returns: True if input is invalid or awaiting server response; false otherwise.
         func disableSubmit() -> Bool
         {
@@ -136,13 +137,13 @@ extension AuthenticationView
                     || waitingServerResponse,
             )
         }
-        
+
         /// Triggers the forget password alert presentation.
         func forgetPassword()
         {
             isPresentForgetPasswordAlert = true
         }
-        
+
         /// Confirms and sends a password reset email if the email is valid.
         ///
         /// Validates email, calls the helper to send the email, and shows success message.
@@ -158,7 +159,7 @@ extension AuthenticationView
             AuthenticationHelper.sendForgetPasswordEmail(to: email)
             showSpecialMessage("A reset password email has been sent to your email address: \(email).")
         }
-        
+
         /// Computed property for the color of the feedback message based on its type.
         var messageColor: Color
         {
@@ -167,12 +168,12 @@ extension AuthenticationView
                 case .normal:
                     return .primary
                 case .special:
-                    return ThemeManager.shared.buttonColor
+                    return DevbanUser.shared.buttonColor
                 case .error:
                     return .red
             }
         }
-        
+
         /// Resets the message states to hide feedback and default type.
         private func resetMessage()
         {
@@ -180,7 +181,7 @@ extension AuthenticationView
             messageType = .normal
             message = ""
         }
-        
+
         /// Displays a normal (informational) message in the UI.
         ///
         /// - Parameter msg: The message text to show.
@@ -190,7 +191,7 @@ extension AuthenticationView
             message = msg
             isShowMessage = true
         }
-        
+
         /// Displays a special (success/emphasis) message in the UI.
         ///
         /// - Parameter msg: The message text to show.
@@ -200,7 +201,7 @@ extension AuthenticationView
             message = msg
             isShowMessage = true
         }
-        
+
         /// Displays an error message in the UI.
         ///
         /// - Parameter msg: The error message text to show.

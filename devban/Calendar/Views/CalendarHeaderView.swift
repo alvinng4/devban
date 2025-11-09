@@ -66,7 +66,7 @@ struct CalendarHeaderView: View
                         .foregroundStyle(.white)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 4)
-                        .background(ThemeManager.shared.buttonColor)
+                        .background(DevbanUser.shared.buttonColor)
                         .clipShape(Capsule())
                 }
             }

@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 /// A view that presents a confirmation sheet for permanent account deletion.
 ///
 /// The sheet asks the user to confirm by typing "YES" before allowing deletion.
@@ -18,7 +17,7 @@ import SwiftUI
 /// which handles input validation and the deletion logic.
 struct AccountDeletionSheetView: View
 {
-    /// Dismiss action for the sheet, provided by SwiftUI environment.    
+    /// Dismiss action for the sheet, provided by SwiftUI environment.
     @Environment(\.dismiss) private var dismiss
 
     /// The view model that manages the account deletion logic and UI states.
@@ -79,7 +78,7 @@ struct AccountDeletionSheetView: View
                         .background(
                             viewModel.disableSubmit ?
                                 Color.gray :
-                                ThemeManager.shared.buttonColor,
+                                DevbanUser.shared.buttonColor,
                         )
                         .cornerRadius(10)
                 }

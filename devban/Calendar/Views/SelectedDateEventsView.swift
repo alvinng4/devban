@@ -126,7 +126,7 @@ struct EventRowView: View
             {
                 Image(systemName: event.isCompleted ? "checkmark.circle.fill" : "circle")
                     .foregroundStyle(
-                        event.isCompleted ? ThemeManager.shared.buttonColor : .gray,
+                        event.isCompleted ? DevbanUser.shared.buttonColor : .gray,
                     )
             }
 

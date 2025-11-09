@@ -29,7 +29,7 @@ struct SignUpView: View
 
         ZStack
         {
-            ThemeManager.shared.backgroundColor
+            DevbanUser.shared.backgroundColor
                 .ignoresSafeArea()
 
             VStack(spacing: 10)
@@ -107,7 +107,7 @@ struct SignUpView: View
                             .background(
                                 viewModel.disableSubmit() ?
                                     Color.gray :
-                                    ThemeManager.shared.buttonColor,
+                                    DevbanUser.shared.buttonColor,
                             )
                             .cornerRadius(10)
                     }

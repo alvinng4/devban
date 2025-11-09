@@ -34,7 +34,7 @@ struct CalendarView: View
 
         ZStack
         {
-            ThemeManager.shared.backgroundColor
+            DevbanUser.shared.backgroundColor
                 .ignoresSafeArea()
 
             VStack(spacing: 10)
@@ -57,7 +57,7 @@ struct CalendarView: View
                             .font(.headline)
                             .foregroundStyle(.white)
                             .padding(8)
-                            .background(ThemeManager.shared.buttonColor)
+                            .background(DevbanUser.shared.buttonColor)
                             .clipShape(Circle())
                     }
                 }
