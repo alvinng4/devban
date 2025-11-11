@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx} % To include graphics 
+\usepackage[tbtags]{amsmath} % tbtags to make eq number at last line
+\usepackage{amssymb}
+%\usepackage{wrapfig} % For figures next to text
+\usepackage{booktabs} % Better tables
+% \usepackage{physics} 
+\usepackage{cases} % For cases with separate labels
+\usepackage{hyperref}% For cross-referencing
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+%\usepackage{pgfplots} % For drawing graphs
+\usepackage{parskip} % To remove indentation and set paragraph spacing
+\usepackage[margin=1in]{geometry}
+%\usepackage{cancel} % To cancel out terms
+\usepackage{listings} % To write code
+\usepackage{xcolor} % To write color text/math by \textcolor{color}{text}
+\usepackage{enumitem} % Better list environment
+\usepackage{fancyhdr} % For custom headers and footers
+% \usepackage{amsthm} % To write theorems and proofs
+% \renewcommand\qedsymbol{$\blacksquare$}
+% \usepackage{algorithm}
+% \usepackage{algpseudocode}
+
+%%%%%%%%%% Configure fancy headers %%%%%%%%%%
+\pagestyle{fancy}
+
+%%%%%%%%%% listings config (for writing code) %%%%%%%%%%
+% \definecolor{codegreen}{rgb}{0,0.6,0}
+% \definecolor{codegray}{rgb}{0.5,0.5,0.5}
+% \definecolor{codepurple}{rgb}{0.58,0,0.82}
+% \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% \lstdefinestyle{mystyle}{
+%     frame=tb,
+%     basicstyle=\ttfamily,
+%     backgroundcolor=\color{backcolour},   
+%     % commentstyle=\color{codegreen},
+%     % keywordstyle=\color{magenta},
+%     % stringstyle=\color{codepurple},
+%     breakatwhitespace=false,         
+%     breaklines=true,                 
+%     captionpos=b,                    
+%     keepspaces=true,                 
+%     numbers=left,                    
+%     numbersep=5pt,                  
+%     showspaces=false,                
+%     showstringspaces=false,
+%     showtabs=false,                  
+%     tabsize=4
+% }
+% \lstset{style=mystyle}
+
+% Title
+\title{CSCI3100 Project Release Notes and User Manual}
+\author{
+    \textbf{Group 17} \\[1em]
+    \begin{tabular}{ll}
+        Ng Ching Yin & (1155175606) \\
+        Lam Hoi Chun & (1155192755) \\
+        Lai Wing Fai & () \\
+        Zou Zhi Hong & (1155204947)
+    \end{tabular}
+}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% Table of contents
+{
+    \hypersetup{linkcolor=black}
+    \tableofcontents
+}
+
+\newpage
+
+% Document Revision History
+% Update this only before pull request, don't update every commit
+\section{Document Revision History}
+\begin{table}[h]
+    \centering
+    \caption{Document Revision History}
+    \begin{tabular}{p{1.5cm} p{6cm} p{2cm} p{3cm}}
+        \toprule
+        Version & Revised By & Revision Date & Comments \\
+        \midrule
+        0.0.1 & nil & nil & Initial release \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:docs_rev_hist}
+\end{table}
+
+% Introduction
+\section{Introduction}
+
+\subsection{Purpose}
+
+
+% \appendix
+% \addcontentsline{toc}{section}{Appendix}
+% \section*{Appendix}
+% \section{References}
+
+\end{document}
