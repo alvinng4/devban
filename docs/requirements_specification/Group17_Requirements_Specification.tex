@@ -190,14 +190,9 @@ The major functions to be provided by the tool are listed below:
         Assumption No. 
         & Title 
         & Description \\
-        
-        \midrule
-        A1 
-        & Supported OS
-        & All popular OS, including Windows, Linux, macOS, iOS, Android and iPadOS \\
 
         \midrule
-        A2
+        A1
         & Apple minimum OS version 
         & iOS 26, iPadOS 26, and macOS 26  \\
 
@@ -228,41 +223,142 @@ The major functions to be provided by the tool are listed below:
     not be considered for the initial release.
 \end{enumerate}
 
-\section{Requirements}
+\section{Functional Requirements}
+\label{sec:functional_requirements}
 
-devban is an application that combines gamified to-do lists and daily planners, providing users
-with a more engaging and motivating approach to organizing their routines and managing their tasks.
-It is designed for users who want to enjoy the benefits of combining effective time management
-with sustained motivation. By including gamification elements, the application could help users to
-build productive habits, manage the tendency to delay tasks, and gain satisfaction from meeting
-personal goals.
+\begin{enumerate}
+    \item \textbf{User Accounts and Authentication}
+    \begin{enumerate}[label=\textbf{FR1-\arabic*.}, leftmargin=2cm]
+        \item The system shall allow users to register, sign in, and sign out using email and password.
+        \item The system shall support password reset via email.
+        \item The system shall support basic roles: Admin and Member.
+        \item The system should support common sign in methods (e.g. Google sign in).
+    \end{enumerate}
 
-\subsection{Software Requirements}
-\subsubsection{User Interface}
-\begin{itemize}
-    \item Calendar Area
-    \begin{itemize}
-        \item Monthly calendar grid view displaying all days of the current month
-        \item Event count indicators showing the number of scheduled events 
-        \item Event management features:
-        \begin{itemize}
-            \item Create new events with title, date, optional start time, and optional end time
-            \item Edit existing events to modify their details
-            \item Delete events
-            \item Toggle completion status of events (mark as completed/incomplete)
-            \item Visual indicators for completed events (strikethrough text and checkmark icon)
-        \end{itemize}
-    \end{itemize}
-    
-    \item Message Area: "AskLLM"
-    \begin{itemize}
-        \item Scrollable list of chat bubbles (user vs. LLM) with the newest chats at the bottom
-        \item Input area containing a multiline text editor with a Submit button
-    \end{itemize}
-\end{itemize}
+    \item \textbf{Workspaces and Teams}
+    \begin{enumerate}[label=\textbf{FR2-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide Workspaces (organization/team scope).
+        \item Admins shall be able to invite/remove members and assign roles per Workspace.
+    \end{enumerate}
 
-\subsubsection{Operating System and Environment}
-This application is developed and deployed for Apple devices running iOS, iPadOS, and macOS, which require iOS 26, iPadOS 26, or macOS Sequoia 26 as per the latest Apple developer policies.
+    \item \textbf{Kanban Board and Task Management}
+    \begin{enumerate}[label=\textbf{FR3-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide a Kanban board with drag-and-drop functionality.
+        \item Users shall be able to create, read, update, and delete tasks.
+        \item Tasks shall support fields: title, description, status, difficulty, tags, deadlines.
+    \end{enumerate}
+
+    \item \textbf{Discussion and Collaboration}
+    \begin{enumerate}[label=\textbf{FR4-\arabic*.}, leftmargin=2cm]
+        \item Each task shall have a comment thread supporting @mentions and attachments.
+        \item The system shall support Markdown formatting for comments (headings, lists, code blocks).
+    \end{enumerate}
+
+    \item \textbf{Real-time Updates and Collaboration}
+    \begin{enumerate}[label=\textbf{FR5-\arabic*.}, leftmargin=2cm]
+        \item Board and task updates made by one user shall appear for other online users in near real-time.
+        \item The system shall display an out-of-sync warning if a client falls behind and provide a manual refresh action.
+    \end{enumerate}
+
+    \item \textbf{Calendar and Scheduling}
+    \begin{enumerate}[label=\textbf{FR6-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide monthly calendar views of task deadlines.
+    \end{enumerate}
+
+    \item \textbf{LLM Chat Interface}
+    \begin{enumerate}[label=\textbf{FR7-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide a personal LLM chat interface.
+        \item The system shall rate-limit LLM requests per user and per workspace to control costs.
+        \item The system shall support configuring multiple LLM providers and failover when one provider is unavailable.
+        \item The system shall store chat history per project and allow exporting a conversation.
+    \end{enumerate}
+
+    \item \textbf{Offline Tolerance and Sync Recovery}
+    \begin{enumerate}[label=\textbf{FR8-\arabic*.}, leftmargin=2cm]
+        \item The system shall allow reading recently viewed boards/tasks when offline.
+        \item Edits made offline shall be queued and synced when connectivity is restored.
+    \end{enumerate}
+
+    \item \textbf{Administration}
+    \begin{enumerate}[label=\textbf{FR9-\arabic*.}, leftmargin=2cm]
+        \item Admins shall be able to configure workspace settings, LLM provider keys, LLM quotas, and feature flags.
+        \item Admins shall be able to deactivate users and transfer project ownership.
+    \end{enumerate}
+\end{enumerate}
+
+
+\section{Non-Functional Requirements}
+\label{sec:non_functional_requirements}
+
+\begin{enumerate}
+    \item \textbf{Performance}
+    \begin{enumerate}[label=\textbf{NFR1-\arabic*.}, leftmargin=2cm]
+        \item Initial application load shall be under 2.5 seconds on a mid-range laptop/phone.
+        \item 95\% of API requests shall complete within 500 ms under normal load; 99\% within 1 s.
+        \item Real-time updates shall propagate to connected clients within 2 seconds.
+    \end{enumerate}
+
+    \item \textbf{Availability}
+    \begin{enumerate}[label=\textbf{NFR2-\arabic*.}, leftmargin=2cm]
+        \item The system should achieve 99\% monthly uptime.
+        \item Planned maintenance windows shall be announced in advance and limited to 2 hours/week.
+    \end{enumerate}
+
+    \item \textbf{Reliability and Data Integrity}
+    \begin{enumerate}[label=\textbf{NFR3-\arabic*.}, leftmargin=2cm]
+        \item Create/update/delete operations shall be atomic and durable.
+        \item The system shall prevent or resolve conflicting edits.
+    \end{enumerate}
+
+    \item \textbf{Scalability}
+    \begin{enumerate}[label=\textbf{NFR4-\arabic*.}, leftmargin=2cm]
+        \item The system should support at least 50 concurrent active users per workspace without violating performance targets.
+        \item The system should support up to 20,000 tasks per project.
+    \end{enumerate}
+
+    \item \textbf{Privacy and LLM Data Handling}
+    \begin{enumerate}[label=\textbf{NFR5-\arabic*.}, leftmargin=2cm]
+        \item The system shall minimize personal data collection to what is strictly necessary.
+        \item The system shall not send secrets or access tokens to LLM providers; task content sent to LLMs shall be user-initiated.
+    \end{enumerate}
+
+    \item \textbf{Usability}
+    \begin{enumerate}[label=\textbf{NFR6-\arabic*.}, leftmargin=2cm]
+        \item New users shall be able to create a project, a board, and a task within 5 minutes without training.
+        \item Common operations (create task, assign, move columns) shall require no more than 3 clicks from the board view.
+        \item Provide keyboard shortcuts for frequent actions (e.g., create task, quick search).
+    \end{enumerate}
+
+    \item \textbf{Compatibility and Cross-Platform Support}
+    \begin{enumerate}[label=\textbf{NFR7-\arabic*.}, leftmargin=2cm]
+        \item The application shall be available on all major platforms, including Windows, Linux, macOS, iOS, Android and iPadOS.
+        \item The UI shall be responsive for desktop, tablet, and mobile breakpoints.
+    \end{enumerate}
+
+    \item \textbf{Observability and Alerting}
+    \begin{enumerate}[label=\textbf{NFR8-\arabic*.}, leftmargin=2cm]
+        \item Basic metrics (request rates, error rates, latency) shall be collected and viewable by developers.
+        \item Alerts shall trigger on sustained LLM provider failures, error spikes, and elevated latency.
+    \end{enumerate}
+
+    \item \textbf{Deployment and Portability}
+    \begin{enumerate}[label=\textbf{NFR9-\arabic*.}, leftmargin=2cm]
+        \item The system should provide a containerized deployment.
+        \item A developer environment shall be bootstrapped in under 15 minutes with documented steps.
+    \end{enumerate}
+
+    \item \textbf{Internationalization and Time Zones}
+    \begin{enumerate}[label=\textbf{NFR10-\arabic*.}, leftmargin=2cm]
+        \item All dates/times shall be stored in UTC and displayed in the user's local time zone.
+        \item The UI shall support localization.
+    \end{enumerate}
+
+    \item \textbf{Data Retention and Deletion}
+    \begin{enumerate}[label=\textbf{NFR11-\arabic*.}, leftmargin=2cm]
+        \item Users must be able to request deletion of their personal data; requests should be fulfilled within 7 days. 
+    \end{enumerate}
+\end{enumerate}
+
 
 % \appendix
 % \addcontentsline{toc}{section}{Appendix}
