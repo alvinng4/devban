@@ -51,12 +51,12 @@ final class DevbanUser
         photoUrl = nil
     }
 
-    func getActualColorScheme(_ colorScheme: ColorScheme) -> ColorScheme
+    func getActualColorScheme(_ colorScheme: ColorScheme) -> ColorScheme?
     {
         switch (preferredColorScheme)
         {
             case .auto:
-                return colorScheme
+                return nil
             case .light:
                 return .light
             case .dark:
@@ -76,11 +76,11 @@ final class DevbanUser
 
     func updateTheme(colorScheme: ColorScheme)
     {
-        themeManager.updateTheme(theme: theme, colorScheme: getActualColorScheme(colorScheme))
+        themeManager.updateTheme(theme: theme, colorScheme: getActualColorScheme(colorScheme) ?? colorScheme)
     }
 
     func updateTheme(theme: DefaultTheme, colorScheme: ColorScheme)
     {
-        themeManager.updateTheme(theme: theme, colorScheme: getActualColorScheme(colorScheme))
+        themeManager.updateTheme(theme: theme, colorScheme: getActualColorScheme(colorScheme) ?? colorScheme)
     }
 }
