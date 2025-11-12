@@ -159,7 +159,7 @@ extension SignUpView
                 case .normal:
                     return .primary
                 case .special:
-                    return DevbanUser.shared.buttonColor
+                    return ThemeManager.shared.buttonColor
                 case .error:
                     return .red
             }

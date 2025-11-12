@@ -28,7 +28,7 @@ struct ChatBubbleView: View
     {
         if (isCurrentUser)
         {
-            return DevbanUser.shared.backgroundColor
+            return ThemeManager.shared.backgroundColor
         }
         return Color.gray.opacity(0.3)
     }

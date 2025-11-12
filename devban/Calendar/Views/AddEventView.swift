@@ -70,7 +70,7 @@ struct AddEventView: View
         {
             ZStack
             {
-                DevbanUser.shared.backgroundColor
+                ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
 
                 VStack(spacing: 20)
@@ -163,7 +163,7 @@ struct AddEventView: View
                             .frame(height: 55)
                             .background(
                                 canSave ?
-                                    DevbanUser.shared.buttonColor :
+                                    ThemeManager.shared.buttonColor :
                                     Color.gray,
                             )
                             .cornerRadius(10)

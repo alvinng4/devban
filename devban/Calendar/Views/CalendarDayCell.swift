@@ -40,7 +40,7 @@ struct CalendarDayCell: View
                     .font(.system(size: 14, weight: isSelected ? .bold : .regular, design: .rounded))
                     .foregroundStyle(
                         isSelected ? .white :
-                            isToday ? DevbanUser.shared.buttonColor :
+                            isToday ? ThemeManager.shared.buttonColor :
                             .primary,
                     )
 
@@ -49,7 +49,7 @@ struct CalendarDayCell: View
                     Circle()
                         .fill(
                             isSelected ? .white :
-                                DevbanUser.shared.buttonColor,
+                                ThemeManager.shared.buttonColor,
                         )
                         .frame(width: 4, height: 4)
                 }
@@ -62,8 +62,8 @@ struct CalendarDayCell: View
             .frame(width: 40, height: 50)
             .background(
                 isSelected ?
-                    DevbanUser.shared.buttonColor :
-                    (isToday ? DevbanUser.shared.buttonColor.opacity(0.2) : Color.clear),
+                    ThemeManager.shared.buttonColor :
+                    (isToday ? ThemeManager.shared.buttonColor.opacity(0.2) : Color.clear),
             )
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .overlay(

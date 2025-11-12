@@ -17,7 +17,7 @@ struct ProfileView: View
         {
             ZStack
             {
-                DevbanUser.shared.backgroundColor
+                ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
 
                 VStack(spacing: 10)
@@ -59,13 +59,13 @@ struct ProfileView: View
                                         )
                                         {
                                             Text("Auto")
-                                                .tag(DevbanUser.PreferredColorScheme.auto)
+                                                .tag(ThemeManager.PreferredColorScheme.auto)
 
                                             Text("Dark")
-                                                .tag(DevbanUser.PreferredColorScheme.dark)
+                                                .tag(ThemeManager.PreferredColorScheme.dark)
 
                                             Text("Light")
-                                                .tag(DevbanUser.PreferredColorScheme.light)
+                                                .tag(ThemeManager.PreferredColorScheme.light)
                                         }
                                         label:
                                         {
@@ -82,8 +82,10 @@ struct ProfileView: View
                                     }
                                     .onChange(of: DevbanUser.shared.preferredColorScheme)
                                     {
-                                        DevbanUser.shared.updateTheme(
+                                        ThemeManager.shared.updateTheme(
+                                            theme: DevbanUser.shared.theme,
                                             colorScheme: colorScheme,
+                                            preferredColorScheme: DevbanUser.shared.preferredColorScheme,
                                         )
                                     }
                                 }
@@ -105,13 +107,13 @@ struct ProfileView: View
                                         )
                                         {
                                             Text("Blue")
-                                                .tag(DevbanUser.DefaultTheme.blue)
+                                                .tag(ThemeManager.DefaultTheme.blue)
 
                                             Text("Green")
-                                                .tag(DevbanUser.DefaultTheme.green)
+                                                .tag(ThemeManager.DefaultTheme.green)
 
                                             Text("Orange")
-                                                .tag(DevbanUser.DefaultTheme.orange)
+                                                .tag(ThemeManager.DefaultTheme.orange)
                                         }
                                         label:
                                         {
@@ -129,9 +131,10 @@ struct ProfileView: View
                                 }
                                 .onChange(of: DevbanUser.shared.theme)
                                 {
-                                    DevbanUser.shared.updateTheme(
+                                    ThemeManager.shared.updateTheme(
                                         theme: DevbanUser.shared.theme,
                                         colorScheme: colorScheme,
+                                        preferredColorScheme: DevbanUser.shared.preferredColorScheme,
                                     )
                                 }
 

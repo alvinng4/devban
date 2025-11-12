@@ -19,7 +19,7 @@ struct AskLLMView: View
 
         ZStack
         {
-            DevbanUser.shared.backgroundColor
+            ThemeManager.shared.backgroundColor
                 .ignoresSafeArea()
 
             VStack(spacing: 10)
@@ -138,7 +138,7 @@ struct AskLLMView: View
                                     .padding(.horizontal, 15)
                                     .padding(.vertical, 12)
                                     .foregroundStyle(.white)
-                                    .background(DevbanUser.shared.buttonColor)
+                                    .background(ThemeManager.shared.buttonColor)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                                     .padding(.trailing, 5)
                                 }
