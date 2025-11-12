@@ -78,7 +78,7 @@ struct AccountDeletionSheetView: View
                         .background(
                             viewModel.disableSubmit ?
                                 Color.gray :
-                                DevbanUser.shared.buttonColor,
+                                ThemeManager.shared.buttonColor,
                         )
                         .cornerRadius(10)
                 }

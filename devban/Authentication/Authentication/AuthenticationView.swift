@@ -34,7 +34,7 @@ struct AuthenticationView: View
         {
             ZStack
             {
-                DevbanUser.shared.backgroundColor
+                ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
 
                 VStack(spacing: 10)
@@ -104,7 +104,7 @@ struct AuthenticationView: View
                                 .background(
                                     viewModel.disableSubmit() ?
                                         Color.gray :
-                                        DevbanUser.shared.buttonColor,
+                                        ThemeManager.shared.buttonColor,
                                 )
                                 .cornerRadius(10)
                         }

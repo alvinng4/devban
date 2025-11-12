@@ -103,7 +103,7 @@ struct NeobrutalismRoundedRectangleTabView<Content: View>: View
                                 .frame(maxWidth: .infinity)
                         }
                         .background(
-                            selection == options[index] ? DevbanUser.shared.buttonColor : unselectedBackgroundColor,
+                            selection == options[index] ? ThemeManager.shared.buttonColor : unselectedBackgroundColor,
                         )
                         .buttonStyle(PlainButtonStyle())
 
