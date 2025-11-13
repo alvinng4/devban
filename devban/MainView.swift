@@ -4,7 +4,7 @@ struct MainView: View
 {
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var selectedTab: String = "askLLM"
+    @State private var selectedTab: String = "home"
 
     var body: some View
     {
@@ -46,6 +46,13 @@ struct MainView: View
                     selection: $selectedTab,
                 )
                 {
+                    HomeView()
+                        .tabItem
+                        {
+                            Label("Home", systemImage: "house")
+                        }
+                        .tag("home")
+
                     CalendarView()
                         .tabItem
                         {
