@@ -74,6 +74,5 @@ struct CalendarDayCell: View
                     ),
             )
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }

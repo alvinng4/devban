@@ -55,8 +55,7 @@ struct SelectedDateEventsView: View
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(.secondary)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 40)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
             else
             {
@@ -79,7 +78,6 @@ struct SelectedDateEventsView: View
                 }
             }
         }
-        .frame(maxHeight: 200)
     }
 }
 

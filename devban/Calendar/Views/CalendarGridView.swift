@@ -60,7 +60,7 @@ struct CalendarGridView: View
     /// followed by all dates in the month.
     ///
     /// - Returns: An array of optional `Date` values representing the calendar grid.
-    private var calendarDays: [Date?]
+    private func getCalendarDays() -> [Date?]
     {
         var days: [Date?] = []
 
@@ -91,7 +91,7 @@ struct CalendarGridView: View
         events.count(where: { calendar.isDate($0.date, inSameDayAs: date) })
     }
 
-    /// Returns `true` if the given date is the currently selected date.
+    /// Check if the given date is the currently selected date.
     ///
     /// - Parameter date: The date to check.
     /// - Returns: `true` if the date matches the selected date; otherwise, `false`.
@@ -100,10 +100,10 @@ struct CalendarGridView: View
         calendar.isDate(date, inSameDayAs: selectedDate)
     }
 
-    /// Returns `true` if the given date is today.
+    /// Check if the given date is today.
     ///
     /// - Parameter date: The date to check.
-    /// - Returns: `true` if the date is today; otherwise, `false`.
+    /// - Returns: whether the given date is today.
     private func isDateToday(_ date: Date) -> Bool
     {
         calendar.isDateInToday(date)
@@ -111,11 +111,13 @@ struct CalendarGridView: View
 
     var body: some View
     {
+        let calendarDays: [Date?] = getCalendarDays()
+
         VStack(spacing: 8)
         {
-            // Week day headers
-            HStack(spacing: 0)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 4)
             {
+                // Week day headers
                 ForEach(weekDays, id: \.self)
                 { day in
                     Text(day)
@@ -123,16 +125,11 @@ struct CalendarGridView: View
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
                 }
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
 
-            // Calendar grid
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 4)
-            {
-                ForEach(Array(calendarDays.enumerated()), id: \.offset)
-                { _, date in
-                    if let date
+                // Calendar grid
+                ForEach(calendarDays.indices, id: \.self)
+                { idx in
+                    if let date = calendarDays[idx]
                     {
                         CalendarDayCell(
                             date: date,
@@ -142,15 +139,10 @@ struct CalendarGridView: View
                             onTap: { selectedDate = date },
                         )
                     }
-                    else
-                    {
-                        Color.clear
-                            .frame(height: 40)
-                    }
                 }
             }
-            .padding(.horizontal, 8)
-            .padding(.bottom, 8)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
     }
 }
