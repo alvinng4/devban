@@ -100,6 +100,7 @@ struct CalendarView: View
                     )
                 }
                 .shadowedBorderRoundedRectangle()
+                .frame(maxHeight: .infinity, alignment: .center)
             }
             .frame(maxWidth: NeobrutalismConstants.maxWidthLarge)
             .padding(
