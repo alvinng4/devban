@@ -20,6 +20,9 @@ enum NeobrutalismConstants
     /// For pressable element to stay pressed when user dragged away
     static let dragTolerance: CGFloat = 150
 
+    /// Max width for extra large elements
+    static let maxWidthExtraLarge: CGFloat = 1500
+
     /// Max width for large elements
     static let maxWidthLarge: CGFloat = 1280
 
