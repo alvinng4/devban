@@ -8,29 +8,26 @@ struct MainView: View
 
     var body: some View
     {
-        getMainContent()
+        let user: DevbanUser? = DevbanUserContainer.shared.user
+
+        return getMainContent()
             .tint(ThemeManager.shared.buttonColor)
             .onAppear
             {
                 AuthenticationHelper.updateUserAuthStatus()
-
-                ThemeManager.shared.updateTheme(
-                    theme: DevbanUser.shared.theme,
-                    colorScheme: colorScheme,
-                    preferredColorScheme: DevbanUser.shared.preferredColorScheme,
-                )
+                updateTheme()
             }
             .onChange(of: colorScheme)
             {
-                ThemeManager.shared.updateTheme(
-                    theme: DevbanUser.shared.theme,
-                    colorScheme: colorScheme,
-                    preferredColorScheme: DevbanUser.shared.preferredColorScheme,
-                )
+                updateTheme()
+            }
+            .onChange(of: DevbanUserContainer.shared.isLoggedIn)
+            {
+                updateTheme()
             }
             .preferredColorScheme(
-                ThemeManager.shared.getActualColorScheme(
-                    preferredColorScheme: DevbanUser.shared.preferredColorScheme,
+                ThemeManager.getActualColorScheme(
+                    preferredColorScheme: user?.preferredColorScheme ?? .auto,
                     colorScheme: colorScheme,
                 ),
             )
@@ -40,7 +37,11 @@ struct MainView: View
     {
         Group
         {
-            if (DevbanUser.shared.loggedIn)
+            if (!DevbanUserContainer.shared.isLoggedIn)
+            {
+                AuthenticationView()
+            }
+            else
             {
                 TabView(
                     selection: $selectedTab,
@@ -75,10 +76,17 @@ struct MainView: View
                         .tag("profile")
                 }
             }
-            else
-            {
-                AuthenticationView()
-            }
         }
+    }
+    
+    private func updateTheme()
+    {
+        guard DevbanUserContainer.shared.isLoggedIn else { return }
+        guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
+        ThemeManager.shared.updateTheme(
+            theme: user.theme,
+            colorScheme: colorScheme,
+            preferredColorScheme: user.preferredColorScheme,
+        )
     }
 }

@@ -17,14 +17,14 @@ import SwiftUI
 @Observable
 final class ThemeManager
 {
-    enum DefaultTheme: String
+    enum DefaultTheme: String, Codable
     {
         case blue = "Blue"
         case green = "Green"
         case orange = "Orange"
     }
 
-    enum PreferredColorScheme: String
+    enum PreferredColorScheme: String, Codable
     {
         case auto = "Auto"
         case light = "Light"
@@ -52,7 +52,7 @@ final class ThemeManager
     @MainActor
     func updateTheme(theme: DefaultTheme, colorScheme: ColorScheme, preferredColorScheme: PreferredColorScheme)
     {
-        let actualColorScheme: ColorScheme = getActualColorScheme(
+        let actualColorScheme: ColorScheme = ThemeManager.getActualColorScheme(
             preferredColorScheme: preferredColorScheme,
             colorScheme: colorScheme,
         ) ?? colorScheme
@@ -60,7 +60,10 @@ final class ThemeManager
         buttonColor = ThemeManager.getButtonColor(theme: theme)
     }
 
-    func getActualColorScheme(preferredColorScheme: PreferredColorScheme, colorScheme _: ColorScheme) -> ColorScheme?
+    static func getActualColorScheme(
+        preferredColorScheme: PreferredColorScheme,
+        colorScheme _: ColorScheme,
+    ) -> ColorScheme?
     {
         switch (preferredColorScheme)
         {

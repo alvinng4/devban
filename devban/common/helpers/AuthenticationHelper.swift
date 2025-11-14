@@ -25,13 +25,11 @@ enum AuthenticationHelper
               user.emailVerified()
         else
         {
-            DevbanUser.shared.logoutUser()
+            DevbanUserContainer.shared.logoutUser()
             return
         }
 
-        DevbanUser.shared.loginUser(
-            with: AuthDataResultModel(user: user),
-        )
+        DevbanUserContainer.shared.loginUser(with: user)
     }
 
     /// Creates a new user asynchronously with email and password, then sends a verification email.
