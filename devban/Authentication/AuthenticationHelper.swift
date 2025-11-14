@@ -21,15 +21,37 @@ enum AuthenticationHelper
     /// Logs out if no user or email not verified; otherwise, logs in with the user's data model.
     static func updateUserAuthStatus()
     {
-        guard let user = Auth.auth().currentUser,
-              user.emailVerified()
-        else
+        Task
         {
-            DevbanUserContainer.shared.logoutUser()
-            return
-        }
+            // Reload user status
+            guard let tempUser = Auth.auth().currentUser
+            else
+            {
+                DevbanUserContainer.shared.logoutUser()
+                return
+            }
 
-        DevbanUserContainer.shared.loginUser(with: user)
+            do
+            {
+                try await tempUser.reload()
+            }
+            catch
+            {
+                print("AuthenticationHelper.updateUserAuthStatus() reloading user error: \(error.localizedDescription)")
+            }
+
+            // Get updated user status and check if email verified
+            guard let user = Auth.auth().currentUser,
+                  user.emailVerified()
+            else
+            {
+                DevbanUserContainer.shared.logoutUser()
+                return
+            }
+
+            // Login user if all succeed
+            DevbanUserContainer.shared.loginUser(with: user)
+        }
     }
 
     /// Creates a new user asynchronously with email and password, then sends a verification email.
