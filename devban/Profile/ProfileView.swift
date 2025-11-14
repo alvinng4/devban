@@ -5,9 +5,10 @@ struct ProfileView: View
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    @State private var showLogoutAlert: Bool = false
     @State private var showAccountDeletionSheetView: Bool = false
-    @State private var settingsIsGeneralExpanded: Bool = true
-    @State private var settingsIsAccountExpanded: Bool = true
+    @State private var settingsIsGeneralExpanded: Bool = false
+    @State private var settingsIsAccountExpanded: Bool = false
 
     var body: some View
     {
@@ -53,8 +54,8 @@ struct ProfileView: View
                                     {
                                         Picker(
                                             selection: Binding(
-                                                get: { DevbanUser.shared.preferredColorScheme },
-                                                set: { DevbanUser.shared.preferredColorScheme = $0 },
+                                                get: { DevbanUserContainer.shared.user?.preferredColorScheme ?? .auto },
+                                                set: { DevbanUserContainer.shared.user?.preferredColorScheme = $0 },
                                             ),
                                         )
                                         {
@@ -76,16 +77,18 @@ struct ProfileView: View
                                     {
                                         HStack(spacing: 5)
                                         {
-                                            Text(DevbanUser.shared.preferredColorScheme.rawValue)
+                                            Text(DevbanUserContainer.shared.user?.preferredColorScheme
+                                                .rawValue ?? "Error")
                                             Image(systemName: "chevron.up.chevron.down")
                                         }
                                     }
-                                    .onChange(of: DevbanUser.shared.preferredColorScheme)
+                                    .onChange(of: DevbanUserContainer.shared.user?.preferredColorScheme)
                                     {
+                                        guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
                                         ThemeManager.shared.updateTheme(
-                                            theme: DevbanUser.shared.theme,
+                                            theme: user.theme,
                                             colorScheme: colorScheme,
-                                            preferredColorScheme: DevbanUser.shared.preferredColorScheme,
+                                            preferredColorScheme: user.preferredColorScheme,
                                         )
                                     }
                                 }
@@ -101,8 +104,8 @@ struct ProfileView: View
                                     {
                                         Picker(
                                             selection: Binding(
-                                                get: { DevbanUser.shared.theme },
-                                                set: { DevbanUser.shared.theme = $0 },
+                                                get: { DevbanUserContainer.shared.user?.theme ?? .blue },
+                                                set: { DevbanUserContainer.shared.user?.theme = $0 },
                                             ),
                                         )
                                         {
@@ -124,17 +127,18 @@ struct ProfileView: View
                                     {
                                         HStack(spacing: 5)
                                         {
-                                            Text(DevbanUser.shared.theme.rawValue)
+                                            Text(DevbanUserContainer.shared.user?.theme.rawValue ?? "Error")
                                             Image(systemName: "chevron.up.chevron.down")
                                         }
                                     }
                                 }
-                                .onChange(of: DevbanUser.shared.theme)
+                                .onChange(of: DevbanUserContainer.shared.user?.theme)
                                 {
+                                    guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
                                     ThemeManager.shared.updateTheme(
-                                        theme: DevbanUser.shared.theme,
+                                        theme: user.theme,
                                         colorScheme: colorScheme,
-                                        preferredColorScheme: DevbanUser.shared.preferredColorScheme,
+                                        preferredColorScheme: user.preferredColorScheme,
                                     )
                                 }
 
@@ -179,14 +183,7 @@ struct ProfileView: View
                             {
                                 Button
                                 {
-                                    do
-                                    {
-                                        try AuthenticationHelper.signOutUser()
-                                    }
-                                    catch
-                                    {
-                                        print(error.localizedDescription)
-                                    }
+                                    showLogoutAlert = true
                                 }
                                 label:
                                 {
@@ -238,6 +235,37 @@ struct ProfileView: View
                 .toolbar(.hidden)
                 .scrollContentBackground(.hidden)
             }
+        }
+        .alert("Confirm Logout", isPresented: $showLogoutAlert)
+        {
+            Button(role: .destructive)
+            {
+                do
+                {
+                    try AuthenticationHelper.signOutUser()
+                }
+                catch
+                {
+                    print(error.localizedDescription)
+                }
+            }
+            label:
+            {
+                Text("Logout")
+            }
+
+            Button(role: .cancel)
+            {
+                showLogoutAlert = false
+            }
+            label:
+            {
+                Text("Cancel")
+            }
+        }
+        message:
+        {
+            Text("Are you sure you want to logout?")
         }
         .sheet(isPresented: $showAccountDeletionSheetView)
         {

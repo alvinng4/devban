@@ -15,7 +15,14 @@ struct ChatBubbleView: View
     {
         self.chatMessage = chatMessage
 
-        isCurrentUser = (chatMessage.senderID == DevbanUser.shared.uid)
+        if let user = DevbanUserContainer.shared.user
+        {
+            isCurrentUser = (chatMessage.senderID == user.uid)
+        }
+        else
+        {
+            isCurrentUser = false
+        }
     }
 
     @Environment(\.colorScheme) private var colorScheme

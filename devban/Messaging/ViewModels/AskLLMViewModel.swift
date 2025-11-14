@@ -65,14 +65,19 @@ final class AskLLMViewModel
 
     func sendMessage()
     {
-        guard (responseStatus == .idle) else { return } // For askLLM only
-        guard !userInput.isEmptyOrWhitespace() else { return }
+        guard (responseStatus == .idle), // For askLLM only
+              (!userInput.isEmptyOrWhitespace()),
+              let user = DevbanUserContainer.shared.user
+        else
+        {
+            return
+        }
 
         let trimmed: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
         messages.append(
-            ChatMessage(senderID: DevbanUser.shared.uid, content: trimmed),
+            ChatMessage(senderID: user.uid, content: trimmed),
         )
         let prompt: String = userInput
         userInput = ""
