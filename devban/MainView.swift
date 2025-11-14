@@ -78,7 +78,7 @@ struct MainView: View
             }
         }
     }
-    
+
     private func updateTheme()
     {
         guard DevbanUserContainer.shared.isLoggedIn else { return }
