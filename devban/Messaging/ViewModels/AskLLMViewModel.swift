@@ -67,7 +67,7 @@ final class AskLLMViewModel
     {
         guard (responseStatus == .idle), // For askLLM only
               (!userInput.isEmptyOrWhitespace()),
-              let user = DevbanUserContainer.shared.user
+              let uid = DevbanUserContainer.shared.getUid()
         else
         {
             return
@@ -77,7 +77,7 @@ final class AskLLMViewModel
         guard !trimmed.isEmpty else { return }
 
         messages.append(
-            ChatMessage(senderID: user.uid, content: trimmed),
+            ChatMessage(senderID: uid, content: trimmed),
         )
         let prompt: String = userInput
         userInput = ""

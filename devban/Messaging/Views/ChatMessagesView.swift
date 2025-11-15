@@ -67,12 +67,12 @@ struct ChatMessagesView: View
 
                     if let userInput,
                        !userInput.isEmptyOrWhitespace(),
-                       let user = DevbanUserContainer.shared.user
+                       let uid = DevbanUserContainer.shared.getUid()
                     {
                         let trimmed: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(
                             ChatMessage(
-                                senderID: user.uid,
+                                senderID: uid,
                                 content: trimmed,
                             ),
                         )

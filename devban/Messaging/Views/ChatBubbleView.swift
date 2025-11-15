@@ -15,9 +15,9 @@ struct ChatBubbleView: View
     {
         self.chatMessage = chatMessage
 
-        if let user = DevbanUserContainer.shared.user
+        if let uid = DevbanUserContainer.shared.getUid()
         {
-            isCurrentUser = (chatMessage.senderID == user.uid)
+            isCurrentUser = (chatMessage.senderID == uid)
         }
         else
         {
