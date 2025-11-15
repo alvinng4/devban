@@ -54,8 +54,10 @@ struct ProfileView: View
                                     {
                                         Picker(
                                             selection: Binding(
-                                                get: { DevbanUserContainer.shared.user?.preferredColorScheme ?? .auto },
-                                                set: { DevbanUserContainer.shared.user?.preferredColorScheme = $0 },
+                                                get: {
+                                                    DevbanUserContainer.shared.getPreferredColorScheme()
+                                                },
+                                                set: { DevbanUserContainer.shared.setPreferredColorScheme($0) },
                                             ),
                                         )
                                         {
@@ -77,18 +79,16 @@ struct ProfileView: View
                                     {
                                         HStack(spacing: 5)
                                         {
-                                            Text(DevbanUserContainer.shared.user?.preferredColorScheme
-                                                .rawValue ?? "Error")
+                                            Text(DevbanUserContainer.shared.getPreferredColorScheme().rawValue)
                                             Image(systemName: "chevron.up.chevron.down")
                                         }
                                     }
-                                    .onChange(of: DevbanUserContainer.shared.user?.preferredColorScheme)
+                                    .onChange(of: DevbanUserContainer.shared.getPreferredColorScheme())
                                     {
-                                        guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
                                         ThemeManager.shared.updateTheme(
-                                            theme: user.theme,
+                                            theme: DevbanUserContainer.shared.getTheme(),
                                             colorScheme: colorScheme,
-                                            preferredColorScheme: user.preferredColorScheme,
+                                            preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
                                         )
                                     }
                                 }
@@ -104,8 +104,8 @@ struct ProfileView: View
                                     {
                                         Picker(
                                             selection: Binding(
-                                                get: { DevbanUserContainer.shared.user?.theme ?? .blue },
-                                                set: { DevbanUserContainer.shared.user?.theme = $0 },
+                                                get: { DevbanUserContainer.shared.getTheme() },
+                                                set: { DevbanUserContainer.shared.setTheme($0) },
                                             ),
                                         )
                                         {
@@ -124,18 +124,17 @@ struct ProfileView: View
                                     {
                                         HStack(spacing: 5)
                                         {
-                                            Text(DevbanUserContainer.shared.user?.theme.rawValue ?? "Error")
+                                            Text(DevbanUserContainer.shared.getTheme().rawValue)
                                             Image(systemName: "chevron.up.chevron.down")
                                         }
                                     }
                                 }
-                                .onChange(of: DevbanUserContainer.shared.user?.theme)
+                                .onChange(of: DevbanUserContainer.shared.getTheme())
                                 {
-                                    guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
                                     ThemeManager.shared.updateTheme(
-                                        theme: user.theme,
+                                        theme: DevbanUserContainer.shared.getTheme(),
                                         colorScheme: colorScheme,
-                                        preferredColorScheme: user.preferredColorScheme,
+                                        preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
                                     )
                                 }
 

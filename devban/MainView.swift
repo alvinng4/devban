@@ -9,8 +9,6 @@ struct MainView: View
 
     var body: some View
     {
-        let user: DevbanUser? = DevbanUserContainer.shared.user
-
         if (!isInitialized)
         {
             return AnyView(
@@ -45,7 +43,7 @@ struct MainView: View
                     }
                     .preferredColorScheme(
                         ThemeManager.getActualColorScheme(
-                            preferredColorScheme: user?.preferredColorScheme ?? .auto,
+                            preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
                             colorScheme: colorScheme,
                         ),
                     ),
@@ -102,11 +100,10 @@ struct MainView: View
     private func updateTheme()
     {
         guard DevbanUserContainer.shared.loggedIn else { return }
-        guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
         ThemeManager.shared.updateTheme(
-            theme: user.theme,
+            theme: DevbanUserContainer.shared.getTheme(),
             colorScheme: colorScheme,
-            preferredColorScheme: user.preferredColorScheme,
+            preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
         )
     }
 }
