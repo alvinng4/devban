@@ -90,7 +90,11 @@ extension SignUpView
             {
                 do
                 {
-                    try await AuthenticationHelper.createUser(email: email, displayName: displayName, password: password)
+                    try await AuthenticationHelper.createUser(
+                        email: email,
+                        displayName: displayName,
+                        password: password,
+                    )
 
                     waitingServerResponse = false
                     showSpecialMessage("Success! Please check your email address (\(email)) for verification email.")
@@ -150,7 +154,7 @@ extension SignUpView
         {
             return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
         }
-        
+
         func isDiaplayNameInputValid() -> Bool
         {
             return !displayName.isEmptyOrWhitespace() && !(displayName.count >= 64)
@@ -176,8 +180,8 @@ extension SignUpView
         {
             return (
                 !isAuthInputValid()
-                || !isDiaplayNameInputValid()
-                || waitingServerResponse
+                    || !isDiaplayNameInputValid()
+                    || waitingServerResponse,
             )
         }
 

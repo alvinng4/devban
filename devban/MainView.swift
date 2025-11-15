@@ -5,32 +5,52 @@ struct MainView: View
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var selectedTab: String = "home"
+    @State private var isInitialized: Bool = false
 
     var body: some View
     {
         let user: DevbanUser? = DevbanUserContainer.shared.user
 
-        return getMainContent()
-            .tint(ThemeManager.shared.buttonColor)
-            .onAppear
-            {
-                AuthenticationHelper.updateUserAuthStatus()
-                updateTheme()
-            }
-            .onChange(of: colorScheme)
-            {
-                updateTheme()
-            }
-            .onChange(of: DevbanUserContainer.shared.loggedIn)
-            {
-                updateTheme()
-            }
-            .preferredColorScheme(
-                ThemeManager.getActualColorScheme(
-                    preferredColorScheme: user?.preferredColorScheme ?? .auto,
-                    colorScheme: colorScheme,
-                ),
+        if (!isInitialized)
+        {
+            return AnyView(
+                ZStack
+                {
+                    Color(.darkBackground)
+                        .ignoresSafeArea()
+
+                    ProgressView()
+                        .tint(.white)
+                }
+                .task
+                {
+                    await AuthenticationHelper.updateUserAuthStatus()
+                    updateTheme()
+                    isInitialized = true
+                },
             )
+        }
+        else
+        {
+            return AnyView(
+                getMainContent()
+                    .tint(ThemeManager.shared.buttonColor)
+                    .onChange(of: colorScheme)
+                    {
+                        updateTheme()
+                    }
+                    .onChange(of: DevbanUserContainer.shared.loggedIn)
+                    {
+                        updateTheme()
+                    }
+                    .preferredColorScheme(
+                        ThemeManager.getActualColorScheme(
+                            preferredColorScheme: user?.preferredColorScheme ?? .auto,
+                            colorScheme: colorScheme,
+                        ),
+                    ),
+            )
+        }
     }
 
     private func getMainContent() -> some View
