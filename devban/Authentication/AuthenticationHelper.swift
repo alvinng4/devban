@@ -19,39 +19,36 @@ enum AuthenticationHelper
     /// Updates the shared user's authentication status based on the current Firebase user.
     ///
     /// Logs out if no user or email not verified; otherwise, logs in with the user's data model.
-    static func updateUserAuthStatus()
+    static func updateUserAuthStatus() async
     {
-        Task
+        // Reload user status
+        guard let tempUser = Auth.auth().currentUser
+        else
         {
-            // Reload user status
-            guard let tempUser = Auth.auth().currentUser
-            else
-            {
-                DevbanUserContainer.shared.logoutUser()
-                return
-            }
-
-            do
-            {
-                try await tempUser.reload()
-            }
-            catch
-            {
-                print("AuthenticationHelper.updateUserAuthStatus() reloading user error: \(error.localizedDescription)")
-            }
-
-            // Get updated user status and check if email verified
-            guard let user = Auth.auth().currentUser,
-                  user.emailVerified()
-            else
-            {
-                DevbanUserContainer.shared.logoutUser()
-                return
-            }
-
-            // Login user if all succeed
-            DevbanUserContainer.shared.loginUser(with: user)
+            DevbanUserContainer.shared.logoutUser()
+            return
         }
+
+        do
+        {
+            try await tempUser.reload()
+        }
+        catch
+        {
+            print("AuthenticationHelper.updateUserAuthStatus() reloading user error: \(error.localizedDescription)")
+        }
+
+        // Get updated user status and check if email verified
+        guard let user = Auth.auth().currentUser,
+              user.emailVerified()
+        else
+        {
+            DevbanUserContainer.shared.logoutUser()
+            return
+        }
+
+        // Login user if all succeed
+        DevbanUserContainer.shared.loginUser(with: user)
     }
 
     /// Creates a new user asynchronously with email and password, then sends a verification email.
@@ -94,7 +91,7 @@ enum AuthenticationHelper
             )
         }
 
-        AuthenticationHelper.updateUserAuthStatus()
+        await AuthenticationHelper.updateUserAuthStatus()
     }
 
     /// Signs in a user asynchronously using Google sign-in credentials.
@@ -109,16 +106,16 @@ enum AuthenticationHelper
         )
         try await Auth.auth().signIn(with: credential)
 
-        AuthenticationHelper.updateUserAuthStatus()
+        await AuthenticationHelper.updateUserAuthStatus()
     }
 
     /// Signs out the current user and updates auth status.
     ///
     /// - Throws: Firebase errors if sign-out fails.
-    static func signOutUser() throws
+    static func signOutUser() async throws
     {
         try Auth.auth().signOut()
-        AuthenticationHelper.updateUserAuthStatus()
+        await AuthenticationHelper.updateUserAuthStatus()
     }
 
     /// Sends a password reset email to the specified address.
@@ -148,6 +145,6 @@ enum AuthenticationHelper
         }
 
         try await user.delete()
-        AuthenticationHelper.updateUserAuthStatus()
+        await AuthenticationHelper.updateUserAuthStatus()
     }
 }

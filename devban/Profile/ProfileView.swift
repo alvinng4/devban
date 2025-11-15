@@ -237,13 +237,16 @@ struct ProfileView: View
         {
             Button(role: .destructive)
             {
-                do
+                Task
                 {
-                    try AuthenticationHelper.signOutUser()
-                }
-                catch
-                {
-                    print(error.localizedDescription)
+                    do
+                    {
+                        try await AuthenticationHelper.signOutUser()
+                    }
+                    catch
+                    {
+                        print(error.localizedDescription)
+                    }
                 }
             }
             label:

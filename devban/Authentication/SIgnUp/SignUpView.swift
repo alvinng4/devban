@@ -76,7 +76,7 @@ struct SignUpView: View
                                     .stroke(.tertiary, lineWidth: 1),
                             )
                     }
-                    
+
                     VStack(spacing: 4)
                     {
                         Text("Display name")
