@@ -67,6 +67,12 @@ enum AuthenticationHelper
         let changeRequest = authDataResult.user.createProfileChangeRequest()
         changeRequest.displayName = displayName
         try await changeRequest.commitChanges()
+        
+        // Creates user file on database
+        let devbanUser: DevbanUser = .init(
+            uid: authDataResult.user.uid,
+        )
+        try await devbanUser.createNewUserOnDatabase()
     }
 
     /// Signs in a user asynchronously with email and password, checking email verification.
@@ -91,6 +97,41 @@ enum AuthenticationHelper
             )
         }
 
+        await AuthenticationHelper.updateUserAuthStatus()
+    }
+    
+    /// Signs up a user asynchronously using Google sign-in credentials.
+    ///
+    /// - Parameter googleSignInResult: The result from Google sign-in, containing ID token and access token.
+    /// - Throws: Firebase authentication errors if sign-in fails.
+    static func signUpWithGoogle(googleSignInResult: GoogleSignInResult) async throws
+    {
+        let credential: AuthCredential = GoogleAuthProvider.credential(
+            withIDToken: googleSignInResult.idToken,
+            accessToken: googleSignInResult.accessToken,
+        )
+        try await Auth.auth().signIn(with: credential)
+
+        // Creates user file on database
+        guard let user = Auth.auth().currentUser
+        else
+        {
+            throw NSError(
+                domain: "Auth",
+                code: 401,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "Unable to obtain user information from authentication API.",
+                ],
+            )
+        }
+        
+        let devbanUser: DevbanUser = .init(
+            uid: user.uid,
+        )
+        try await devbanUser.createNewUserOnDatabase()
+        
+        // Update auth status
         await AuthenticationHelper.updateUserAuthStatus()
     }
 
