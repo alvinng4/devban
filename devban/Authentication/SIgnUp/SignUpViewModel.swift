@@ -31,6 +31,8 @@ extension SignUpView
     {
         /// The user's email address input.
         var email: String = ""
+        /// The user's display name input.
+        var displayName: String = ""
         /// The user's password input (secure field).
         var password: String = ""
         /// Flag indicating if a feedback message should be shown in the UI.
@@ -45,6 +47,7 @@ extension SignUpView
         var waitingServerResponse: Bool = false
         /// Flag to dismiss the view after successful signup or confirmation.
         var dismiss: Bool = false
+
         /// Initiates the email/password signup process asynchronously.
         ///
         /// Validates input, shows waiting message, and calls the helper to create a user.
@@ -53,10 +56,30 @@ extension SignUpView
         {
             resetMessage()
 
-            guard isInputValid()
+            guard isAuthInputValid()
             else
             {
                 showErrorMessage("Invalid email or password")
+                return
+            }
+
+            // Check display name input
+            guard isDiaplayNameInputValid()
+            else
+            {
+                if (displayName.isEmptyOrWhitespace())
+                {
+                    showErrorMessage("Display name cannot be empty!")
+                }
+                else if (displayName.count >= 64)
+                {
+                    showErrorMessage("Display name is too long!")
+                }
+                else
+                {
+                    showErrorMessage("Unknown error of display name.")
+                }
+
                 return
             }
 
@@ -67,12 +90,13 @@ extension SignUpView
             {
                 do
                 {
-                    try await AuthenticationHelper.createUser(email: email, password: password)
+                    try await AuthenticationHelper.createUser(email: email, displayName: displayName, password: password)
 
                     waitingServerResponse = false
                     showSpecialMessage("Success! Please check your email address (\(email)) for verification email.")
 
                     email = ""
+                    displayName = ""
                     password = ""
                 }
                 catch
@@ -122,9 +146,14 @@ extension SignUpView
         /// Checks if the email and password inputs are valid (non-empty and non-whitespace).
         ///
         /// - Returns: True if both inputs are valid; false otherwise.
-        func isInputValid() -> Bool
+        func isAuthInputValid() -> Bool
         {
             return !email.isEmptyOrWhitespace() && !password.isEmptyOrWhitespace()
+        }
+        
+        func isDiaplayNameInputValid() -> Bool
+        {
+            return !displayName.isEmptyOrWhitespace() && !(displayName.count >= 64)
         }
 
         /// Handles dismiss logic by checking for unsaved inputs and showing an alert if needed.
@@ -146,8 +175,9 @@ extension SignUpView
         func disableSubmit() -> Bool
         {
             return (
-                !isInputValid()
-                    || waitingServerResponse,
+                !isAuthInputValid()
+                || !isDiaplayNameInputValid()
+                || waitingServerResponse
             )
         }
 

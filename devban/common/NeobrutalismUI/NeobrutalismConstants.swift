@@ -26,6 +26,9 @@ enum NeobrutalismConstants
     /// Max width for large elements
     static let maxWidthLarge: CGFloat = 1280
 
+    /// Max width for medium elements
+    static let maxWidthMedium: CGFloat = 800
+
     /// Max width for small elements
     static let maxWidthSmall: CGFloat = 540
 

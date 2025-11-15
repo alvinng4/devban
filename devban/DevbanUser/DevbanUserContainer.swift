@@ -8,32 +8,39 @@ final class DevbanUserContainer
     static let shared: DevbanUserContainer = .init()
 
     @MainActor
-    private init()
-    {
-        user = nil
-    }
+    private init() {}
 
+    var loggedIn: Bool = false
+    var isUserProfileCreated: Bool = false
     var user: DevbanUser?
 
-    var isLoggedIn: Bool
-    {
-        return !(user == nil)
-    }
+    // Data from auth
+    var authUid: String?
+    var authEmail: String?
+    var authDisplayName: String?
 
     func loginUser(with user: User)
     {
-        let tempUser: DevbanUser = .init(
+        authUid = user.uid
+        authEmail = user.email
+        authDisplayName = user.displayName
+
+        self.user = DevbanUser(
             uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
             preferredColorScheme: .auto,
             theme: .blue,
         )
-        self.user = tempUser
+
+        loggedIn = true
     }
 
     func logoutUser()
     {
-        self.user = nil
+        loggedIn = false
+        isUserProfileCreated = false
+        user = nil
+        authUid = nil
+        authEmail = nil
+        authDisplayName = nil
     }
 }

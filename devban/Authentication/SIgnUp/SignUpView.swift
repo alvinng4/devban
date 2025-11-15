@@ -76,6 +76,23 @@ struct SignUpView: View
                                     .stroke(.tertiary, lineWidth: 1),
                             )
                     }
+                    
+                    VStack(spacing: 4)
+                    {
+                        Text("Display name")
+                            .fontDesign(.rounded)
+                            .frame(maxWidth: .infinity, alignment: .topLeading)
+
+                        TextField("Display name", text: $viewModel.displayName)
+                            .autocorrectionDisabled()
+                            .font(.headline)
+                            .focused($isTextFocused)
+                            .padding(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(.tertiary, lineWidth: 1),
+                            )
+                    }
 
                     VStack(spacing: 4)
                     {
