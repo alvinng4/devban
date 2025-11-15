@@ -58,12 +58,18 @@ enum AuthenticationHelper
     ///
     /// - Parameters:
     ///   - email: The user's email address.
+    ///   - displayName: The user's display name.
     ///   - password: The user's password.
     /// - Throws: Firebase authentication errors if creation or email sending fails.
-    static func createUser(email: String, password: String) async throws
+    static func createUser(email: String, displayName: String, password: String) async throws
     {
         let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
         try await authDataResult.user.sendEmailVerification()
+
+        // Update user's display name
+        let changeRequest = authDataResult.user.createProfileChangeRequest()
+        changeRequest.displayName = displayName
+        try await changeRequest.commitChanges()
     }
 
     /// Signs in a user asynchronously with email and password, checking email verification.

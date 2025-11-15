@@ -28,7 +28,7 @@ struct ProfileView: View
 
                     VStack(spacing: 10)
                     {
-                        Text("User Profile")
+                        Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .padding()
@@ -109,14 +109,11 @@ struct ProfileView: View
                                             ),
                                         )
                                         {
-                                            Text("Blue")
-                                                .tag(ThemeManager.DefaultTheme.blue)
-
-                                            Text("Green")
-                                                .tag(ThemeManager.DefaultTheme.green)
-
-                                            Text("Orange")
-                                                .tag(ThemeManager.DefaultTheme.orange)
+                                            ForEach(ThemeManager.DefaultTheme.allCases)
+                                            { themeCase in
+                                                Text(themeCase.rawValue)
+                                                    .tag(themeCase)
+                                            }
                                         }
                                         label:
                                         {
@@ -218,7 +215,7 @@ struct ProfileView: View
                     }
                     .shadowedBorderRoundedRectangle()
                 }
-                .frame(maxWidth: NeobrutalismConstants.maxWidthSmall)
+                .frame(maxWidth: NeobrutalismConstants.maxWidthMedium)
                 .padding(
                     .horizontal,
                     isCompact ?

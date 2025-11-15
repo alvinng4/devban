@@ -17,18 +17,28 @@ import SwiftUI
 @Observable
 final class ThemeManager
 {
-    enum DefaultTheme: String, Codable
+    enum DefaultTheme: String, Codable, CaseIterable, Identifiable
     {
         case blue = "Blue"
         case green = "Green"
         case orange = "Orange"
+
+        var id: String
+        {
+            return self.rawValue
+        }
     }
 
-    enum PreferredColorScheme: String, Codable
+    enum PreferredColorScheme: String, Codable, CaseIterable, Identifiable
     {
         case auto = "Auto"
         case light = "Light"
         case dark = "Dark"
+
+        var id: String
+        {
+            return self.rawValue
+        }
     }
 
     @MainActor

@@ -21,7 +21,7 @@ struct MainView: View
             {
                 updateTheme()
             }
-            .onChange(of: DevbanUserContainer.shared.isLoggedIn)
+            .onChange(of: DevbanUserContainer.shared.loggedIn)
             {
                 updateTheme()
             }
@@ -37,7 +37,7 @@ struct MainView: View
     {
         Group
         {
-            if (!DevbanUserContainer.shared.isLoggedIn)
+            if (!DevbanUserContainer.shared.loggedIn)
             {
                 AuthenticationView()
             }
@@ -81,7 +81,7 @@ struct MainView: View
 
     private func updateTheme()
     {
-        guard DevbanUserContainer.shared.isLoggedIn else { return }
+        guard DevbanUserContainer.shared.loggedIn else { return }
         guard let user: DevbanUser = DevbanUserContainer.shared.user else { return }
         ThemeManager.shared.updateTheme(
             theme: user.theme,
