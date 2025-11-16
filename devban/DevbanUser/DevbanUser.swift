@@ -5,6 +5,8 @@ import SwiftUI
 struct DevbanUser: Codable
 {
     var uid: String
+    var lastAccess: Date?
+    var createdDate: Date?
     private var preferredColorScheme: ThemeManager.PreferredColorScheme?
     private var theme: ThemeManager.DefaultTheme?
 }
@@ -101,11 +103,35 @@ extension DevbanUser
         return decoder
     }
 
-    static func createNewUserOnDatabaseIfNotExist(uid: String) async throws
+    static func createNewUserProfile(uid: String) async throws
     {
-        try DevbanUser.getUserDocument(uid).setData(
-            from: ["uid": uid],
-            merge: true,
+        let userDoc = DevbanUser.getUserDocument(uid)
+        let document = try await userDoc.getDocument()
+
+        if (!document.exists)
+        {
+            try userDoc.setData(
+                from: ["uid": uid],
+                merge: true,
+            )
+            try await userDoc.updateData(
+                ["created_date": Timestamp()],
+            )
+        }
+    }
+
+    static func updateUserStatusToDatabase(uid: String) async throws
+    {
+        let userDoc = DevbanUser.getUserDocument(uid)
+        let document = try await userDoc.getDocument()
+
+        if (!document.exists)
+        {
+            try await DevbanUser.createNewUserProfile(uid: uid)
+        }
+
+        try await DevbanUser.getUserDocument(uid).updateData(
+            ["last_access": Timestamp()],
         )
     }
 }
