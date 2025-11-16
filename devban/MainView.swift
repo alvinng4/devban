@@ -59,6 +59,10 @@ struct MainView: View
             {
                 AuthenticationView()
             }
+            else if (!DevbanUserContainer.shared.hasTeam)
+            {
+                TeamAuthenticationView()
+            }
             else
             {
                 TabView(

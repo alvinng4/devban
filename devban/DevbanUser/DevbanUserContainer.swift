@@ -19,6 +19,14 @@ final class DevbanUserContainer
     var authEmail: String?
     var authDisplayName: String?
 
+    var hasTeam: Bool
+    {
+        guard let user else { return false }
+
+        // TODO: Need more careful check with the database
+        return user.teamID != nil
+    }
+
     func loginUser(with user: User) async throws
     {
         authUid = user.uid
