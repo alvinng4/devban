@@ -45,7 +45,7 @@ extension TeamJoinView
                     // TODO: Add create team logic, check license key with the server
                     print("Do something")
                     waitingServerResponse = false
-                    resetMessage()
+                    showSpecialMessage("Success! You should be navigated very soon...")
                 }
                 catch
                 {

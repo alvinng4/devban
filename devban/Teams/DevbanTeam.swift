@@ -10,7 +10,7 @@ struct DevbanTeam: Codable
         case normal
     }
 
-    var uid: String
+    var id: String
     var teamName: String
     var createdDate: Date?
     var members: [String: Role]
@@ -19,25 +19,17 @@ struct DevbanTeam: Codable
 
 extension DevbanTeam
 {
-    static func updateDatabaseData(uid: String, data: [String: Any]) async throws
+    static func updateDatabaseData(id: String, data: [String: Any]) async throws
     {
-        try await DevbanTeam.getTeamDocument(uid).updateData(data)
-    }
-
-    static func checkIfLisenceValid(licenseID: String) async throws -> Bool
-    {
-        let licenseDoc = Firestore.firestore().collection("licenses").document(licenseID)
-        let document = try await licenseDoc.getDocument()
-
-        return document.exists
+        try await DevbanTeam.getTeamDocument(id).updateData(data)
     }
 }
 
 extension DevbanTeam
 {
-    static func getTeam(_ uid: String) async throws -> DevbanTeam
+    static func getTeam(_ id: String) async throws -> DevbanTeam
     {
-        return try await DevbanTeam.getTeamDocument(uid).getDocument(
+        return try await DevbanTeam.getTeamDocument(id).getDocument(
             as: DevbanTeam.self,
             decoder: decoder,
         )
@@ -48,9 +40,9 @@ extension DevbanTeam
         return Firestore.firestore().collection("teams")
     }
 
-    static func getTeamDocument(_ uid: String) -> DocumentReference
+    static func getTeamDocument(_ id: String) -> DocumentReference
     {
-        return DevbanTeam.getTeamCollection().document(uid)
+        return DevbanTeam.getTeamCollection().document(id)
     }
 
     private static var encoder: Firestore.Encoder
@@ -69,7 +61,7 @@ extension DevbanTeam
 
     static func createNewTeamProfile(team: DevbanTeam) async throws
     {
-        let teamDoc = DevbanTeam.getTeamDocument(team.uid)
+        let teamDoc = DevbanTeam.getTeamDocument(team.id)
         let document = try await teamDoc.getDocument()
 
         if (!document.exists)

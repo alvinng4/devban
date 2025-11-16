@@ -56,7 +56,7 @@ struct TeamJoinView: View
                     .foregroundStyle(viewModel.messageColor)
             }
 
-            Text("Tip: Ask your admin to generate a invite code")
+            Text("Tip: Ask your admin to generate an invite code")
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(25)
