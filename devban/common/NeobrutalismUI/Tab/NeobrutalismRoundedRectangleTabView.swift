@@ -131,9 +131,7 @@ struct NeobrutalismRoundedRectangleTabView<Content: View>: View
             // MARK: The tab content
 
             content(selection)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .shadowedBorderRoundedRectangle()
     }
 }
