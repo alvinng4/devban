@@ -47,10 +47,10 @@ enum AuthenticationHelper
             return
         }
 
-        // Creates user file on database if not exist
+        // Update user last access status to database
         do
         {
-            try await DevbanUser.createNewUserOnDatabaseIfNotExist(uid: user.uid)
+            try await DevbanUser.updateUserStatusToDatabase(uid: user.uid)
         }
         catch
         {
@@ -86,6 +86,9 @@ enum AuthenticationHelper
         let changeRequest = authDataResult.user.createProfileChangeRequest()
         changeRequest.displayName = displayName
         try await changeRequest.commitChanges()
+
+        // Create user on database
+        try await DevbanUser.createNewUserProfile(uid: authDataResult.user.uid)
     }
 
     /// Signs in a user asynchronously with email and password, checking email verification.
@@ -110,6 +113,36 @@ enum AuthenticationHelper
             )
         }
 
+        await AuthenticationHelper.updateUserAuthStatus()
+    }
+
+    /// Signs up a user asynchronously using Google sign-in credentials.
+    ///
+    /// - Parameter googleSignInResult: The result from Google sign-in, containing ID token and access token.
+    /// - Throws: Firebase authentication errors if sign-in fails.
+    static func signUpWithGoogle(googleSignInResult: GoogleSignInResult) async throws
+    {
+        let credential: AuthCredential = GoogleAuthProvider.credential(
+            withIDToken: googleSignInResult.idToken,
+            accessToken: googleSignInResult.accessToken,
+        )
+        try await Auth.auth().signIn(with: credential)
+
+        guard let user = Auth.auth().currentUser
+        else
+        {
+            try await AuthenticationHelper.signOutUser()
+            throw NSError(
+                domain: "Auth",
+                code: 401,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "Failed to create user profile on database. Please try again.",
+                ],
+            )
+        }
+
+        try await DevbanUser.createNewUserProfile(uid: user.uid)
         await AuthenticationHelper.updateUserAuthStatus()
     }
 

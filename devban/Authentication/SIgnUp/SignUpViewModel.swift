@@ -135,7 +135,7 @@ extension SignUpView
                 do
                 {
                     let signInResult: GoogleSignInResult = try await helper.signIn()
-                    try await AuthenticationHelper.signInWithGoogle(googleSignInResult: signInResult)
+                    try await AuthenticationHelper.signUpWithGoogle(googleSignInResult: signInResult)
                     waitingServerResponse = false
                     resetMessage()
                 }

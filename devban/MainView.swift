@@ -99,7 +99,6 @@ struct MainView: View
 
     private func updateTheme()
     {
-        guard DevbanUserContainer.shared.loggedIn else { return }
         ThemeManager.shared.updateTheme(
             theme: DevbanUserContainer.shared.getTheme(),
             colorScheme: colorScheme,
