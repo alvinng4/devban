@@ -74,7 +74,7 @@ extension AuthenticationView
                         password: password,
                     )
                     waitingServerResponse = false
-                    resetMessage()
+                    showSpecialMessage("Success! You should be navigated very soon...")
                 }
                 catch
                 {

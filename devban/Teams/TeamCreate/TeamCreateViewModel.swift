@@ -43,15 +43,41 @@ extension TeamCreateView
             {
                 do
                 {
-                    // TODO: Add create team logic, check license key with the server
-                    print("Do something")
+                    // Get license
+                    let license: License = try await License.getLicense(licenseID)
+
+                    // If not exist, an error should be thrown. So at this point, the license exist
+                    if let _ = license.teamID
+                    {
+                        throw NSError(
+                            domain: "Auth",
+                            code: 401,
+                            userInfo: [
+                                NSLocalizedDescriptionKey:
+                                    "The license is already used for other teams! Contact us if there is any issue.",
+                            ],
+                        )
+                    }
+
+                    // TODO: Add team create logic
+
                     waitingServerResponse = false
-                    resetMessage()
+                    showSpecialMessage("Success! You should be navigated very soon...")
                 }
                 catch
                 {
                     waitingServerResponse = false
-                    showErrorMessage(error.localizedDescription)
+
+                    // License key not found on database
+                    if let decodingError = error as? DecodingError,
+                       case .valueNotFound = decodingError
+                    {
+                        showErrorMessage("Invalid / missing License Key. Contact us if there is any issue.")
+                    }
+                    else
+                    {
+                        showErrorMessage(error.localizedDescription)
+                    }
                 }
             }
         }
