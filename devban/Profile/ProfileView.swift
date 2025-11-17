@@ -69,13 +69,30 @@ struct ProfileView: View
 
                         Divider()
 
+                        HStack(spacing: 0)
+                        {
+                            Label("Number of members", systemImage: "number.circle")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            if let numberOfMembers = DevbanUserContainer.shared.getTeamMembersCount()
+                            {
+                                Text("\(numberOfMembers)")
+                            }
+                            else
+                            {
+                                Text("Error")
+                            }
+                        }
+
+                        Divider()
+
                         Button
                         {
                             showGenerateInviteCodeSheetView = true
                         }
                         label:
                         {
-                            Label("Generate invite codes", systemImage: "person.badge.shield.checkmark")
+                            Label("Generate invite codes", systemImage: "person.crop.circle.fill.badge.plus")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(PlainButtonStyle())

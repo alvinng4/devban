@@ -92,6 +92,11 @@ final class DevbanUserContainer
         return team?.id
     }
 
+    func getTeamMembersCount() -> Int?
+    {
+        return team?.members.count
+    }
+
     func getTheme() -> ThemeManager.DefaultTheme
     {
         return user?.getTheme() ?? .blue
