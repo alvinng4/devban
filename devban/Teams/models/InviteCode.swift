@@ -123,6 +123,12 @@ extension DevbanTeamInviteCode
             data: ["members.\(userID)": DevbanTeam.Role.member.rawValue],
         )
 
+        // Add teamID to user
+        try await DevbanUser.updateDatabaseData(
+            uid: userID,
+            data: ["team_id": team.id],
+        )
+
         // Add team to DevbanUserContainer
         try await DevbanUserContainer.shared.setTeam(id: team.id)
     }
