@@ -18,7 +18,6 @@ package "ViewModel / Model" as Core {
   component "User Profile" as Auth
   component "Kanban" as Kanban
   component "Calendar" as Calendar
-  component "Messaging" as Messaging
   component "LLM" as LLM
 }
 
@@ -30,7 +29,6 @@ cloud "LLM Provider API" as LLMAPI #F0F7F0
 GUI --> Auth
 GUI --> Kanban
 GUI --> Calendar
-GUI --> Messaging
 GUI --> LLM
 
 ' Auth and user management
@@ -40,7 +38,6 @@ Auth --> DB
 ' Persistence
 Kanban --> DB
 Calendar --> DB
-Messaging --> DB
 
 ' LLM integration
 LLM --> DB : LLM chat history
