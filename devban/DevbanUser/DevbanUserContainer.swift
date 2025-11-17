@@ -65,6 +65,23 @@ final class DevbanUserContainer
         self.team = try await DevbanTeam.getTeam(id)
     }
 
+    func getTeamName() -> String?
+    {
+        return self.team?.teamName
+    }
+
+    func getUserTeamRole() -> DevbanTeam.Role?
+    {
+        guard let user,
+              let team
+        else
+        {
+            return nil
+        }
+
+        return team.members[user.uid]
+    }
+
     func getUid() -> String?
     {
         return user?.uid ?? nil

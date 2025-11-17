@@ -76,7 +76,7 @@ struct TeamCreateView: View
             {
                 Text("Don't have a license key?")
 
-                Link(destination: URL(string: "mailto:QuestList_app@outlook.com")!)
+                Link(destination: URL(string: "mailto:csci3100group17@gmail.com")!)
                 {
                     Text("Contact us")
                         .frame(maxWidth: .infinity, alignment: .leading)

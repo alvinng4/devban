@@ -7,7 +7,7 @@ struct DevbanTeam: Codable
     enum Role: String, Codable
     {
         case admin
-        case normal
+        case member
     }
 
     var id: String
