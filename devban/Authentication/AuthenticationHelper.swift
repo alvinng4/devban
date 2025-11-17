@@ -195,6 +195,20 @@ enum AuthenticationHelper
             )
         }
 
+        guard let teamID = DevbanUserContainer.shared.getTeamId()
+        else
+        {
+            throw NSError(
+                domain: "Auth",
+                code: 401,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "Failed to get team information.",
+                ],
+            )
+        }
+
+        try await DevbanTeam.deleteUser(teamId: teamID, uid: user.uid)
         try await user.delete()
         await AuthenticationHelper.updateUserAuthStatus()
     }

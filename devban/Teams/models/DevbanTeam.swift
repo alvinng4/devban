@@ -24,6 +24,16 @@ extension DevbanTeam
     {
         try await DevbanTeam.getTeamDocument(id).updateData(data)
     }
+
+    static func deleteUser(teamId: String, uid: String) async throws
+    {
+        try await DevbanTeam.updateDatabaseData(
+            id: teamId,
+            data: [
+                "members.\(uid)": FieldValue.delete(),
+            ],
+        )
+    }
 }
 
 extension DevbanTeam
