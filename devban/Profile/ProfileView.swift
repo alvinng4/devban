@@ -6,6 +6,7 @@ struct ProfileView: View
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @State private var showLogoutAlert: Bool = false
+    @State private var showGenerateInviteCodeSheetView: Bool = false
     @State private var showAccountDeletionSheetView: Bool = false
     @State private var settingsIsGeneralExpanded: Bool = false
     @State private var settingsIsAccountExpanded: Bool = false
@@ -65,6 +66,19 @@ struct ProfileView: View
 
                             Text(DevbanUserContainer.shared.getUserTeamRole()?.rawValue.capitalized ?? "Error")
                         }
+
+                        Divider()
+
+                        Button
+                        {
+                            showGenerateInviteCodeSheetView = true
+                        }
+                        label:
+                        {
+                            Label("Generate invite codes", systemImage: "person.badge.shield.checkmark")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -282,7 +296,7 @@ struct ProfileView: View
                             Label("csci3100group17@gmail.com", systemImage: "envelope")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .tint(.primary)
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -343,6 +357,10 @@ struct ProfileView: View
         .sheet(isPresented: $showAccountDeletionSheetView)
         {
             AccountDeletionSheetView()
+        }
+        .sheet(isPresented: $showGenerateInviteCodeSheetView)
+        {
+            GenerateInviteCodeSheetView()
         }
     }
 }

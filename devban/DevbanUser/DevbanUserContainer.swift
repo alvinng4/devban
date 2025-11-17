@@ -84,7 +84,12 @@ final class DevbanUserContainer
 
     func getUid() -> String?
     {
-        return user?.uid ?? nil
+        return user?.uid
+    }
+
+    func getTeamId() -> String?
+    {
+        return team?.id
     }
 
     func getTheme() -> ThemeManager.DefaultTheme
