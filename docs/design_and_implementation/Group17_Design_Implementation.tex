@@ -84,7 +84,7 @@
         \toprule
         Version & Revised By & Revision Date & Comments \\
         \midrule
-        0.0.1 & Ng Ching Yin & 31 Oct 2025 & Initial draft \\
+        0.0.1 & Ng Ching Yin & 17 Nov 2025 & Initial release \\
         \bottomrule
     \end{tabular}
     \label{tab:docs_rev_hist}
@@ -103,7 +103,7 @@ to implement the features in the application.
 
 This document describes the design and implementation details of the devban
 Application. This document will focus on four components: 
-database, user management, UI design and implementation of the main features. 
+database, users and teams management, UI design and implementation of the main features. 
 Each of the components will be explained in details.
 
 \subsection{Definitions, Acronyms and Abbreviations}
@@ -117,11 +117,15 @@ Each of the components will be explained in details.
         
         \midrule
         devban
-        & Name of the project, shortened from ``developers'' and ``kanban'' \\
+        & Name of the project, shortened from ``develop'' and ``kanban'' \\
 
         \midrule
         UI
         & User Interface \\
+
+        \midrule
+        UX
+        & User Experience \\
 
         \midrule
         GUI
@@ -144,18 +148,30 @@ Each of the components will be explained in details.
 \section{System Overview}
 
 devban offers multiple useful features, including kanban board for resource management and
-progress tracking, calendar for visual planning, messaging for communication and LLM interface
+progress tracking, calendar for visual planning and LLM interface
 to boost development productivity. On top of that, it provides a graphical user interface that 
-enables users to interact with the system easily. Furthermore, gamification elements are to serve
-as a motivation-boost for users.
+enables users to interact with the system easily. Furthermore, gamification elements are added
+to serve as a motivation-boost for users.
 
 \section{System Architecture}
 
-\subsection{Architecture Design}
+\subsection{Architecture Patterns}
+\subsubsection{Model-View-ViewModel (MVVM)}
+The application will follow the Model-View-ViewModel design pattern, where
+View represents the graphical user interface (GUI), Model controls the business logic and data, and
+ViewModel acts as a middleman to control the view updates and forward user requests to the model.
 
-The application will follow the Model-View-ViewModel (MVVM) design pattern, where
-View represents the graphical user interface (GUI), Model controls the business logic, and
-ViewModel acts as a middleman to controls the view updates and send API request to the model.
+This pattern enables separation of business logic and user interface, enhances code reusability
+and makes the application easier to test and maintain.
+
+\subsubsection{Singleton}
+For some simple UX components, for example \verb|ThemeManager| for themes and \verb|AudioManager| 
+for sound effects, we simply use global singleton classes in order to ensure update to all views 
+and the APIs are accessible to all components.
+
+Due to time constraint, \verb|DevbanUserContainer| also adopts the Singleton pattern so that the user
+information could be accessed globally. In the future, this should be modified to the dependency
+injection pattern.
 
 \subsection{Decomposition Description}
 Figure \ref{fig:decomposition_description} shows a high level decomposition of the components in devban. 
@@ -167,39 +183,33 @@ Some external services are used to extend the system capabilities:
     \item external identity provider (idP) are used to provide secure user authentication;
     \item LLM Provider API are used to get access to advanced LLM models;
 \end{itemize}
+The details for each components will be discussed in the following sections.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/system_architecture/system_architecture.png}
+    \includegraphics[width=0.8\textwidth]{assets/system_architecture/system_architecture.pdf}
     \caption{Components diagram for high level overview of devban application.}
     \label{fig:decomposition_description}
 \end{figure}
 
-% \section{User Interface}
-% \begin{itemize}
-%     \item Calendar Area
-%     \begin{itemize}
-%         \item Monthly calendar grid view displaying all days of the current month
-%         \item Event count indicators showing the number of scheduled events 
-%         \item Event management features:
-%         \begin{itemize}
-%             \item Create new events with title, date, optional start time, and optional end time
-%             \item Edit existing events to modify their details
-%             \item Delete events
-%             \item Toggle completion status of events (mark as completed/incomplete)
-%             \item Visual indicators for completed events (strikethrough text and checkmark icon)
-%         \end{itemize}
-%     \end{itemize}
-    
-%     \item Message Area: "AskLLM"
-%     \begin{itemize}
-%         \item Scrollable list of chat bubbles (user vs. LLM) with the newest chats at the bottom
-%         \item Input area containing a multiline text editor with a Submit button
-%     \end{itemize}
-% \end{itemize}
+\section{Human Interface Design}
+For our application, the Neobrutalism UI style is adopted. The benefits are as follows:
+\begin{enumerate}
+    \item High contrast emphasizing the main contents
+    \item Block-like layout simplify UI design for multiple components on the same view
+    \item Provides an unique, memorable user interface
+    \item Comes with interactive elements with animations
+\end{enumerate}
 
-% \section{Operating System and Environment}
-% This application is developed and deployed for Apple devices running iOS, iPadOS, and macOS, which require iOS 26, iPadOS 26, or macOS Sequoia 26 as per the latest Apple developer policies.
+\newpage
+\section{Design And Implementation}
+\subsection{Home (Kanban)}
+
+\subsection{Calendar}
+
+\subsection{AskLLM}
+
+\subsection{User Profile}
 
 
 % \appendix
