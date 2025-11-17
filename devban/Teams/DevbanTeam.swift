@@ -4,7 +4,7 @@ import Foundation
 
 struct DevbanTeam: Codable
 {
-    enum Role: Codable
+    enum Role: String, Codable
     {
         case admin
         case normal
@@ -14,7 +14,7 @@ struct DevbanTeam: Codable
     var teamName: String
     var createdDate: Date?
     var members: [String: Role]
-    var licenseID: String
+    var licenseId: String
 }
 
 extension DevbanTeam
@@ -59,17 +59,28 @@ extension DevbanTeam
         return decoder
     }
 
-    static func createNewTeamProfile(team: DevbanTeam) async throws
+    static func createNewTeamProfile(
+        teamName: String,
+        creatorUid: String,
+        licenseId: String,
+    ) async throws -> String
     {
-        let teamDoc = DevbanTeam.getTeamDocument(team.id)
-        let document = try await teamDoc.getDocument()
+        let teamDoc = DevbanTeam.getTeamCollection().document()
+        let id: String = teamDoc.documentID
 
-        if (!document.exists)
-        {
-            try teamDoc.setData(
-                from: team,
-                merge: false,
-            )
-        }
+        let docData: [String: Any] = [
+            "id": id,
+            "team_name": teamName,
+            "created_date": Timestamp(),
+            "members": [creatorUid: Role.admin.rawValue],
+            "license_id": licenseId,
+        ]
+
+        try await teamDoc.setData(
+            docData,
+            merge: false,
+        )
+
+        return id
     }
 }

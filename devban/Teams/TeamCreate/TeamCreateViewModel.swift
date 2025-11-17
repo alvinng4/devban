@@ -47,7 +47,7 @@ extension TeamCreateView
                     let license: License = try await License.getLicense(licenseID)
 
                     // If not exist, an error should be thrown. So at this point, the license exist
-                    if let _ = license.teamID
+                    if (license.teamId != nil)
                     {
                         throw NSError(
                             domain: "Auth",
@@ -59,7 +59,38 @@ extension TeamCreateView
                         )
                     }
 
-                    // TODO: Add team create logic
+                    guard let uid: String = DevbanUserContainer.shared.getUid()
+                    else
+                    {
+                        throw NSError(
+                            domain: "Auth",
+                            code: 401,
+                            userInfo: [
+                                NSLocalizedDescriptionKey:
+                                    "Failed to get user id! Please restart the app and try again.",
+                            ],
+                        )
+                    }
+
+                    // Create new team
+                    let teamId: String = try await DevbanTeam.createNewTeamProfile(
+                        teamName: teamName,
+                        creatorUid: uid,
+                        licenseId: license.id,
+                    )
+
+                    // Update license and also user
+                    try await License.updateDatabaseData(
+                        id: license.id,
+                        data: ["team_id": teamId],
+                    )
+                    try await DevbanUser.updateDatabaseData(
+                        uid: uid,
+                        data: ["team_id": teamId],
+                    )
+
+                    // Update DevbanUserContainer
+                    try await DevbanUserContainer.shared.setTeam(id: teamId)
 
                     waitingServerResponse = false
                     showSpecialMessage("Success! You should be navigated very soon...")
