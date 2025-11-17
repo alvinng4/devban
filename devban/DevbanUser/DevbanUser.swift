@@ -7,7 +7,7 @@ struct DevbanUser: Codable
     var uid: String
     var lastAccess: Date?
     var createdDate: Date?
-    var teamID: String?
+    var teamId: String?
     private var preferredColorScheme: ThemeManager.PreferredColorScheme?
     private var theme: ThemeManager.DefaultTheme?
 }

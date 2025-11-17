@@ -13,6 +13,7 @@ final class DevbanUserContainer
     var loggedIn: Bool = false
     var isUserProfileCreated: Bool = false
     private var user: DevbanUser?
+    private var team: DevbanTeam?
 
     // Data from auth
     var authUid: String?
@@ -21,10 +22,7 @@ final class DevbanUserContainer
 
     var hasTeam: Bool
     {
-        guard let user else { return false }
-
-        // TODO: Need more careful check with the database
-        return user.teamID != nil
+        return team != nil
     }
 
     func loginUser(with user: User) async throws
@@ -33,7 +31,21 @@ final class DevbanUserContainer
         authEmail = user.email
         authDisplayName = user.displayName
 
-        self.user = try await DevbanUser.getUser(user.uid)
+        let devbanUser: DevbanUser = try await DevbanUser.getUser(user.uid)
+        self.user = devbanUser
+
+        if let teamID = devbanUser.teamId
+        {
+            do
+            {
+                self.team = try await DevbanTeam.getTeam(teamID)
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+
         loggedIn = true
     }
 
@@ -42,9 +54,15 @@ final class DevbanUserContainer
         loggedIn = false
         isUserProfileCreated = false
         user = nil
+        team = nil
         authUid = nil
         authEmail = nil
         authDisplayName = nil
+    }
+
+    func setTeam(id: String) async throws
+    {
+        self.team = try await DevbanTeam.getTeam(id)
     }
 
     func getUid() -> String?

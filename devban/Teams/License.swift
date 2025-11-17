@@ -5,7 +5,15 @@ import Foundation
 struct License: Codable
 {
     var id: String
-    var teamID: String?
+    var teamId: String?
+}
+
+extension License
+{
+    static func updateDatabaseData(id: String, data: [String: Any]) async throws
+    {
+        try await License.getLicenseDocument(id).updateData(data)
+    }
 }
 
 extension License
