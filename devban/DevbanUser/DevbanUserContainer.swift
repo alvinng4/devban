@@ -38,7 +38,7 @@ final class DevbanUserContainer
         {
             do
             {
-                self.team = try await DevbanTeam.getTeam(teamID)
+                try await setTeam(id: teamID)
             }
             catch
             {
