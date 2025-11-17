@@ -21,7 +21,7 @@ struct AccountDeletionSheetView: View
     @Environment(\.dismiss) private var dismiss
 
     /// The view model that manages the account deletion logic and UI states.
-    @State private var viewModel: AccountDeletionSheetViewModel = AccountDeletionSheetViewModel()
+    @State private var viewModel: AccountDeletionSheetViewModel = .init()
 
     /// Tracks whether the confirmation text field is currently focused.
     @FocusState private var isTextFocused: Bool
