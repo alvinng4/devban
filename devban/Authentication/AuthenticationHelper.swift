@@ -208,8 +208,8 @@ enum AuthenticationHelper
             )
         }
 
-        try await DevbanTeam.deleteUser(teamId: teamID, uid: user.uid)
         try await user.delete()
+        try await DevbanTeam.deleteUser(teamId: teamID, uid: user.uid)
         await AuthenticationHelper.updateUserAuthStatus()
     }
 }
