@@ -23,21 +23,59 @@ struct ProfileView: View
 
                 VStack(spacing: 10)
                 {
+                    // MARK: Profile
+
                     Text("Profile")
                         .customTitle()
 
                     VStack(spacing: 10)
                     {
-                        Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack(spacing: 0)
+                        {
+                            Label("Display Name", systemImage: "person.text.rectangle")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
+                        }
                     }
                     .padding()
                     .shadowedBorderRoundedRectangle()
 
+                    // MARK: Team
+
+                    Text("Team")
+                        .customTitle()
+
+                    VStack(spacing: 15)
+                    {
+                        HStack(spacing: 0)
+                        {
+                            Label("Team Name", systemImage: "person.2.circle")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text(DevbanUserContainer.shared.getTeamName() ?? "Error")
+                        }
+
+                        Divider()
+
+                        HStack(spacing: 0)
+                        {
+                            Label("Role", systemImage: "person.badge.shield.checkmark")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text(DevbanUserContainer.shared.getUserTeamRole()?.rawValue.capitalized ?? "Error")
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .shadowedBorderRoundedRectangle()
+
+                    // MARK: Settings
+
                     Text("Settings")
                         .customTitle()
 
-                    VStack(spacing: 0)
+                    VStack(spacing: 15)
                     {
                         DisclosureGroup(isExpanded: $settingsIsGeneralExpanded)
                         {
@@ -160,8 +198,7 @@ struct ProfileView: View
 //                                        .fixedSize()
 //                                }
                             }
-                            .padding(.top, 20)
-                            .padding(.horizontal, 5)
+                            .padding(5)
                         }
                         label:
                         {
@@ -169,7 +206,6 @@ struct ProfileView: View
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .foregroundStyle(.primary)
-                        .padding()
 
                         Divider()
 
@@ -177,6 +213,8 @@ struct ProfileView: View
                         {
                             VStack(spacing: 15)
                             {
+                                Divider()
+
                                 Button
                                 {
                                     showLogoutAlert = true
@@ -201,8 +239,7 @@ struct ProfileView: View
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
-                            .padding(.top, 20)
-                            .padding(.horizontal, 5)
+                            .padding(5)
                         }
                         label:
                         {
@@ -210,8 +247,45 @@ struct ProfileView: View
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .foregroundStyle(.primary)
-                        .padding()
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .shadowedBorderRoundedRectangle()
+
+                    // MARK: About
+
+                    Text("About")
+                        .customTitle()
+
+                    VStack(spacing: 15)
+                    {
+                        HStack(spacing: 0)
+                        {
+                            Label("App Version", systemImage: "number.circle")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            if let versionString: String = Bundle.main
+                                .infoDictionary?["CFBundleShortVersionString"] as? String
+                            {
+                                Text(versionString)
+                            }
+                            else
+                            {
+                                Text("Unknown")
+                            }
+                        }
+
+                        Divider()
+
+                        Link(destination: URL(string: "mailto:csci3100group17@gmail.com")!)
+                        {
+                            Label("csci3100group17@gmail.com", systemImage: "envelope")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
                     .shadowedBorderRoundedRectangle()
                 }
                 .frame(maxWidth: NeobrutalismConstants.maxWidthMedium)
