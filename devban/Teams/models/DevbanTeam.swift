@@ -15,6 +15,7 @@ struct DevbanTeam: Codable
     var createdDate: Date?
     var members: [String: Role]
     var licenseId: String
+    var inviteCodes: [String]?
 }
 
 extension DevbanTeam

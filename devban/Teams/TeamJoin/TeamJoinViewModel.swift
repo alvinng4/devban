@@ -42,15 +42,25 @@ extension TeamJoinView
             {
                 do
                 {
-                    // TODO: Add create team logic, check license key with the server
-                    print("Do something")
+                    try await DevbanTeamInviteCode.redeemInviteCode(id: inviteCode)
+
                     waitingServerResponse = false
                     showSpecialMessage("Success! You should be navigated very soon...")
                 }
                 catch
                 {
                     waitingServerResponse = false
-                    showErrorMessage(error.localizedDescription)
+
+                    // Invite code not found on database
+                    if let decodingError = error as? DecodingError,
+                       case .valueNotFound = decodingError
+                    {
+                        showErrorMessage("Invalid / missing invite code. Contact your admin if there is any issue.")
+                    }
+                    else
+                    {
+                        showErrorMessage(error.localizedDescription)
+                    }
                 }
             }
         }
