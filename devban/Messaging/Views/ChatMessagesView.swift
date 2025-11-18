@@ -12,7 +12,7 @@ struct ChatMessagesView: View
 {
     let messages: [ChatMessage]
     let responseStatus: ResponseStatus
-    let LLMStreamingContent: String.PartiallyGenerated?
+    let LLMStreamingContent: String
     let userInput: String?
 
     @Namespace var bottomElement
@@ -53,8 +53,7 @@ struct ChatMessagesView: View
                     {
                         ProgressView()
                     }
-                    else if let LLMStreamingContent,
-                            !LLMStreamingContent.isEmptyOrWhitespace()
+                    else if !LLMStreamingContent.isEmptyOrWhitespace()
                     {
                         let trimmed: String = LLMStreamingContent.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(

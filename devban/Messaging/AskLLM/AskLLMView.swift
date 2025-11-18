@@ -31,8 +31,8 @@ struct AskLLMView: View
                 {
                     ChatMessagesView(
                         messages: viewModel.messages,
-                        responseStatus: viewModel.responseStatus,
-                        LLMStreamingContent: viewModel.LLMStreamingContent,
+                        responseStatus: viewModel.model.responseStatus,
+                        LLMStreamingContent: viewModel.streamingContent,
                         userInput: viewModel.userInput,
                     )
 
@@ -138,11 +138,14 @@ struct AskLLMView: View
                                     .padding(.horizontal, 15)
                                     .padding(.vertical, 12)
                                     .foregroundStyle(.white)
-                                    .background(ThemeManager.shared.buttonColor)
+                                    .background(viewModel.disableSubmit ? Color.gray : ThemeManager.shared.buttonColor)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                                     .padding(.trailing, 5)
                                 }
                                 .keyboardShortcut(.defaultAction)
+                                .disabled(
+                                    viewModel.disableSubmit,
+                                )
                             }
                             .padding(.bottom, 10)
                         }
