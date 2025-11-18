@@ -97,6 +97,19 @@ struct ProfileView: View
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(PlainButtonStyle())
+
+                        Divider()
+
+                        Button
+                        {
+                            showQuitTeamAlert = true
+                        }
+                        label:
+                        {
+                            Label("Exit team", systemImage: "rectangle.portrait.and.arrow.right")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -404,7 +417,7 @@ struct ProfileView: View
         }
         message:
         {
-            Text("Are you sure you want to logout?")
+            Text("Are you sure you want to quit the team?")
         }
         .sheet(isPresented: $showAccountDeletionSheetView)
         {
