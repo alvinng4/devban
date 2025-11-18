@@ -126,4 +126,24 @@ final class DevbanUserContainer
             self.user = try await DevbanUser.getUser(user.uid)
         }
     }
+
+    func quitTeam() async throws
+    {
+        guard let userID = user?.uid,
+              let teamID = team?.id
+        else
+        {
+            throw NSError(
+                domain: "Auth",
+                code: 401,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "Failed to get userID or teamID",
+                ],
+            )
+        }
+
+        try await DevbanUser.removeTeamFromUser(uid: userID)
+        try await DevbanTeam.deleteUser(teamId: teamID, uid: userID)
+    }
 }

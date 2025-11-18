@@ -5,6 +5,7 @@ struct ProfileView: View
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    @State private var showQuitTeamAlert: Bool = false
     @State private var showLogoutAlert: Bool = false
     @State private var showGenerateInviteCodeSheetView: Bool = false
     @State private var showAccountDeletionSheetView: Bool = false
@@ -361,6 +362,40 @@ struct ProfileView: View
             Button(role: .cancel)
             {
                 showLogoutAlert = false
+            }
+            label:
+            {
+                Text("Cancel")
+            }
+        }
+        message:
+        {
+            Text("Are you sure you want to logout?")
+        }
+        .alert("Quit team?", isPresented: $showQuitTeamAlert)
+        {
+            Button(role: .destructive)
+            {
+                Task
+                {
+                    do
+                    {
+                        try await DevbanUserContainer.shared.quitTeam()
+                    }
+                    catch
+                    {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+            label:
+            {
+                Text("Quit")
+            }
+
+            Button(role: .cancel)
+            {
+                showQuitTeamAlert = false
             }
             label:
             {
