@@ -44,24 +44,16 @@ extension AskLLMView
             messages.append(
                 ChatMessage(senderID: uid, content: trimmed, messageType: .user),
             )
-            let prompt: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
             userInput = ""
 
             // Get response from LLM
-            promptLLM(
-                transcript: messages.dropLast(),
-                prompt: prompt,
-            )
+            promptLLM(trimmed)
         }
 
-        private func promptLLM(
-            transcript _: [ChatMessage],
-            prompt: String,
-        )
+        private func promptLLM(_ prompt: String)
         {
-            model.prompt(
-                prompt: prompt,
-            )
+            self.streamingContent = ""
+            model.prompt(prompt)
             { partialContent in
                 let previousOutputLength: Int = self.streamingContent.count
 
@@ -96,7 +88,7 @@ extension AskLLMView
                 self.messages.append(
                     ChatMessage(
                         senderID: nil,
-                        content: self.streamingContent,
+                        content: self.streamingContent.trimmingCharacters(in: .whitespacesAndNewlines),
                         messageType: .assistantResponse,
                     ),
                 )
@@ -109,19 +101,20 @@ extension AskLLMView
                     self.messages.append(
                         ChatMessage(
                             senderID: nil,
-                            content: self.streamingContent,
+                            content: self.streamingContent.trimmingCharacters(in: .whitespacesAndNewlines),
                             messageType: .assistantResponse,
                         ),
                     )
+                    self.streamingContent = ""
                 }
+                print("Error detected: \(error.localizedDescription)")
                 self.messages.append(
                     ChatMessage(
                         senderID: nil,
-                        content: error.localizedDescription,
+                        content: "Error: \(error.localizedDescription)",
                         messageType: .system,
                     ),
                 )
-                self.streamingContent = ""
             }
         }
 
@@ -132,6 +125,7 @@ extension AskLLMView
             Task
             {
                 await waitForIdle()
+                model.resetSession()
                 await MainActor.run
                 {
                     messages = [
@@ -157,6 +151,7 @@ extension AskLLMView
             Task
             {
                 await waitForIdle()
+                model.resetSession()
                 await MainActor.run
                 {
                     messages.append(
