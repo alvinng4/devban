@@ -19,6 +19,18 @@ extension DevbanUser
         try await DevbanUser.getUserDocument(uid).updateData(data)
     }
 
+    static func removeTeamFromUser(uid: String) async throws
+    {
+        try await DevbanUser.getUserDocument(uid).updateData(
+            ["team_id": FieldValue.delete()],
+        )
+    }
+
+    static func deleteUser(uid: String) async throws
+    {
+        try await DevbanUser.getUserDocument(uid).delete()
+    }
+
     func getTheme() -> ThemeManager.DefaultTheme
     {
         return theme ?? .blue
