@@ -134,16 +134,31 @@ Each of the components will be explained in details.
         \midrule
         MVVM
         & Model-View-ViewModel \\
-
-        \midrule
-        idP
-        & Identity provider \\
  
         \bottomrule
     \end{tabular}
     \label{tab:docs_definitions_acronyms_and_abbreviations}
 \end{table}
 
+\subsection{References}
+\begin{table}[h]
+    \centering
+    \caption{References}
+    \begin{tabular}{p{1cm} p{3cm} p{8cm}}
+        \toprule
+        No.
+        & Author
+        & Reference \\
+        
+        \midrule
+        Ref1
+        & Ching-Yin Ng
+        & QuestList \label{ref:QuestList}\\
+ 
+        \bottomrule
+    \end{tabular}
+    \label{tab:references}
+\end{table}
 
 \section{System Overview}
 
@@ -171,7 +186,7 @@ and the APIs are accessible to all components.
 
 Due to time constraint, \verb|DevbanUserContainer| also adopts the Singleton pattern so that the user
 information could be accessed globally. In the future, this should be modified to the dependency
-injection pattern.
+injection pattern for better testability.
 
 \subsection{Decomposition Description}
 Figure \ref{fig:decomposition_description} shows a high level decomposition of the components in devban. 
@@ -200,21 +215,55 @@ For our application, the Neobrutalism UI style is adopted. The benefits are as f
     \item Provides an unique, memorable user interface
     \item Comes with interactive elements with animations
 \end{enumerate}
+Some of the layout designs are reused from the QuestList application [\ref{ref:QuestList}].
 
 \newpage
 \section{Design And Implementation}
+\subsection{Database}
+
+\subsection{User Authentication}
+\subsubsection{Sign up methods}
+We provide the following two methods for user sign up as these are the most common methods:
+\begin{enumerate}
+    \item Email
+    \item Google sign in
+\end{enumerate}
+For reliable user authentication, we used the Firebase Authentication service. For email
+sign up, user must pass the email verification to sign in their account.
+
+\subsubsection{Sequence diagram}
+Figure \ref{fig:user_auth_sequence} shows the sequence diagram for user authentication.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{assets/user_auth_sequence/user_auth_sequence.pdf}
+    \caption{Sequence diagram for user authentication}
+    \label{fig:user_auth_sequence}d
+\end{figure}
+
+\subsubsection{Deleting User Account}
+To protect user privacy, when user initiates account deletion, all of their
+account-related data will be deleted.
+
+\subsection{Teams Management}
+In order to work together, users must first create a team on devban.
+
+\subsubsection{License}
+A license key is required for creating a team. User can contact us via email
+and subscribe to our plans to get a license key. A license key will then be
+manually created by us and stored on the database.
+
+\subsubsection{Creating a team}
+Figure \ref{} shows the interface for creating a team, and figure \ref{}
+shows the sequence diagram for team creation logic.
+
+\subsubsection{Joining a team}
+
 \subsection{Home (Kanban)}
 
 \subsection{Calendar}
 
 \subsection{AskLLM}
 
-\subsection{User Profile}
-
-
-% \appendix
-% \addcontentsline{toc}{section}{Appendix}
-% \section*{Appendix}
-% \section{References}
 
 \end{document}
