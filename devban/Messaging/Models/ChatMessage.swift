@@ -9,23 +9,38 @@ import Foundation
 ///     - LLMContextClearedAfter: For LLM, is context cleared after this message.
 struct ChatMessage: Codable, Equatable, Identifiable
 {
+    /// Message types for devban chat messages
+    enum MessageType: String, Codable
+    {
+        /// User message
+        case user
+        /// System messages (e.g. Error)
+        case system
+        /// LLM Response
+        case assistantResponse
+        /// LLM Greetings
+        case assistantGreeting
+        /// Pseudo-message representing LLM context clear
+        case assistantContextClear
+    }
+
     init(
         senderID: String?,
         content: String,
         sentDate: Date = Date(),
-        LLMContextClearedAfter: Bool = false,
+        messageType: MessageType,
     )
     {
         id = UUID()
         self.senderID = senderID
         self.content = content
         self.sentDate = sentDate
-        self.LLMContextClearedAfter = LLMContextClearedAfter
+        self.messageType = messageType
     }
 
     let id: UUID
     let senderID: String?
     let content: String
     let sentDate: Date
-    var LLMContextClearedAfter: Bool
+    var messageType: MessageType
 }
