@@ -145,5 +145,8 @@ final class DevbanUserContainer
 
         try await DevbanUser.removeTeamFromUser(uid: userID)
         try await DevbanTeam.deleteUser(teamId: teamID, uid: userID)
+
+        self.team = nil
+        self.user?.teamId = nil
     }
 }
