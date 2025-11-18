@@ -1,4 +1,3 @@
-import FoundationModels
 import SwiftUI
 
 extension AskLLMView
@@ -9,57 +8,30 @@ extension AskLLMView
     {
         init()
         {
-            resetStreamingTask()
             messages = [
-                AskLLMViewModel.getGreetingMessage(),
+                ChatMessage(
+                    senderID: nil,
+                    content: "Hello! How may I assist you today?",
+                    messageType: .assistantGreeting,
+                ),
             ]
         }
 
-        private var session: LanguageModelSession = LanguageModelSession()
-        private(set) var messages: [ChatMessage] = []
         var userInput: String = ""
         var userInputSelectedRange = NSRange(location: 0, length: 0)
 
-        private(set) var responseStatus: ResponseStatus = .idle
-        private(set) var LLMStreamingContent: String.PartiallyGenerated?
-        private var streamingTask: Task<Void, Never>?
+        private(set) var messages: [ChatMessage] = []
+        private(set) var model: AppleIntelligence = .init()
+        private(set) var streamingContent: String = ""
 
-        func resetSession()
+        var disableSubmit: Bool
         {
-            resetStreamingTask()
-            session = LanguageModelSession()
-            messages = [
-                AskLLMViewModel.getGreetingMessage(),
-            ]
-        }
-
-        static func getGreetingMessage() -> ChatMessage
-        {
-            let msg: String = switch SystemLanguageModel.default.availability
-            {
-                case .available:
-                    "Hello! How may I assist you today?"
-                case .unavailable(.deviceNotEligible):
-                    "Error: Your device is not eligible for Apple Intelligence."
-                case .unavailable(.appleIntelligenceNotEnabled):
-                    "Error: To use this feature, please turn on Apple Intelligence."
-                case .unavailable(.modelNotReady):
-                    "Error: Model is not ready. Please try again later."
-                case _:
-                    "Error: Apple Intelligence / LLM model is unavailable for unknown reason."
-            }
-
-            return ChatMessage(
-                senderID: nil,
-                content: msg,
-                messageType: .assistantGreeting,
-            )
+            return model.responseStatus != .idle || userInput.isEmptyOrWhitespace()
         }
 
         func sendMessage()
         {
-            guard (responseStatus == .idle), // For askLLM only
-                  (!userInput.isEmptyOrWhitespace()),
+            guard !disableSubmit,
                   let uid = DevbanUserContainer.shared.getUid()
             else
             {
@@ -72,135 +44,142 @@ extension AskLLMView
             messages.append(
                 ChatMessage(senderID: uid, content: trimmed, messageType: .user),
             )
-            let prompt: String = userInput
+            let prompt: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
             userInput = ""
 
             // Get response from LLM
-            promptLLM(prompt)
+            promptLLM(
+                transcript: messages.dropLast(),
+                prompt: prompt,
+            )
         }
 
-        private func promptLLM(_ prompt: String)
+        private func promptLLM(
+            transcript _: [ChatMessage],
+            prompt: String,
+        )
         {
-            guard (responseStatus == .idle) else { return }
+            model.prompt(
+                prompt: prompt,
+            )
+            { partialContent in
+                let previousOutputLength: Int = self.streamingContent.count
 
-            responseStatus = .thinking
-
-            // Cancel any existing streaming task before starting a new one
-            streamingTask?.cancel()
-            streamingTask = Task
-            {
-                do
+                // When the message is short, render character by character.
+                // When it is long, render chunk by chunk to prevent lag.
+                if (previousOutputLength < 500)
                 {
-                    let stream = session.streamResponse(to: prompt)
-                    LLMStreamingContent = ""
+                    // Get only the new characters since last update
+                    let newCharacters = String(partialContent.dropFirst(previousOutputLength))
 
-                    for try await partial in stream
+                    // Append character by character with small delay so that the display look smooth
+                    for character in newCharacters
                     {
-                        responseStatus = .responding
-
-                        let originalLength: Int = LLMStreamingContent?.count ?? 0
-
-                        // When the message is short, render character by character.
-                        // When it is long, render chunk by chunk to prevent lag.
-                        if (originalLength < 500)
+                        self.streamingContent.append(character)
+                        do
                         {
-                            // Get only the new characters since last update
-                            let newContent = partial.content
-                            let newCharacters = String(newContent.dropFirst(originalLength))
-
-                            // Append character by character with small delay so that the display look smooth
-                            for character in newCharacters
-                            {
-                                LLMStreamingContent?.append(character)
-                                try await Task.sleep(nanoseconds: 100_000) // 0.1 ms
-                            }
+                            try await Task.sleep(nanoseconds: 100_000) // 0.1 ms
                         }
-                        else
+                        catch
                         {
-                            LLMStreamingContent = partial.content
+                            print(error.localizedDescription)
                         }
                     }
-
-                    storeLLMOutputToMessages()
-
-                    // Cancel task is set to false because
-                    // 1. The task is already completed successfully at this point.
-                    // 2. It is better not to cancel the task within the task itself.
-                    resetStreamingTask(cancelTask: false)
                 }
-                catch
+                else
                 {
-                    // There may be some output before the error occurred
-                    storeLLMOutputToMessages()
+                    self.streamingContent = partialContent
+                }
+            }
+            onFinish:
+            {
+                self.messages.append(
+                    ChatMessage(
+                        senderID: nil,
+                        content: self.streamingContent,
+                        messageType: .assistantResponse,
+                    ),
+                )
+                self.streamingContent = ""
+            }
+            onError:
+            { error in
+                if (!self.streamingContent.isEmptyOrWhitespace())
+                {
+                    self.messages.append(
+                        ChatMessage(
+                            senderID: nil,
+                            content: self.streamingContent,
+                            messageType: .assistantResponse,
+                        ),
+                    )
+                }
+                self.messages.append(
+                    ChatMessage(
+                        senderID: nil,
+                        content: error.localizedDescription,
+                        messageType: .system,
+                    ),
+                )
+                self.streamingContent = ""
+            }
+        }
 
-                    print("AskLLM Error: \(error)")
+        func resetSession()
+        {
+            model.stopSession()
 
-                    // Ignores CancellationError as it is requested by User (i.e. expected behaviour)
-                    if !(error is CancellationError)
-                    {
-                        messages.append(
-                            ChatMessage(
-                                senderID: nil,
-                                content: "Error: \(error.localizedDescription)",
-                                messageType: .system,
-                            ),
-                        )
-                    }
-
-                    // Cancel task is set to false because
-                    // 1. The task is already completed successfully at this point.
-                    // 2. It is better not to cancel the task within the task itself.
-                    resetStreamingTask(cancelTask: false)
+            Task
+            {
+                await waitForIdle()
+                await MainActor.run
+                {
+                    messages = [
+                        ChatMessage(
+                            senderID: nil,
+                            content: "Hello! How may I assist you today?",
+                            messageType: .assistantGreeting,
+                        ),
+                    ]
                 }
             }
         }
 
         func stopModel()
         {
-            storeLLMOutputToMessages()
-            resetStreamingTask()
+            model.stopSession()
         }
 
         func clearContext()
         {
-            stopModel()
-            session = LanguageModelSession()
-            messages.append(
-                ChatMessage(
-                    senderID: nil,
-                    content: "",
-                    messageType: .assistantContextClear,
-                ),
-            )
-        }
+            model.stopSession()
 
-        private func resetStreamingTask(cancelTask: Bool = true)
-        {
-            if (cancelTask)
+            Task
             {
-                streamingTask?.cancel()
+                await waitForIdle()
+                await MainActor.run
+                {
+                    messages.append(
+                        ChatMessage(
+                            senderID: nil,
+                            content: "",
+                            messageType: .assistantContextClear,
+                        ),
+                    )
+                }
             }
-            streamingTask = nil
-            LLMStreamingContent = nil
-
-            responseStatus = .idle
         }
 
-        private func storeLLMOutputToMessages()
+        private func waitForIdle(timeoutSeconds: TimeInterval = 5.0) async
         {
-            if let LLMStreamingContent,
-               !LLMStreamingContent.isEmptyOrWhitespace()
-            {
-                let trimmed: String = LLMStreamingContent.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard !trimmed.isEmpty else { return }
+            let timeoutNanoseconds = UInt64(timeoutSeconds * 1_000_000_000)
+            let checkInterval: UInt64 = 100_000_000 // 0.1 seconds
+            var elapsed: UInt64 = 0
 
-                messages.append(
-                    ChatMessage(
-                        senderID: nil,
-                        content: trimmed,
-                        messageType: .assistantResponse,
-                    ),
-                )
+            while (model.responseStatus != .idle), (elapsed < timeoutNanoseconds)
+            {
+                try? await Task.sleep(nanoseconds: checkInterval)
+                elapsed += checkInterval
             }
         }
     }
