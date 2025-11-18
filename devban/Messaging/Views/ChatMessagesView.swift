@@ -29,9 +29,11 @@ struct ChatMessagesView: View
 
                     ForEach(messages)
                     { msg in
-                        ChatBubbleView(msg)
-
-                        if (msg.LLMContextClearedAfter)
+                        if (msg.messageType != .assistantContextClear)
+                        {
+                            ChatBubbleView(msg)
+                        }
+                        else
                         {
                             VStack(spacing: 5)
                             {
@@ -59,6 +61,7 @@ struct ChatMessagesView: View
                             ChatMessage(
                                 senderID: nil,
                                 content: trimmed,
+                                messageType: .assistantResponse,
                             ),
                         )
                     }
@@ -74,6 +77,7 @@ struct ChatMessagesView: View
                             ChatMessage(
                                 senderID: uid,
                                 content: trimmed,
+                                messageType: .user,
                             ),
                         )
                     }
