@@ -39,7 +39,7 @@ extension AskLLMView
         }
 
         func prompt(
-            prompt: String,
+            _ prompt: String,
             onUpdateStreamingContent: @escaping (_ partialContent: String) async -> Void,
             onFinish: @escaping () -> Void,
             onError: @escaping (_ error: any Error) -> Void,
@@ -107,6 +107,11 @@ extension AskLLMView
             streamingTask?.cancel()
             responseStatus = .idle
             streamingTask = nil
+        }
+        
+        func resetSession()
+        {
+            session = LanguageModelSession()
         }
     }
 }

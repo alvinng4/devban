@@ -6,7 +6,7 @@ import Foundation
 ///     - senderID: The sender user id.
 ///     - content: The message content.
 ///     - sentDate: Exact timestamp when the message is sent.
-///     - LLMContextClearedAfter: For LLM, is context cleared after this message.
+///     - messageType: The type of message (user, system, assistant, etc.)
 struct ChatMessage: Codable, Equatable, Identifiable
 {
     /// Message types for devban chat messages
