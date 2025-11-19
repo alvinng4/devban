@@ -22,17 +22,8 @@ struct HomeView: View
                     {
                         UserGamificationBarView()
 
-                        Text("Notifications")
+                        Text("Discussion")
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                            .frame(height: 350)
-                            .shadowedBorderRoundedRectangle()
-
-                        Text("Tags")
-                            .customTitle()
-
-                        Text("Tags")
                             .padding()
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                             .shadowedBorderRoundedRectangle()
