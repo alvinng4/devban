@@ -3,7 +3,7 @@ import Foundation
 /// A structure representing a single chat message.
 ///
 /// - Parameters:
-///     - senderID: The sender user id.
+///     - senderId: The sender user id.
 ///     - content: The message content.
 ///     - sentDate: Exact timestamp when the message is sent.
 ///     - messageType: The type of message (user, system, assistant, etc.)
@@ -25,21 +25,21 @@ struct ChatMessage: Codable, Equatable, Identifiable
     }
 
     init(
-        senderID: String?,
+        senderId: String,
         content: String,
         sentDate: Date = Date(),
         messageType: MessageType,
     )
     {
         id = UUID()
-        self.senderID = senderID
+        self.senderId = senderId
         self.content = content
         self.sentDate = sentDate
         self.messageType = messageType
     }
 
     let id: UUID
-    let senderID: String?
+    let senderId: String
     let content: String
     let sentDate: Date
     var messageType: MessageType

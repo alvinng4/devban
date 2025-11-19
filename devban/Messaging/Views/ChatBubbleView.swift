@@ -17,11 +17,25 @@ struct ChatBubbleView: View
 
         if let uid = DevbanUserContainer.shared.getUid()
         {
-            isCurrentUser = (chatMessage.senderID == uid)
+            isCurrentUser = (chatMessage.senderId == uid && chatMessage.messageType == .user)
         }
         else
         {
             isCurrentUser = false
+        }
+
+        displayName = switch (chatMessage.messageType)
+        {
+            case .user:
+                DevbanUserContainer.shared.getDisplayName()
+            case .assistantGreeting:
+                "Apple Intelligence"
+            case .assistantResponse:
+                "Apple Intelligence"
+            case .assistantContextClear:
+                nil
+            case .system:
+                "System"
         }
     }
 
@@ -29,6 +43,7 @@ struct ChatBubbleView: View
 
     private let chatMessage: ChatMessage
     private let isCurrentUser: Bool
+    private let displayName: String?
     private let theme: Splash.Theme = .wwdc17(withFont: .init(size: 16))
 
     private var backgroundColor: SwiftUI.Color
@@ -44,6 +59,16 @@ struct ChatBubbleView: View
     {
         VStack(spacing: 0)
         {
+            if let displayName
+            {
+                Text(displayName)
+                    .foregroundStyle(.tertiary)
+                    .font(.footnote)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
+                    .padding(.horizontal, 2)
+            }
+
             Markdown(chatMessage.content)
                 .markdownBlockStyle(\.codeBlock)
                 {

@@ -87,6 +87,11 @@ final class DevbanUserContainer
         return user?.uid
     }
 
+    func getDisplayName() -> String?
+    {
+        return authDisplayName
+    }
+
     func getTeamId() -> String?
     {
         return team?.id

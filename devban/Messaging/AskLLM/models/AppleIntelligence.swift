@@ -108,7 +108,7 @@ extension AskLLMView
             responseStatus = .idle
             streamingTask = nil
         }
-        
+
         func resetSession()
         {
             session = LanguageModelSession()
