@@ -112,6 +112,16 @@ final class DevbanUserContainer
         return user?.getPreferredColorScheme() ?? .auto
     }
 
+    func getSoundEffectSetting() -> Bool
+    {
+        return user?.getSoundEffectSetting() ?? true
+    }
+
+    func getHapticEffectSetting() -> Bool
+    {
+        return user?.getHapticEffectSetting() ?? true
+    }
+
     func setTheme(_ theme: ThemeManager.DefaultTheme)
     {
         guard let user else { return }
@@ -126,6 +136,26 @@ final class DevbanUserContainer
     {
         guard let user else { return }
         user.setPreferredColorScheme(preferredColorScheme)
+        Task
+        {
+            self.user = try await DevbanUser.getUser(user.uid)
+        }
+    }
+
+    func setSoundEffectSetting(_ option: Bool)
+    {
+        guard let user else { return }
+        user.setSoundEffectSetting(option)
+        Task
+        {
+            self.user = try await DevbanUser.getUser(user.uid)
+        }
+    }
+
+    func setHapticEffectSetting(_ option: Bool)
+    {
+        guard let user else { return }
+        user.setHapticEffectSetting(option)
         Task
         {
             self.user = try await DevbanUser.getUser(user.uid)

@@ -10,6 +10,8 @@ struct DevbanUser: Codable
     var teamId: String?
     private var preferredColorScheme: ThemeManager.PreferredColorScheme?
     private var theme: ThemeManager.DefaultTheme?
+    private var soundEffectOn: Bool?
+    private var hapticEffectOn: Bool?
 }
 
 extension DevbanUser
@@ -77,6 +79,56 @@ extension DevbanUser
             catch
             {
                 print("DevbanUser.setPreferredColorScheme: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func getSoundEffectSetting() -> Bool
+    {
+        return soundEffectOn ?? true
+    }
+
+    func setSoundEffectSetting(_ option: Bool)
+    {
+        let data: [String: Any] = [
+            "sound_effect_on": option,
+        ]
+        let uid: String = self.uid
+
+        Task
+        {
+            do
+            {
+                try await DevbanUser.updateDatabaseData(uid: uid, data: data)
+            }
+            catch
+            {
+                print("DevbanUser.setSoundEffectSetting: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func getHapticEffectSetting() -> Bool
+    {
+        return hapticEffectOn ?? true
+    }
+
+    func setHapticEffectSetting(_ option: Bool)
+    {
+        let data: [String: Any] = [
+            "haptic_effect_on": option,
+        ]
+        let uid: String = self.uid
+
+        Task
+        {
+            do
+            {
+                try await DevbanUser.updateDatabaseData(uid: uid, data: data)
+            }
+            catch
+            {
+                print("DevbanUser.setHapticEffectSetting: \(error.localizedDescription)")
             }
         }
     }

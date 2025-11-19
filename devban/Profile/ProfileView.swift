@@ -23,150 +23,199 @@ struct ProfileView: View
                 ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
 
-                VStack(spacing: 10)
+                ScrollView
                 {
-                    // MARK: Profile
-
-                    Text("Profile")
-                        .customTitle()
-
                     VStack(spacing: 10)
                     {
-                        HStack(spacing: 0)
+                        // MARK: Profile
+
+                        Text("Profile")
+                            .customTitle()
+
+                        VStack(spacing: 10)
                         {
-                            Label("Display Name", systemImage: "person.text.rectangle")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
-                        }
-                    }
-                    .padding()
-                    .shadowedBorderRoundedRectangle()
-
-                    // MARK: Team
-
-                    Text("Team")
-                        .customTitle()
-
-                    VStack(spacing: 15)
-                    {
-                        HStack(spacing: 0)
-                        {
-                            Label("Team Name", systemImage: "person.2.circle")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text(DevbanUserContainer.shared.getTeamName() ?? "Error")
-                        }
-
-                        Divider()
-
-                        HStack(spacing: 0)
-                        {
-                            Label("Role", systemImage: "person.badge.shield.checkmark")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text(DevbanUserContainer.shared.getUserTeamRole()?.rawValue.capitalized ?? "Error")
-                        }
-
-                        Divider()
-
-                        HStack(spacing: 0)
-                        {
-                            Label("Number of members", systemImage: "number.circle")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            if let numberOfMembers = DevbanUserContainer.shared.getTeamMembersCount()
+                            HStack(spacing: 0)
                             {
-                                Text("\(numberOfMembers)")
-                            }
-                            else
-                            {
-                                Text("Error")
+                                Label("Display Name", systemImage: "person.text.rectangle")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
                             }
                         }
+                        .padding()
+                        .shadowedBorderRoundedRectangle()
 
-                        Divider()
+                        // MARK: Team
 
-                        Button
+                        Text("Team")
+                            .customTitle()
+
+                        VStack(spacing: 15)
                         {
-                            showGenerateInviteCodeSheetView = true
-                        }
-                        label:
-                        {
-                            Label("Generate invite codes", systemImage: "person.crop.circle.fill.badge.plus")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-
-                        Divider()
-
-                        Button
-                        {
-                            showQuitTeamAlert = true
-                        }
-                        label:
-                        {
-                            Label("Exit team", systemImage: "rectangle.portrait.and.arrow.right")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .shadowedBorderRoundedRectangle()
-
-                    // MARK: Settings
-
-                    Text("Settings")
-                        .customTitle()
-
-                    VStack(spacing: 15)
-                    {
-                        DisclosureGroup(isExpanded: $settingsIsGeneralExpanded)
-                        {
-                            VStack(spacing: 15)
+                            HStack(spacing: 0)
                             {
-                                Divider()
+                                Label("Team Name", systemImage: "person.2.circle")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                                HStack(spacing: 0)
+                                Text(DevbanUserContainer.shared.getTeamName() ?? "Error")
+                            }
+
+                            Divider()
+
+                            HStack(spacing: 0)
+                            {
+                                Label("Role", systemImage: "person.badge.shield.checkmark")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                Text(DevbanUserContainer.shared.getUserTeamRole()?.rawValue.capitalized ?? "Error")
+                            }
+
+                            Divider()
+
+                            HStack(spacing: 0)
+                            {
+                                Label("Number of members", systemImage: "number.circle")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                if let numberOfMembers = DevbanUserContainer.shared.getTeamMembersCount()
                                 {
-                                    Label("Dark mode", systemImage: "moon")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Text("\(numberOfMembers)")
+                                }
+                                else
+                                {
+                                    Text("Error")
+                                }
+                            }
 
-                                    Menu
+                            Divider()
+
+                            Button
+                            {
+                                showGenerateInviteCodeSheetView = true
+                            }
+                            label:
+                            {
+                                Label("Generate invite codes", systemImage: "person.crop.circle.fill.badge.plus")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
+                            Divider()
+
+                            Button
+                            {
+                                showQuitTeamAlert = true
+                            }
+                            label:
+                            {
+                                Label("Exit team", systemImage: "rectangle.portrait.and.arrow.right")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .shadowedBorderRoundedRectangle()
+
+                        // MARK: Settings
+
+                        Text("Settings")
+                            .customTitle()
+
+                        VStack(spacing: 15)
+                        {
+                            DisclosureGroup(isExpanded: $settingsIsGeneralExpanded)
+                            {
+                                VStack(spacing: 15)
+                                {
+                                    Divider()
+
+                                    HStack(spacing: 0)
                                     {
-                                        Picker(
-                                            selection: Binding(
-                                                get: {
-                                                    DevbanUserContainer.shared.getPreferredColorScheme()
-                                                },
-                                                set: { DevbanUserContainer.shared.setPreferredColorScheme($0) },
-                                            ),
-                                        )
+                                        Label("Dark mode", systemImage: "moon")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                                        Menu
                                         {
-                                            Text("Auto")
-                                                .tag(ThemeManager.PreferredColorScheme.auto)
+                                            Picker(
+                                                selection: Binding(
+                                                    get: {
+                                                        DevbanUserContainer.shared.getPreferredColorScheme()
+                                                    },
+                                                    set: { DevbanUserContainer.shared.setPreferredColorScheme($0) },
+                                                ),
+                                            )
+                                            {
+                                                Text("Auto")
+                                                    .tag(ThemeManager.PreferredColorScheme.auto)
 
-                                            Text("Dark")
-                                                .tag(ThemeManager.PreferredColorScheme.dark)
+                                                Text("Dark")
+                                                    .tag(ThemeManager.PreferredColorScheme.dark)
 
-                                            Text("Light")
-                                                .tag(ThemeManager.PreferredColorScheme.light)
+                                                Text("Light")
+                                                    .tag(ThemeManager.PreferredColorScheme.light)
+                                            }
+                                            label:
+                                            {
+                                                Label("Dark mode", systemImage: "moon")
+                                            }
                                         }
                                         label:
                                         {
-                                            Label("Dark mode", systemImage: "moon")
+                                            HStack(spacing: 5)
+                                            {
+                                                Text(DevbanUserContainer.shared.getPreferredColorScheme().rawValue)
+                                                Image(systemName: "chevron.up.chevron.down")
+                                            }
                                         }
-                                    }
-                                    label:
-                                    {
-                                        HStack(spacing: 5)
+                                        .onChange(of: DevbanUserContainer.shared.getPreferredColorScheme())
                                         {
-                                            Text(DevbanUserContainer.shared.getPreferredColorScheme().rawValue)
-                                            Image(systemName: "chevron.up.chevron.down")
+                                            ThemeManager.shared.updateTheme(
+                                                theme: DevbanUserContainer.shared.getTheme(),
+                                                colorScheme: colorScheme,
+                                                preferredColorScheme: DevbanUserContainer.shared
+                                                    .getPreferredColorScheme(),
+                                            )
                                         }
                                     }
-                                    .onChange(of: DevbanUserContainer.shared.getPreferredColorScheme())
+
+                                    Divider()
+
+                                    HStack(spacing: 0)
+                                    {
+                                        Label("Theme", systemImage: "paintpalette")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                                        Menu
+                                        {
+                                            Picker(
+                                                selection: Binding(
+                                                    get: { DevbanUserContainer.shared.getTheme() },
+                                                    set: { DevbanUserContainer.shared.setTheme($0) },
+                                                ),
+                                            )
+                                            {
+                                                ForEach(ThemeManager.DefaultTheme.allCases)
+                                                { themeCase in
+                                                    Text(themeCase.rawValue)
+                                                        .tag(themeCase)
+                                                }
+                                            }
+                                            label:
+                                            {
+                                                Label("Theme", systemImage: "paintpalette")
+                                            }
+                                        }
+                                        label:
+                                        {
+                                            HStack(spacing: 5)
+                                            {
+                                                Text(DevbanUserContainer.shared.getTheme().rawValue)
+                                                Image(systemName: "chevron.up.chevron.down")
+                                            }
+                                        }
+                                    }
+                                    .onChange(of: DevbanUserContainer.shared.getTheme())
                                     {
                                         ThemeManager.shared.updateTheme(
                                             theme: DevbanUserContainer.shared.getTheme(),
@@ -174,178 +223,146 @@ struct ProfileView: View
                                             preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
                                         )
                                     }
-                                }
 
-                                Divider()
+                                    Divider()
 
-                                HStack(spacing: 0)
-                                {
-                                    Label("Theme", systemImage: "paintpalette")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    Menu
+                                    HStack(spacing: 0)
                                     {
-                                        Picker(
-                                            selection: Binding(
-                                                get: { DevbanUserContainer.shared.getTheme() },
-                                                set: { DevbanUserContainer.shared.setTheme($0) },
+                                        Label("Sound effects", systemImage: "music.note")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                                        Toggle(
+                                            "",
+                                            isOn: Binding(
+                                                get: { DevbanUserContainer.shared.getSoundEffectSetting() },
+                                                set: { DevbanUserContainer.shared.setSoundEffectSetting($0) },
                                             ),
                                         )
-                                        {
-                                            ForEach(ThemeManager.DefaultTheme.allCases)
-                                            { themeCase in
-                                                Text(themeCase.rawValue)
-                                                    .tag(themeCase)
-                                            }
-                                        }
-                                        label:
-                                        {
-                                            Label("Theme", systemImage: "paintpalette")
-                                        }
+                                        .fixedSize()
+                                    }
+
+                                    Divider()
+
+                                    HStack(spacing: 0)
+                                    {
+                                        Label("Haptic effects", systemImage: "iphone.gen1.radiowaves.left.and.right")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                                        Toggle(
+                                            "",
+                                            isOn: Binding(
+                                                get: { DevbanUserContainer.shared.getHapticEffectSetting() },
+                                                set: { DevbanUserContainer.shared.setHapticEffectSetting($0) },
+                                            ),
+                                        )
+                                        .fixedSize()
+                                    }
+                                }
+                                .padding(5)
+                            }
+                            label:
+                            {
+                                Label("General", systemImage: "gearshape")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .foregroundStyle(.primary)
+
+                            Divider()
+
+                            DisclosureGroup(isExpanded: $settingsIsAccountExpanded)
+                            {
+                                VStack(spacing: 15)
+                                {
+                                    Divider()
+
+                                    Button
+                                    {
+                                        showLogoutAlert = true
                                     }
                                     label:
                                     {
-                                        HStack(spacing: 5)
-                                        {
-                                            Text(DevbanUserContainer.shared.getTheme().rawValue)
-                                            Image(systemName: "chevron.up.chevron.down")
-                                        }
+                                        Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
                                     }
-                                }
-                                .onChange(of: DevbanUserContainer.shared.getTheme())
-                                {
-                                    ThemeManager.shared.updateTheme(
-                                        theme: DevbanUserContainer.shared.getTheme(),
-                                        colorScheme: colorScheme,
-                                        preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
-                                    )
-                                }
+                                    .frame(maxWidth: .infinity)
 
-//                                Divider()
-//
-//                                HStack(spacing: 0)
-//                                {
-//                                    Label("Sound effects", systemImage: "music.note")
-//                                        .frame(maxWidth: .infinity, alignment: .leading)
-//
-//                                    Toggle("", isOn: $settingsSoundEffect)
-//                                        .fixedSize()
-//                                }
-//
-//                                Divider()
-//
-//                                HStack(spacing: 0)
-//                                {
-//                                    Label("Haptic effects", systemImage: "iphone.gen1.radiowaves.left.and.right")
-//                                        .frame(maxWidth: .infinity, alignment: .leading)
-//
-//                                    Toggle("", isOn: $settingsHapticEffect)
-//                                        .fixedSize()
-//                                }
+                                    Divider()
+
+                                    Button
+                                    {
+                                        showAccountDeletionSheetView = true
+                                    }
+                                    label:
+                                    {
+                                        Label("Delete account", systemImage: "exclamationmark.triangle")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                                .padding(5)
                             }
-                            .padding(5)
-                        }
-                        label:
-                        {
-                            Label("General", systemImage: "gearshape")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .foregroundStyle(.primary)
-
-                        Divider()
-
-                        DisclosureGroup(isExpanded: $settingsIsAccountExpanded)
-                        {
-                            VStack(spacing: 15)
+                            label:
                             {
-                                Divider()
-
-                                Button
-                                {
-                                    showLogoutAlert = true
-                                }
-                                label:
-                                {
-                                    Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                                .frame(maxWidth: .infinity)
-
-                                Divider()
-
-                                Button
-                                {
-                                    showAccountDeletionSheetView = true
-                                }
-                                label:
-                                {
-                                    Label("Delete account", systemImage: "exclamationmark.triangle")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                                .buttonStyle(PlainButtonStyle())
+                                Label("Account", systemImage: "person.crop.circle")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .padding(5)
+                            .foregroundStyle(.primary)
                         }
-                        label:
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .shadowedBorderRoundedRectangle()
+
+                        // MARK: About
+
+                        Text("About")
+                            .customTitle()
+
+                        VStack(spacing: 15)
                         {
-                            Label("Account", systemImage: "person.crop.circle")
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            HStack(spacing: 0)
+                            {
+                                Label("App Version", systemImage: "number.circle")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                if let versionString: String = Bundle.main
+                                    .infoDictionary?["CFBundleShortVersionString"] as? String
+                                {
+                                    Text(versionString)
+                                }
+                                else
+                                {
+                                    Text("Unknown")
+                                }
+                            }
+
+                            Divider()
+
+                            Link(destination: URL(string: "mailto:csci3100group17@gmail.com")!)
+                            {
+                                Label("csci3100group17@gmail.com", systemImage: "envelope")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .tint(.primary)
                         }
-                        .foregroundStyle(.primary)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .shadowedBorderRoundedRectangle()
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .shadowedBorderRoundedRectangle()
-
-                    // MARK: About
-
-                    Text("About")
-                        .customTitle()
-
-                    VStack(spacing: 15)
-                    {
-                        HStack(spacing: 0)
-                        {
-                            Label("App Version", systemImage: "number.circle")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            if let versionString: String = Bundle.main
-                                .infoDictionary?["CFBundleShortVersionString"] as? String
-                            {
-                                Text(versionString)
-                            }
-                            else
-                            {
-                                Text("Unknown")
-                            }
-                        }
-
-                        Divider()
-
-                        Link(destination: URL(string: "mailto:csci3100group17@gmail.com")!)
-                        {
-                            Label("csci3100group17@gmail.com", systemImage: "envelope")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .tint(.primary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .shadowedBorderRoundedRectangle()
+                    .frame(maxWidth: NeobrutalismConstants.maxWidthMedium)
+                    .padding(
+                        .horizontal,
+                        isCompact ?
+                            NeobrutalismConstants.mainContentPaddingHorizontalCompact :
+                            NeobrutalismConstants.mainContentPaddingHorizontalRegular,
+                    )
+                    .padding(
+                        .vertical,
+                        isCompact ?
+                            NeobrutalismConstants.mainContentPaddingVerticalCompact :
+                            NeobrutalismConstants.mainContentPaddingVerticalRegular,
+                    )
+                    .frame(maxWidth: .infinity, alignment: .center) // For scroll bar to be on edge
                 }
-                .frame(maxWidth: NeobrutalismConstants.maxWidthMedium)
-                .padding(
-                    .horizontal,
-                    isCompact ?
-                        NeobrutalismConstants.mainContentPaddingHorizontalCompact :
-                        NeobrutalismConstants.mainContentPaddingHorizontalRegular,
-                )
-                .padding(
-                    .vertical,
-                    isCompact ?
-                        NeobrutalismConstants.mainContentPaddingVerticalCompact :
-                        NeobrutalismConstants.mainContentPaddingVerticalRegular,
-                )
                 .navigationBarBackButtonHidden(true)
                 .toolbar(.hidden)
                 .scrollContentBackground(.hidden)
