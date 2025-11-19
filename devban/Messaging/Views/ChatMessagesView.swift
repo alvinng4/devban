@@ -14,6 +14,7 @@ struct ChatMessagesView: View
     let responseStatus: ResponseStatus
     let LLMStreamingContent: String
     let userInput: String?
+    let uid: String = DevbanUserContainer.shared.getUid() ?? ""
 
     @Namespace var bottomElement
 
@@ -58,7 +59,7 @@ struct ChatMessagesView: View
                         let trimmed: String = LLMStreamingContent.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(
                             ChatMessage(
-                                senderID: nil,
+                                senderId: uid,
                                 content: trimmed,
                                 messageType: .assistantResponse,
                             ),
@@ -74,7 +75,7 @@ struct ChatMessagesView: View
                         let trimmed: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
                         ChatBubbleView(
                             ChatMessage(
-                                senderID: uid,
+                                senderId: uid,
                                 content: trimmed,
                                 messageType: .user,
                             ),

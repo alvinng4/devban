@@ -1,3 +1,5 @@
+import FirebaseFirestore
+import FirebaseSharedSwift
 import SwiftUI
 
 extension AskLLMView
@@ -8,13 +10,50 @@ extension AskLLMView
     {
         init()
         {
-            messages = [
-                ChatMessage(
-                    senderID: nil,
-                    content: "Hello! How may I assist you today?",
-                    messageType: .assistantGreeting,
-                ),
-            ]
+            guard let uid: String = DevbanUserContainer.shared.getUid()
+            else
+            {
+                messages = [
+                    ChatMessage(
+                        senderId: "",
+                        content: "Error: Failed to get user ID",
+                        messageType: .system,
+                    ),
+                ]
+                return
+            }
+
+            Task
+            {
+                do
+                {
+                    let transcript: [ChatMessage] = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                    if (transcript.isEmpty)
+                    {
+                        let newMessage: ChatMessage = AskLLMViewModel.getGreetings(uid: uid)
+                        AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
+                        messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                    }
+                    else if (transcript.last?.messageType != .assistantGreeting)
+                    {
+                        let newMessage: ChatMessage = .init(
+                            senderId: uid,
+                            content: "",
+                            messageType: .assistantContextClear,
+                        )
+                        AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
+                        messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                    }
+                    else
+                    {
+                        messages = transcript
+                    }
+                }
+                catch
+                {
+                    print("AskLLMViewModel init Error: \(error.localizedDescription)")
+                }
+            }
         }
 
         var userInput: String = ""
@@ -23,6 +62,28 @@ extension AskLLMView
         private(set) var messages: [ChatMessage] = []
         private(set) var model: AppleIntelligence = .init()
         private(set) var streamingContent: String = ""
+
+        static func getGreetings(uid: String) -> ChatMessage
+        {
+            return ChatMessage(
+                senderId: uid,
+                content: "Hello! How may I assist you today?",
+                messageType: .assistantGreeting,
+            )
+        }
+
+        static func getTranscriptFromDatabase(uid: String) async throws -> [ChatMessage]
+        {
+            return try await AskLLMViewModel.getAskLLMTranscriptCollection()
+                .whereField("sender_id", isEqualTo: uid)
+                .order(by: "sent_date")
+                .getDocuments(as: ChatMessage.self)
+        }
+
+        static func getAskLLMTranscriptCollection() -> CollectionReference
+        {
+            return Firestore.firestore().collection("askllm_transcripts")
+        }
 
         var disableSubmit: Bool
         {
@@ -41,16 +102,44 @@ extension AskLLMView
             let trimmed: String = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmed.isEmpty else { return }
 
-            messages.append(
-                ChatMessage(senderID: uid, content: trimmed, messageType: .user),
-            )
+            let newMessage: ChatMessage = .init(senderId: uid, content: trimmed, messageType: .user)
+            AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
             userInput = ""
 
-            // Get response from LLM
-            promptLLM(trimmed)
+            Task
+            {
+                do
+                {
+                    messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                }
+                catch
+                {
+                    print("sendMessage Error: \(error.localizedDescription)")
+                }
+
+                // Get response from LLM
+                promptLLM(trimmed, uid: uid)
+            }
         }
 
-        private func promptLLM(_ prompt: String)
+        private static func addMessageToDatabase(uid _: String, msg: ChatMessage)
+        {
+            let doc: DocumentReference = AskLLMViewModel.getAskLLMTranscriptCollection().document(msg.id.uuidString)
+            do
+            {
+                try doc.setData(
+                    from: msg,
+                    merge: false,
+                    encoder: encoder,
+                )
+            }
+            catch
+            {
+                print("addMessageToDatabase Error: \(error.localizedDescription)")
+            }
+        }
+
+        private func promptLLM(_ prompt: String, uid: String)
         {
             self.streamingContent = ""
             model.prompt(prompt)
@@ -74,7 +163,7 @@ extension AskLLMView
                         }
                         catch
                         {
-                            print(error.localizedDescription)
+                            print("model.prompt Error: \(error.localizedDescription)")
                         }
                     }
                 }
@@ -87,55 +176,104 @@ extension AskLLMView
             {
                 self.messages.append(
                     ChatMessage(
-                        senderID: nil,
+                        senderId: uid,
                         content: self.streamingContent.trimmingCharacters(in: .whitespacesAndNewlines),
                         messageType: .assistantResponse,
                     ),
                 )
-                self.streamingContent = ""
+
+                Task
+                {
+                    do
+                    {
+                        let newMessage: ChatMessage = .init(
+                            senderId: uid,
+                            content: self.streamingContent.trimmingCharacters(in: .whitespacesAndNewlines),
+                            messageType: .assistantResponse,
+                        )
+                        AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
+                        self.streamingContent = ""
+                        self.messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                    }
+                    catch
+                    {
+                        print("onFinish Error: \(error.localizedDescription)")
+                    }
+                }
             }
             onError:
             { error in
                 if (!self.streamingContent.isEmptyOrWhitespace())
                 {
-                    self.messages.append(
-                        ChatMessage(
-                            senderID: nil,
-                            content: self.streamingContent.trimmingCharacters(in: .whitespacesAndNewlines),
-                            messageType: .assistantResponse,
-                        ),
+                    let newMessage: ChatMessage = .init(
+                        senderId: uid,
+                        content: self.streamingContent.trimmingCharacters(in: .whitespacesAndNewlines),
+                        messageType: .assistantResponse,
                     )
+                    AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
                     self.streamingContent = ""
                 }
                 print("Error detected: \(error.localizedDescription)")
-                self.messages.append(
-                    ChatMessage(
-                        senderID: nil,
-                        content: "Error: \(error.localizedDescription)",
-                        messageType: .system,
-                    ),
+                let newMessage: ChatMessage = .init(
+                    senderId: uid,
+                    content: "Error: \(error.localizedDescription)",
+                    messageType: .system,
                 )
+                AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
+
+                Task
+                {
+                    do
+                    {
+                        self.messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                    }
+                    catch
+                    {
+                        print(error.localizedDescription)
+                    }
+                }
             }
         }
 
         func resetSession()
         {
             model.stopSession()
+            guard let uid = DevbanUserContainer.shared.getUid()
+            else
+            {
+                print("Error!")
+                return
+            }
 
             Task
             {
                 await waitForIdle()
                 model.resetSession()
-                await MainActor.run
+
+                do
                 {
-                    messages = [
-                        ChatMessage(
-                            senderID: nil,
-                            content: "Hello! How may I assist you today?",
-                            messageType: .assistantGreeting,
-                        ),
-                    ]
+                    let querySnapshot = try await AskLLMViewModel.getAskLLMTranscriptCollection()
+                        .whereField("sender_id", isEqualTo: uid)
+                        .getDocuments()
+
+                    let batch = Firestore.firestore().batch()
+
+                    for document in querySnapshot.documents
+                    {
+                        batch.deleteDocument(document.reference)
+                    }
+
+                    try await batch.commit()
+                    print("AskLLM: records successfully deleted")
                 }
+                catch
+                {
+                    print("AskLLM: Error deleting documents: \(error)")
+                }
+
+                let newMessage: ChatMessage = AskLLMViewModel.getGreetings(uid: uid)
+                AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
+                messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
             }
         }
 
@@ -146,6 +284,13 @@ extension AskLLMView
 
         func clearContext()
         {
+            guard let uid = DevbanUserContainer.shared.getUid()
+            else
+            {
+                print("Error!")
+                return
+            }
+
             model.stopSession()
 
             Task
@@ -154,13 +299,24 @@ extension AskLLMView
                 model.resetSession()
                 await MainActor.run
                 {
-                    messages.append(
-                        ChatMessage(
-                            senderID: nil,
-                            content: "",
-                            messageType: .assistantContextClear,
-                        ),
+                    let newMessage: ChatMessage = .init(
+                        senderId: uid,
+                        content: "",
+                        messageType: .assistantContextClear,
                     )
+                    AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
+
+                    Task
+                    {
+                        do
+                        {
+                            self.messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
+                        }
+                        catch
+                        {
+                            print("clearContext Error: \(error.localizedDescription)")
+                        }
+                    }
                 }
             }
         }
@@ -176,6 +332,13 @@ extension AskLLMView
                 try? await Task.sleep(nanoseconds: checkInterval)
                 elapsed += checkInterval
             }
+        }
+
+        private static var encoder: Firestore.Encoder
+        {
+            let encoder = Firestore.Encoder()
+            encoder.keyEncodingStrategy = .convertToSnakeCase
+            return encoder
         }
     }
 }
