@@ -14,18 +14,23 @@ skinparam Package {
 
 rectangle "GUI" as GUI
 
+package "Singleton" {
+  component "UX components\n(Theme, Audio, etc.)" as UX
+  component "User Container" as Auth
+}
+
 package "ViewModel / Model" as Core {
-  component "User Profile" as Auth
   component "Kanban" as Kanban
   component "Calendar" as Calendar
   component "LLM" as LLM
 }
 
-database "devban DB" as DB #FFF4E6
-cloud "User Management System\n(External IdP)" as UMS #F0F7F0
+database "devban DB\n(Firebase)" as DB #FFF4E6
+cloud "User Management System\n(Firebase Auth)" as UMS #F0F7F0
 cloud "LLM Provider API" as LLMAPI #F0F7F0
 
 ' GUI -> Services
+GUI --> UX
 GUI --> Auth
 GUI --> Kanban
 GUI --> Calendar
