@@ -18,79 +18,39 @@ struct HomeView: View
                 ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
 
-                VStack(spacing: 10)
-                {
-                    HStack(spacing: 25)
+                GeometryReader
+                { proxy in
+                    let width = proxy.size.width
+
+                    VStack(spacing: 10)
                     {
-                        VStack(spacing: 10)
+                        if (width > 900)
                         {
-                            UserGamificationBarView()
-
-                            NeobrutalismRoundedRectangleTabView(
-                                options: ["Discussion"],
-                                defaultSelection: "Discussion",
-                            )
-                            { _ in
-                                DiscussionView()
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            wideLayout
                         }
-                        .frame(maxWidth: 300)
-                        .frame(maxHeight: .infinity, alignment: .top)
-
-                        NeobrutalismRoundedRectangleTabView(
-                            options: ["To-do"],
-                            defaultSelection: "To-do",
-                        )
-                        { _ in
-                            DevbanTaskListView(
-                                status: .todo,
-                                navPath: $navPath,
-                            )
+                        else if (width > 600)
+                        {
+                            mediumLayout
                         }
-                        .frame(maxWidth: 300)
-                        .frame(maxHeight: .infinity, alignment: .top)
-
-                        NeobrutalismRoundedRectangleTabView(
-                            options: ["In Progress"],
-                            defaultSelection: "In Progress",
-                        )
-                        { _ in
-                            DevbanTaskListView(
-                                status: .inProgress,
-                                navPath: $navPath,
-                            )
+                        else
+                        {
+                            narrowLayout
                         }
-                        .frame(maxWidth: 300)
-                        .frame(maxHeight: .infinity, alignment: .top)
-
-                        NeobrutalismRoundedRectangleTabView(
-                            options: ["Done"],
-                            defaultSelection: "Done",
-                        )
-                        { _ in
-                            DevbanTaskListView(
-                                status: .completed,
-                                navPath: $navPath,
-                            )
-                        }
-                        .frame(maxWidth: 300)
-                        .frame(maxHeight: .infinity, alignment: .top)
                     }
+                    .frame(maxWidth: NeobrutalismConstants.maxWidthExtraLarge)
+                    .padding(
+                        .horizontal,
+                        isCompact ?
+                            NeobrutalismConstants.mainContentPaddingHorizontalCompact :
+                            NeobrutalismConstants.mainContentPaddingHorizontalRegular,
+                    )
+                    .padding(
+                        .vertical,
+                        isCompact ?
+                            NeobrutalismConstants.mainContentPaddingVerticalCompact :
+                            NeobrutalismConstants.mainContentPaddingVerticalRegular,
+                    )
                 }
-                .frame(maxWidth: NeobrutalismConstants.maxWidthExtraLarge)
-                .padding(
-                    .horizontal,
-                    isCompact ?
-                        NeobrutalismConstants.mainContentPaddingHorizontalCompact :
-                        NeobrutalismConstants.mainContentPaddingHorizontalRegular,
-                )
-                .padding(
-                    .vertical,
-                    isCompact ?
-                        NeobrutalismConstants.mainContentPaddingVerticalCompact :
-                        NeobrutalismConstants.mainContentPaddingVerticalRegular,
-                )
             }
             .navigationBarHidden(true)
             .navigationDestination(for: DevbanTask.self)
@@ -112,6 +72,177 @@ struct HomeView: View
                     DevbanTaskAddView(status: .completed)
                 }
             }
+        }
+    }
+
+    // MARK: - Wide Layout (>900px)
+
+    private var wideLayout: some View
+    {
+        HStack(spacing: 25)
+        {
+            VStack(spacing: 10)
+            {
+                UserGamificationBarView()
+
+                NeobrutalismRoundedRectangleTabView(
+                    options: ["Discussion"],
+                    defaultSelection: "Discussion",
+                )
+                { _ in
+                    DiscussionView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
+            .frame(maxWidth: 300)
+            .frame(maxHeight: .infinity, alignment: .top)
+
+            NeobrutalismRoundedRectangleTabView(
+                options: ["To-do"],
+                defaultSelection: "To-do",
+            )
+            { _ in
+                DevbanTaskListView(
+                    status: .todo,
+                    navPath: $navPath,
+                )
+            }
+            .frame(maxWidth: 300)
+            .frame(maxHeight: .infinity, alignment: .top)
+
+            NeobrutalismRoundedRectangleTabView(
+                options: ["In Progress"],
+                defaultSelection: "In Progress",
+            )
+            { _ in
+                DevbanTaskListView(
+                    status: .inProgress,
+                    navPath: $navPath,
+                )
+            }
+            .frame(maxWidth: 300)
+            .frame(maxHeight: .infinity, alignment: .top)
+
+            NeobrutalismRoundedRectangleTabView(
+                options: ["Done"],
+                defaultSelection: "Done",
+            )
+            { _ in
+                DevbanTaskListView(
+                    status: .completed,
+                    navPath: $navPath,
+                )
+            }
+            .frame(maxWidth: 300)
+            .frame(maxHeight: .infinity, alignment: .top)
+        }
+    }
+
+    // MARK: - Medium Layout (600-900px)
+
+    private var mediumLayout: some View
+    {
+        HStack(spacing: 25)
+        {
+            VStack(spacing: 10)
+            {
+                UserGamificationBarView()
+
+                NeobrutalismRoundedRectangleTabView(
+                    options: ["Discussion"],
+                    defaultSelection: "Discussion",
+                )
+                { _ in
+                    DiscussionView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
+            .frame(maxWidth: 300)
+            .frame(maxHeight: .infinity, alignment: .top)
+
+            NeobrutalismRoundedRectangleTabView(
+                options: ["To-do", "In Progress", "Done"],
+                defaultSelection: "To-do",
+            )
+            { option in
+                Group
+                {
+                    if option == "To-do"
+                    {
+                        DevbanTaskListView(
+                            status: .todo,
+                            navPath: $navPath,
+                            isDraggable: false,
+                        )
+                    }
+                    else if option == "In Progress"
+                    {
+                        DevbanTaskListView(
+                            status: .inProgress,
+                            navPath: $navPath,
+                            isDraggable: false,
+                        )
+                    }
+                    else
+                    {
+                        DevbanTaskListView(
+                            status: .completed,
+                            navPath: $navPath,
+                            isDraggable: false,
+                        )
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
+    }
+
+    // MARK: - Narrow Layout (≤600px)
+
+    private var narrowLayout: some View
+    {
+        VStack(spacing: 10)
+        {
+            UserGamificationBarView()
+
+            NeobrutalismRoundedRectangleTabView(
+                options: ["Discussion", "To-do", "In Progress", "Done"],
+                defaultSelection: "Discussion",
+            )
+            { option in
+                Group
+                {
+                    if option == "Discussion"
+                    {
+                        DiscussionView()
+                    }
+                    else if option == "To-do"
+                    {
+                        DevbanTaskListView(
+                            status: .todo,
+                            navPath: $navPath,
+                            isDraggable: false,
+                        )
+                    }
+                    else if option == "In Progress"
+                    {
+                        DevbanTaskListView(
+                            status: .inProgress,
+                            navPath: $navPath,
+                            isDraggable: false,
+                        )
+                    }
+                    else
+                    {
+                        DevbanTaskListView(
+                            status: .completed,
+                            navPath: $navPath,
+                            isDraggable: false,
+                        )
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }
 }
