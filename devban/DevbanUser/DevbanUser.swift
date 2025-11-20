@@ -200,7 +200,7 @@ extension DevbanUser
         return decoder
     }
 
-    static func createNewUserProfile(uid: String) async throws
+    static func createNewUserProfile(uid: String, displayName: String) async throws
     {
         let userDoc = DevbanUser.getUserDocument(uid)
         let document = try await userDoc.getDocument()
@@ -208,7 +208,7 @@ extension DevbanUser
         if (!document.exists)
         {
             try userDoc.setData(
-                from: ["uid": uid],
+                from: ["uid": uid, "display_name": displayName],
                 merge: true,
             )
             try await userDoc.updateData(
@@ -224,7 +224,7 @@ extension DevbanUser
 
         if (!document.exists)
         {
-            try await DevbanUser.createNewUserProfile(uid: uid)
+            try await DevbanUser.createNewUserProfile(uid: uid, displayName: DevbanUserContainer.shared.authDisplayName ?? "Error")
         }
 
         try await DevbanUser.getUserDocument(uid).updateData(
