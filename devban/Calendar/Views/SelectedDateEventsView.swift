@@ -1,26 +1,19 @@
 import SwiftUI
 
-/// View showing events for the selected date.
+/// View showing tasks with deadlines for the selected date.
 ///
-/// This view displays a list of all events occurring on a specific date, with options to
-/// toggle completion status, edit, or delete each event. If no events exist, it shows
-/// an empty state message.
+/// This view displays a list of all tasks with deadlines occurring on a specific date.
+/// If no tasks exist, it shows an empty state message.
 struct SelectedDateEventsView: View
 {
-    /// The date for which to display events.
+    /// The date for which to display tasks.
     let date: Date
 
-    /// The events to display for the selected date.
-    let events: [CalendarEvent]
+    /// The tasks to display for the selected date.
+    let tasks: [DevbanTask]
 
-    /// Action to perform when toggling an event's completion status.
-    let onToggleCompletion: (CalendarEvent) -> Void
-
-    /// Action to perform when deleting an event.
-    let onDelete: (CalendarEvent) -> Void
-
-    /// Action to perform when editing an event.
-    let onEdit: (CalendarEvent) -> Void
+    /// Navigation path for navigating to task details.
+    @Binding var navPath: NavigationPath
 
     /// Returns a formatted string representing the date.
     ///
@@ -43,7 +36,7 @@ struct SelectedDateEventsView: View
                 .padding(.horizontal)
                 .padding(.top, 12)
 
-            if events.isEmpty
+            if tasks.isEmpty
             {
                 VStack(spacing: 8)
                 {
@@ -51,7 +44,7 @@ struct SelectedDateEventsView: View
                         .font(.system(size: 40))
                         .foregroundStyle(.secondary)
 
-                    Text("No events scheduled")
+                    Text("No deadlines scheduled")
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(.secondary)
                 }
@@ -63,14 +56,18 @@ struct SelectedDateEventsView: View
                 {
                     VStack(spacing: 8)
                     {
-                        ForEach(events)
-                        { event in
-                            EventRowView(
-                                event: event,
-                                onToggleCompletion: { onToggleCompletion(event) },
-                                onDelete: { onDelete(event) },
-                                onEdit: { onEdit(event) },
+                        ForEach(tasks, id: \.id)
+                        { task in
+                            DevbanTaskPreviewView(
+                                devbanTask: task,
                             )
+                            {
+                                navPath.append(task)
+                            }
+                            .padding(.trailing)
+                            .background(Color.gray.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .tint(.primary)
                         }
                     }
                     .padding(.horizontal)
@@ -78,102 +75,5 @@ struct SelectedDateEventsView: View
                 }
             }
         }
-    }
-}
-
-/// Individual event row view.
-///
-/// This view displays a single event in the events list, showing its title, optional time,
-/// completion status, and action menu for editing or deleting.
-struct EventRowView: View
-{
-    /// The event to display.
-    let event: CalendarEvent
-
-    /// Action to perform when toggling the event's completion status.
-    let onToggleCompletion: () -> Void
-
-    /// Action to perform when deleting the event.
-    let onDelete: () -> Void
-
-    /// Action to perform when editing the event.
-    let onEdit: () -> Void
-
-    /// Returns a formatted string representing the event's start time.
-    ///
-    /// Returns `nil` if the event has no start time.
-    ///
-    /// - Returns: A formatted time string (e.g., "3:00 PM"), or `nil` if no start time exists.
-    private var timeText: String?
-    {
-        guard let startTime = event.startTime else { return nil }
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: startTime)
-    }
-
-    var body: some View
-    {
-        HStack(spacing: 12)
-        {
-            Button
-            {
-                onToggleCompletion()
-            }
-            label:
-            {
-                Image(systemName: event.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(
-                        event.isCompleted ? ThemeManager.shared.buttonColor : .gray,
-                    )
-            }
-
-            VStack(alignment: .leading, spacing: 2)
-            {
-                Text(event.title)
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .strikethrough(event.isCompleted)
-                    .foregroundStyle(event.isCompleted ? .secondary : .primary)
-
-                if let timeText
-                {
-                    Text(timeText)
-                        .font(.system(size: 12, design: .rounded))
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Spacer()
-
-            Menu
-            {
-                Button
-                {
-                    onEdit()
-                }
-                label:
-                {
-                    Label("Edit", systemImage: "pencil")
-                }
-
-                Button(role: .destructive)
-                {
-                    onDelete()
-                }
-                label:
-                {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
-            label:
-            {
-                Image(systemName: "ellipsis")
-                    .foregroundStyle(.secondary)
-                    .padding(8)
-            }
-        }
-        .padding(10)
-        .background(Color.gray.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
