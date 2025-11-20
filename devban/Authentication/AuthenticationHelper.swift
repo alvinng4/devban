@@ -142,7 +142,7 @@ enum AuthenticationHelper
             )
         }
 
-        try await DevbanUser.createNewUserProfile(uid: user.uid, displayName: user.displayName)
+        try await DevbanUser.createNewUserProfile(uid: user.uid, displayName: user.displayName ?? "Error")
         await AuthenticationHelper.updateUserAuthStatus()
     }
 
