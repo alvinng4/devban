@@ -2,8 +2,8 @@ import SwiftUI
 
 /// Renders the user interface for Calendar.
 ///
-/// This is the main calendar view that combines the calendar header, grid, and event list.
-/// It manages the calendar view model and handles adding/editing events through a sheet presentation.
+/// This is the main calendar view that combines the calendar header, grid, and task list.
+/// It manages the calendar view model and handles adding/editing tasks through navigation.
 struct CalendarView: View
 {
     /// Creates a new calendar view.
@@ -19,7 +19,7 @@ struct CalendarView: View
     /// Used to adjust layout for compact (iPhone) vs regular (iPad) sizes.
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    /// The view model that manages calendar state and events.
+    /// The view model that manages calendar state and tasks.
     @State private var viewModel: CalendarViewModel
 
     @State private var navPath: NavigationPath = .init()
@@ -77,20 +77,18 @@ struct CalendarView: View
 
                         CalendarGridView(
                             selectedDate: $viewModel.selectedDate,
-                            events: viewModel.events,
+                            tasks: viewModel.tasks,
                         )
 
                         Divider()
                             .foregroundStyle(.secondary)
 
-                        // MARK: Selected Date Events List
+                        // MARK: Selected Date Tasks List
 
                         SelectedDateEventsView(
                             date: viewModel.selectedDate,
-                            events: viewModel.selectedDateEvents,
-                            onToggleCompletion: { event in viewModel.toggleEventCompletion(event) },
-                            onDelete: { event in viewModel.deleteEvent(event) },
-                            onEdit: { _ in },
+                            tasks: viewModel.selectedDateTasks,
+                            navPath: $navPath,
                         )
                     }
                     .shadowedBorderRoundedRectangle()
@@ -112,6 +110,10 @@ struct CalendarView: View
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarHidden(true)
+            .navigationDestination(for: DevbanTask.self)
+            { devbanTask in
+                DevbanTaskDetailView(devbanTask: devbanTask)
+            }
             .navigationDestination(for: String.self)
             { string in
                 if (string == "New Task Deadline")

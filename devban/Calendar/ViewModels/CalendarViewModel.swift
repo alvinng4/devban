@@ -1,102 +1,87 @@
+import Combine
+import FirebaseFirestore
 import Foundation
 import SwiftUI
 
 /// ViewModel for managing calendar state and operations.
 ///
-/// This class manages the calendar's state, including the selected date and all calendar events.
-/// It provides methods for querying, adding, updating, and deleting events, as well as
-/// navigating between months. The class is marked as `@Observable` to enable SwiftUI
-/// automatic observation and view updates.
+/// This class manages the calendar's state, including the selected date and tasks with deadlines.
+/// It provides methods for querying tasks and navigating between months. The class is marked
+/// as `@Observable` to enable SwiftUI automatic observation and view updates.
 @Observable
 final class CalendarViewModel
 {
     /// Creates a new calendar view model.
     ///
-    /// Initializes the view model with the current date as the selected date and an empty
-    /// events array.
+    /// Initializes the view model with the current date as the selected date and sets up
+    /// a Firebase listener for tasks with deadlines.
     init()
     {
         selectedDate = Date()
-        events = []
+        tasks = []
+        
+        guard let teamId: String = DevbanUserContainer.shared.getTeamId()
+        else
+        {
+            return
+        }
+
+        let (publisher, listener) = DevbanTask.getTaskCollection()
+            .whereField("team_id", isEqualTo: teamId)
+            .whereField("has_deadline", isEqualTo: true)
+            .order(by: "deadline")
+            .addSnapshotListener(as: DevbanTask.self)
+
+        self.tasksListener = listener
+        publisher
+            .receive(on: DispatchQueue.main)
+            .sink
+            { completion in
+                if case let .failure(error) = completion
+                {
+                    print("Listener error: \(error)")
+                }
+            }
+            receiveValue:
+            { [weak self] tasks in
+                self?.tasks = tasks
+            }
+            .store(in: &cancellables)
+    }
+
+    deinit
+    {
+        tasksListener?.remove()
     }
 
     /// The currently selected date in the calendar.
     var selectedDate: Date
 
-    /// All calendar events managed by this view model.
-    ///
-    /// Events are automatically sorted by date whenever they are added or updated.
-    var events: [CalendarEvent]
+    /// All tasks with deadlines managed by this view model.
+    private(set) var tasks: [DevbanTask]
 
-    /// Returns all events that occur on a specific date.
+    private var cancellables: Set<AnyCancellable> = .init()
+    private var tasksListener: ListenerRegistration?
+
+    /// Returns all tasks that have a deadline on a specific date.
     ///
-    /// - Parameter date: The date for which to retrieve events.
-    /// - Returns: An array of `CalendarEvent` objects that occur on the specified date.
-    func events(for date: Date) -> [CalendarEvent]
+    /// - Parameter date: The date for which to retrieve tasks.
+    /// - Returns: An array of `DevbanTask` objects that have a deadline on the specified date.
+    func tasks(for date: Date) -> [DevbanTask]
     {
         let calendar = Calendar.current
-        return events.filter
-        { event in
-            calendar.isDate(event.date, inSameDayAs: date)
+        return tasks.filter
+        { task in
+            task.hasDeadline && calendar.isDate(task.deadline, inSameDayAs: date)
         }
     }
 
-    /// Returns all events for the currently selected date.
+    /// Returns all tasks for the currently selected date.
     ///
-    /// - Returns: An array of `CalendarEvent` objects for the selected date.
-    var selectedDateEvents: [CalendarEvent]
+    /// - Returns: An array of `DevbanTask` objects for the selected date.
+    var selectedDateTasks: [DevbanTask]
     {
-        events(for: selectedDate)
-    }
-
-    /// Adds a new event to the calendar.
-    ///
-    /// The event is appended to the events array and the array is automatically sorted
-    /// by date in ascending order.
-    ///
-    /// - Parameter event: The event to add to the calendar.
-    func addEvent(_ event: CalendarEvent)
-    {
-        events.append(event)
-        events.sort { $0.date < $1.date }
-    }
-
-    /// Updates an existing event in the calendar.
-    ///
-    /// If an event with the same ID exists, it is replaced with the provided event and
-    /// the events array is re-sorted by date.
-    ///
-    /// - Parameter event: The event to update. Must have an ID matching an existing event.
-    func updateEvent(_ event: CalendarEvent)
-    {
-        if let index = events.firstIndex(where: { $0.id == event.id })
-        {
-            events[index] = event
-            events.sort { $0.date < $1.date }
-        }
-    }
-
-    /// Deletes an event from the calendar.
-    ///
-    /// - Parameter event: The event to delete. Must have an ID matching an existing event.
-    func deleteEvent(_ event: CalendarEvent)
-    {
-        events.removeAll { $0.id == event.id }
-    }
-
-    /// Toggles the completion status of an event.
-    ///
-    /// If the event is found, its `isCompleted` property is toggled between `true` and `false`.
-    ///
-    /// - Parameter event: The event whose completion status should be toggled.
-    func toggleEventCompletion(_ event: CalendarEvent)
-    {
-        if let index = events.firstIndex(where: { $0.id == event.id })
-        {
-            var updatedEvent = events[index]
-            updatedEvent.isCompleted.toggle()
-            events[index] = updatedEvent
-        }
+        tasks(for: selectedDate)
     }
 
     /// Moves the selected date to the previous month.

@@ -16,8 +16,8 @@ struct CalendarDayCell: View
     /// Whether this cell represents today's date.
     let isToday: Bool
 
-    /// The number of events on this date.
-    let eventsCount: Int
+    /// The number of tasks with deadlines on this date.
+    let tasksCount: Int
 
     /// The action to perform when the cell is tapped.
     let onTap: () -> Void
@@ -44,7 +44,7 @@ struct CalendarDayCell: View
                             .primary,
                     )
 
-                if eventsCount > 0
+                if tasksCount > 0
                 {
                     Circle()
                         .fill(

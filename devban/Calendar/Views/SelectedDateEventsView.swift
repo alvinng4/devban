@@ -1,26 +1,19 @@
 import SwiftUI
 
-/// View showing events for the selected date.
+/// View showing tasks with deadlines for the selected date.
 ///
-/// This view displays a list of all events occurring on a specific date, with options to
-/// toggle completion status, edit, or delete each event. If no events exist, it shows
-/// an empty state message.
+/// This view displays a list of all tasks with deadlines occurring on a specific date.
+/// If no tasks exist, it shows an empty state message.
 struct SelectedDateEventsView: View
 {
-    /// The date for which to display events.
+    /// The date for which to display tasks.
     let date: Date
 
-    /// The events to display for the selected date.
-    let events: [CalendarEvent]
+    /// The tasks to display for the selected date.
+    let tasks: [DevbanTask]
 
-    /// Action to perform when toggling an event's completion status.
-    let onToggleCompletion: (CalendarEvent) -> Void
-
-    /// Action to perform when deleting an event.
-    let onDelete: (CalendarEvent) -> Void
-
-    /// Action to perform when editing an event.
-    let onEdit: (CalendarEvent) -> Void
+    /// Navigation path for navigating to task details.
+    @Binding var navPath: NavigationPath
 
     /// Returns a formatted string representing the date.
     ///
@@ -43,7 +36,7 @@ struct SelectedDateEventsView: View
                 .padding(.horizontal)
                 .padding(.top, 12)
 
-            if events.isEmpty
+            if tasks.isEmpty
             {
                 VStack(spacing: 8)
                 {
@@ -51,7 +44,7 @@ struct SelectedDateEventsView: View
                         .font(.system(size: 40))
                         .foregroundStyle(.secondary)
 
-                    Text("No events scheduled")
+                    Text("No deadlines scheduled")
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(.secondary)
                 }
@@ -63,14 +56,16 @@ struct SelectedDateEventsView: View
                 {
                     VStack(spacing: 8)
                     {
-                        ForEach(events)
-                        { event in
-                            EventRowView(
-                                event: event,
-                                onToggleCompletion: { onToggleCompletion(event) },
-                                onDelete: { onDelete(event) },
-                                onEdit: { onEdit(event) },
+                        ForEach(tasks, id: \.id)
+                        { task in
+                            DevbanTaskPreviewView(
+                                devbanTask: task,
                             )
+                            {
+                                navPath.append(task)
+                            }
+                            .background(Color.gray.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
                     }
                     .padding(.horizontal)
