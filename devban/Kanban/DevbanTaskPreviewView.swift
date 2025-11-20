@@ -132,56 +132,34 @@ struct DevbanTaskPreviewView: View
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        // TODO: Drop destination
-//        .dropDestination(for: String.self)
-//        { items, _ in
-//            for dropString in items
-//            {
-//                let splitString: [String] = dropString.components(separatedBy: .whitespaces)
-//                guard !splitString.isEmpty else { continue }
-//
-//                if (splitString.count >= 2 && splitString[0] == "Quest")
-//                {
-//                    if let questUUID: UUID = UUID(uuidString: splitString[1]),
-//                       let dropQuest: Quest = (quests.first { $0.id == questUUID })
-//                    {
-//                        if (quest.assignedDateType == .anytime)
-//                        {
-//                            dropQuest.assignedDateType = .anytime
-//                        }
-//                        else
-//                        {
-//                            if let date
-//                            {
-//                                dropQuest.assignedDateType = .date
-//                                dropQuest.assignedDate.year = date.year
-//                                dropQuest.assignedDate.month = date.month
-//                                dropQuest.assignedDate.day = date.day
-//                            }
-//                        }
-//                    }
-//                }
-//                else if (splitString.count >= 2 && splitString[0] == "Tag")
-//                {
-//                    do
-//                    {
-//                        let tags: [Tag] = try modelContext.fetch(FetchDescriptor<Tag>())
-//
-//                        if let tagUUID: UUID = UUID(uuidString: splitString[1]),
-//                           let dropTag: Tag = (tags.first { $0.id == tagUUID })
-//                        {
-//                            quest.tag = dropTag
-//                        }
-//                    }
-//                    catch
-//                    {
-//                        print("Failed to fetch tags for drag and drop operation")
-//                    }
-//                }
-//            }
-//
-//            return true
-//        }
+        .dropDestination(for: String.self)
+        { items, _ in
+            for dropString in items
+            {
+                let splitString: [String] = dropString.components(separatedBy: .whitespaces)
+                guard !splitString.isEmpty else { continue }
+
+                if (splitString.count >= 2 && splitString[0] == "Task")
+                {
+                    Task
+                    {
+                        do
+                        {
+                            try await DevbanTask.updateDatabaseData(
+                                id: splitString[1],
+                                data: ["status": devbanTask.status.rawValue],
+                            )
+                        }
+                        catch
+                        {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+
+            return true
+        }
         .padding(.leading, 10)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
