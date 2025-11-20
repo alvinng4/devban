@@ -12,6 +12,7 @@ struct DevbanUser: Codable
     private var theme: ThemeManager.DefaultTheme?
     private var soundEffectOn: Bool?
     private var hapticEffectOn: Bool?
+    private var exp: Int?
 }
 
 extension DevbanUser
@@ -129,6 +130,31 @@ extension DevbanUser
             catch
             {
                 print("DevbanUser.setHapticEffectSetting: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func getExp() -> Int
+    {
+        return exp ?? 0
+    }
+
+    func addExp(_ expChange: Int)
+    {
+        let data: [String: Any] = [
+            "exp": getExp() + expChange,
+        ]
+        let uid: String = self.uid
+
+        Task
+        {
+            do
+            {
+                try await DevbanUser.updateDatabaseData(uid: uid, data: data)
+            }
+            catch
+            {
+                print("DevbanUser.setExp: \(error.localizedDescription)")
             }
         }
     }

@@ -122,6 +122,11 @@ final class DevbanUserContainer
         return user?.getHapticEffectSetting() ?? true
     }
 
+    func getExp() -> Int
+    {
+        return user?.getExp() ?? 0
+    }
+
     func setTheme(_ theme: ThemeManager.DefaultTheme)
     {
         guard let user else { return }
@@ -156,6 +161,16 @@ final class DevbanUserContainer
     {
         guard let user else { return }
         user.setHapticEffectSetting(option)
+        Task
+        {
+            self.user = try await DevbanUser.getUser(user.uid)
+        }
+    }
+
+    func addExp(_ exp: Int)
+    {
+        guard let user else { return }
+        user.addExp(exp)
         Task
         {
             self.user = try await DevbanUser.getUser(user.uid)

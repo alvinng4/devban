@@ -71,6 +71,7 @@ extension DevbanTask
             do
             {
                 try await DevbanTask.updateDatabaseData(id: id, data: data)
+                DevbanUserContainer.shared.addExp(difficulty.getExp())
             }
             catch
             {
@@ -91,6 +92,7 @@ extension DevbanTask
             do
             {
                 try await DevbanTask.updateDatabaseData(id: id, data: data)
+                DevbanUserContainer.shared.addExp(-difficulty.getExp())
             }
             catch
             {
