@@ -224,7 +224,10 @@ extension DevbanUser
 
         if (!document.exists)
         {
-            try await DevbanUser.createNewUserProfile(uid: uid, displayName: DevbanUserContainer.shared.authDisplayName ?? "Error")
+            try await DevbanUser.createNewUserProfile(
+                uid: uid,
+                displayName: DevbanUserContainer.shared.authDisplayName ?? "Error",
+            )
         }
 
         try await DevbanUser.getUserDocument(uid).updateData(
