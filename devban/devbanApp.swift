@@ -1,6 +1,7 @@
 import FirebaseCore
 import SwiftUI
 
+/// Application delegate responsible for Firebase initialization.
 class AppDelegate: NSObject, UIApplicationDelegate
 {
     func application(
@@ -14,6 +15,7 @@ class AppDelegate: NSObject, UIApplicationDelegate
     }
 }
 
+/// The main application entry point for Devban.
 @main
 struct devbanApp: App
 {
