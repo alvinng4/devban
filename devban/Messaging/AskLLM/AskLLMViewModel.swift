@@ -34,7 +34,8 @@ extension AskLLMView
                         AskLLMViewModel.addMessageToDatabase(uid: uid, msg: newMessage)
                         messages = try await AskLLMViewModel.getTranscriptFromDatabase(uid: uid)
                     }
-                    else if (transcript.last?.messageType != .assistantGreeting)
+                    else if (transcript.last?.messageType != .assistantGreeting || transcript.last?
+                        .messageType != .assistantContextClear)
                     {
                         let newMessage: ChatMessage = .init(
                             senderId: uid,
