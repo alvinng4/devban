@@ -2,6 +2,7 @@ import SwiftUI
 
 struct UserGamificationBarView: View
 {
+    let exp: Int = DevbanUserContainer.shared.getExp()
     var body: some View
     {
         HStack
@@ -12,8 +13,8 @@ struct UserGamificationBarView: View
             label:
             {
                 ProgressIndicator(
-                    currentLevel: 0,
-                    currentLevelExp: 0,
+                    currentLevel: currentLevel,
+                    currentLevelExp: exp % 100,
                     currentLevelTotalExp: 100,
                 )
             }
@@ -22,6 +23,11 @@ struct UserGamificationBarView: View
             )
         }
         .frame(maxWidth: .infinity)
+    }
+
+    var currentLevel: Int
+    {
+        return (exp / 100) + 1
     }
 
     private struct ProgressIndicator: View
