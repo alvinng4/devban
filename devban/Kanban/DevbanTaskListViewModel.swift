@@ -20,7 +20,8 @@ extension DevbanTaskListView
             let (publisher, listener) = DevbanTask.getTaskCollection()
                 .whereField("team_id", isEqualTo: teamId)
                 .whereField("status", isEqualTo: status.rawValue)
-                .order(by: "created_date")
+                .order(by: "is_pinned", descending: true)
+                .order(by: "created_date", descending: true)
                 .addSnapshotListener(as: DevbanTask.self)
 
             self.devbanTasksListener = listener
