@@ -92,6 +92,7 @@ struct HomeView: View
                 { _ in
                     DiscussionView()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
             .frame(maxWidth: 300)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -154,6 +155,7 @@ struct HomeView: View
                 { _ in
                     DiscussionView()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
             .frame(maxWidth: 300)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -166,23 +168,23 @@ struct HomeView: View
                 switch option
                 {
                     case "To-do":
-                        return DevbanTaskListView(
+                        DevbanTaskListView(
                             status: .todo,
                             navPath: $navPath,
                         )
                     case "In Progress":
-                        return DevbanTaskListView(
+                        DevbanTaskListView(
                             status: .inProgress,
                             navPath: $navPath,
                         )
                     default:
-                        return DevbanTaskListView(
+                        DevbanTaskListView(
                             status: .completed,
                             navPath: $navPath,
                         )
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
     }
 
@@ -196,35 +198,27 @@ struct HomeView: View
 
             NeobrutalismRoundedRectangleTabView(
                 options: ["Discussion", "To-do", "In Progress", "Done"],
-                defaultSelection: "Discussion",
+                defaultSelection: "To-do",
             )
             { option in
                 switch option
                 {
                     case "Discussion":
-                        return AnyView(
-                            DiscussionView(),
-                        )
+                        DiscussionView()
                     case "To-do":
-                        return AnyView(
-                            DevbanTaskListView(
-                                status: .todo,
-                                navPath: $navPath,
-                            ),
+                        DevbanTaskListView(
+                            status: .todo,
+                            navPath: $navPath,
                         )
                     case "In Progress":
-                        return AnyView(
-                            DevbanTaskListView(
-                                status: .inProgress,
-                                navPath: $navPath,
-                            ),
+                        DevbanTaskListView(
+                            status: .inProgress,
+                            navPath: $navPath,
                         )
                     default:
-                        return AnyView(
-                            DevbanTaskListView(
-                                status: .completed,
-                                navPath: $navPath,
-                            ),
+                        DevbanTaskListView(
+                            status: .completed,
+                            navPath: $navPath,
                         )
                 }
             }
