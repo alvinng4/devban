@@ -165,12 +165,14 @@ struct HomeView: View
                 defaultSelection: "To-do",
             )
             { option in
-                Group {
+                Group
+                {
                     if option == "To-do"
                     {
                         DevbanTaskListView(
                             status: .todo,
                             navPath: $navPath,
+                            isDraggable: false,
                         )
                     }
                     else if option == "In Progress"
@@ -178,6 +180,7 @@ struct HomeView: View
                         DevbanTaskListView(
                             status: .inProgress,
                             navPath: $navPath,
+                            isDraggable: false,
                         )
                     }
                     else
@@ -185,6 +188,7 @@ struct HomeView: View
                         DevbanTaskListView(
                             status: .completed,
                             navPath: $navPath,
+                            isDraggable: false,
                         )
                     }
                 }
@@ -203,10 +207,11 @@ struct HomeView: View
 
             NeobrutalismRoundedRectangleTabView(
                 options: ["Discussion", "To-do", "In Progress", "Done"],
-                defaultSelection: "To-do",
+                defaultSelection: "Discussion",
             )
             { option in
-                Group {
+                Group
+                {
                     if option == "Discussion"
                     {
                         DiscussionView()
@@ -216,6 +221,7 @@ struct HomeView: View
                         DevbanTaskListView(
                             status: .todo,
                             navPath: $navPath,
+                            isDraggable: false,
                         )
                     }
                     else if option == "In Progress"
@@ -223,6 +229,7 @@ struct HomeView: View
                         DevbanTaskListView(
                             status: .inProgress,
                             navPath: $navPath,
+                            isDraggable: false,
                         )
                     }
                     else
@@ -230,6 +237,7 @@ struct HomeView: View
                         DevbanTaskListView(
                             status: .completed,
                             navPath: $navPath,
+                            isDraggable: false,
                         )
                     }
                 }
