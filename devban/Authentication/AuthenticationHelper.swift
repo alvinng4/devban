@@ -88,7 +88,7 @@ enum AuthenticationHelper
         try await changeRequest.commitChanges()
 
         // Create user on database
-        try await DevbanUser.createNewUserProfile(uid: authDataResult.user.uid)
+        try await DevbanUser.createNewUserProfile(uid: authDataResult.user.uid, displayName: displayName)
     }
 
     /// Signs in a user asynchronously with email and password, checking email verification.
@@ -142,7 +142,7 @@ enum AuthenticationHelper
             )
         }
 
-        try await DevbanUser.createNewUserProfile(uid: user.uid)
+        try await DevbanUser.createNewUserProfile(uid: user.uid, displayName: user.displayName)
         await AuthenticationHelper.updateUserAuthStatus()
     }
 
