@@ -3,6 +3,10 @@ import SwiftUI
 
 extension AskLLMView
 {
+    /// Manages interactions with Apple's on-device language model.
+    ///
+    /// This class handles checking model availability, sending prompts, streaming responses,
+    /// and managing session state.
     @Observable
     final class AppleIntelligence
     {
@@ -10,6 +14,9 @@ extension AskLLMView
         private var session: LanguageModelSession = LanguageModelSession()
         private var streamingTask: Task<Void, Never>?
 
+        /// Checks if Apple Intelligence is available on the device.
+        ///
+        /// - Throws: NSError with a descriptive message if the model is unavailable
         static func checkModelAvailability() throws
         {
             let msg: String? = switch SystemLanguageModel.default.availability
@@ -38,6 +45,13 @@ extension AskLLMView
             }
         }
 
+        /// Sends a prompt to the language model and streams the response.
+        ///
+        /// - Parameters:
+        ///   - prompt: The text prompt to send to the model
+        ///   - onUpdateStreamingContent: Callback invoked with partial content as it streams
+        ///   - onFinish: Callback invoked when the response is complete
+        ///   - onError: Callback invoked if an error occurs
         func prompt(
             _ prompt: String,
             onUpdateStreamingContent: @escaping (_ partialContent: String) async -> Void,
@@ -102,6 +116,7 @@ extension AskLLMView
             }
         }
 
+        /// Stops the current streaming session.
         func stopSession()
         {
             streamingTask?.cancel()
@@ -109,6 +124,7 @@ extension AskLLMView
             streamingTask = nil
         }
 
+        /// Resets the language model session, clearing conversation history.
         func resetSession()
         {
             session = LanguageModelSession()

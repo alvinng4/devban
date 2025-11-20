@@ -9,6 +9,9 @@ import UIKit
 
 extension UIApplication
 {
+    /// Finds the root view controller of the application.
+    ///
+    /// - Returns: The root view controller, or nil if not found
     private static func rootViewController() -> UIViewController?
     {
         let rootVC: UIViewController? = UIApplication
@@ -21,6 +24,14 @@ extension UIApplication
         return rootVC
     }
 
+    /// Recursively finds the topmost visible view controller.
+    ///
+    /// This method traverses the view controller hierarchy to find the currently visible
+    /// view controller, accounting for navigation controllers, tab bar controllers, and
+    /// presented view controllers.
+    ///
+    /// - Parameter controller: The starting view controller (defaults to root)
+    /// - Returns: The topmost visible view controller, or nil if not found
     @MainActor static func topViewController(controller: UIViewController? = nil) -> UIViewController?
     {
         let controller = controller ?? rootViewController()

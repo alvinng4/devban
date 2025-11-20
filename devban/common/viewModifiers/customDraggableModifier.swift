@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View modifier that conditionally makes a view draggable.
 private struct CustomDraggableViewModifier: ViewModifier
 {
     let isDraggable: Bool
@@ -20,6 +21,11 @@ private struct CustomDraggableViewModifier: ViewModifier
 
 extension View
 {
+    /// Conditionally makes a view draggable with a string payload.
+    ///
+    /// - Parameters:
+    ///   - isDraggable: Whether the view should be draggable
+    ///   - transferString: The string to transfer when dragging
     func customDraggable(isDraggable: Bool, transferString: String) -> some View
     {
         modifier(
