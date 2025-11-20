@@ -5,6 +5,7 @@ import SwiftUI
 struct DevbanUser: Codable
 {
     var uid: String
+    var displayName: String
     var lastAccess: Date?
     var createdDate: Date?
     var teamId: String?
@@ -168,6 +169,11 @@ extension DevbanUser
             as: DevbanUser.self,
             decoder: decoder,
         )
+    }
+
+    static func getDisplayName(_ uid: String) async throws -> String
+    {
+        try await getUser(uid).displayName
     }
 
     static func getUserCollection() -> CollectionReference

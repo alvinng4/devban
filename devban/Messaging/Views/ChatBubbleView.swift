@@ -23,27 +23,13 @@ struct ChatBubbleView: View
         {
             isCurrentUser = false
         }
-
-        displayName = switch (chatMessage.messageType)
-        {
-            case .user:
-                DevbanUserContainer.shared.getDisplayName()
-            case .assistantGreeting:
-                "Apple Intelligence"
-            case .assistantResponse:
-                "Apple Intelligence"
-            case .assistantContextClear:
-                nil
-            case .system:
-                "System"
-        }
     }
 
     @Environment(\.colorScheme) private var colorScheme
 
     private let chatMessage: ChatMessage
     private let isCurrentUser: Bool
-    private let displayName: String?
+    @State private var displayName: String?
     private let theme: Splash.Theme = .wwdc17(withFont: .init(size: 16))
 
     private var backgroundColor: SwiftUI.Color
@@ -53,6 +39,23 @@ struct ChatBubbleView: View
             return ThemeManager.shared.backgroundColor
         }
         return Color.gray.opacity(0.3)
+    }
+
+    func loadDisplayName() async throws -> String?
+    {
+        switch (chatMessage.messageType)
+        {
+            case .user:
+                try await DevbanUser.getDisplayName(chatMessage.senderId)
+            case .assistantGreeting:
+                "Apple Intelligence"
+            case .assistantResponse:
+                "Apple Intelligence"
+            case .assistantContextClear:
+                nil
+            case .system:
+                "System"
+        }
     }
 
     var body: some View
@@ -86,6 +89,17 @@ struct ChatBubbleView: View
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
                 .padding(.horizontal, 2)
+        }
+        .task
+        {
+            do
+            {
+                displayName = try await loadDisplayName()
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
         }
     }
 
