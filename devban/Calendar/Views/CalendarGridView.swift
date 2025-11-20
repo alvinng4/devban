@@ -10,8 +10,8 @@ struct CalendarGridView: View
     /// Binding to the currently selected date.
     @Binding var selectedDate: Date
 
-    /// All calendar events to display event indicators on days.
-    let events: [CalendarEvent]
+    /// All tasks with deadlines to display indicators on days.
+    let tasks: [DevbanTask]
 
     /// The calendar instance used for date calculations.
     private let calendar = Calendar.current
@@ -82,13 +82,13 @@ struct CalendarGridView: View
         return days
     }
 
-    /// Returns the number of events on a specific date.
+    /// Returns the number of tasks with deadlines on a specific date.
     ///
-    /// - Parameter date: The date for which to count events.
-    /// - Returns: The number of events occurring on the specified date.
-    private func eventsCount(for date: Date) -> Int
+    /// - Parameter date: The date for which to count tasks.
+    /// - Returns: The number of tasks with deadlines occurring on the specified date.
+    private func tasksCount(for date: Date) -> Int
     {
-        events.count(where: { calendar.isDate($0.date, inSameDayAs: date) })
+        tasks.count(where: { $0.hasDeadline && calendar.isDate($0.deadline, inSameDayAs: date) })
     }
 
     /// Check if the given date is the currently selected date.
@@ -135,7 +135,7 @@ struct CalendarGridView: View
                             date: date,
                             isSelected: isDateSelected(date),
                             isToday: isDateToday(date),
-                            eventsCount: eventsCount(for: date),
+                            tasksCount: tasksCount(for: date),
                             onTap: { selectedDate = date },
                         )
                     }
