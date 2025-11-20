@@ -1,10 +1,11 @@
+import Combine
 import FirebaseFirestore
 import FirebaseSharedSwift
 import SwiftUI
 
 struct DevbanTask: Codable, Hashable
 {
-    enum Status: String, Codable
+    enum Status: String, Codable, CaseIterable, Identifiable
     {
         case todo
         case inProgress
@@ -21,6 +22,11 @@ struct DevbanTask: Codable, Hashable
                 case .completed:
                     return "Completed"
             }
+        }
+
+        var id: String
+        {
+            return self.description
         }
     }
 
@@ -44,24 +50,19 @@ extension DevbanTask
         try await DevbanTask.getTaskDocument(id).updateData(data)
     }
 
-    static func deleteTask(id: String) async throws
-    {
-        try await DevbanTask.getTaskDocument(id).delete()
-    }
-
     static func loadTasks(teamID: String, status: Status) async throws -> [DevbanTask]
     {
-        try await DevbanTask.getTaskCollection()
+        return try await DevbanTask.getTaskCollection()
             .whereField("team_id", isEqualTo: teamID)
-            .whereField("status", isEqualTo: status)
+            .whereField("status", isEqualTo: status.rawValue)
             .order(by: "created_date")
             .getDocuments(as: DevbanTask.self)
     }
 
-    func setProgress(_ progress: Double)
+    func complete()
     {
         let data: [String: Any] = [
-            "progress": progress,
+            "status": Status.completed.rawValue,
         ]
         let id: String = self.id
 
@@ -73,7 +74,27 @@ extension DevbanTask
             }
             catch
             {
-                print("DevbanTeam.setProgress: \(error.localizedDescription)")
+                print("DevbanTeam.complete: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func uncomplete()
+    {
+        let data: [String: Any] = [
+            "status": Status.inProgress.rawValue,
+        ]
+        let id: String = self.id
+
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(id: id, data: data)
+            }
+            catch
+            {
+                print("DevbanTeam.uncomplete: \(error.localizedDescription)")
             }
         }
     }
@@ -105,13 +126,18 @@ extension DevbanTask
         return decoder
     }
 
-    func createNewTask(_ devbanTask: DevbanTask) async throws
+    static func createNewTask(_ devbanTask: DevbanTask) throws
     {
-        let taskDoc = DevbanTeam.getTeamCollection().document(devbanTask.id)
+        let taskDoc = DevbanTask.getTaskCollection().document(devbanTask.id)
         try taskDoc.setData(
             from: devbanTask,
             merge: false,
             encoder: DevbanTask.encoder,
         )
+    }
+
+    static func deleteTask(id: String) async throws
+    {
+        try await DevbanTask.getTaskDocument(id).delete()
     }
 }

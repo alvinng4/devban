@@ -16,7 +16,6 @@ struct DevbanTaskPreviewView: View
     private let devbanTask: DevbanTask
     private let navAction: () -> Void
 
-    @State private var showDeleteAlert: Bool = false
     @FocusState private var isTextFocused: Bool
 
     var body: some View
@@ -30,8 +29,7 @@ struct DevbanTaskPreviewView: View
             {
                 Button
                 {
-                    // TODO: complete
-//                    devbanTask.complete()
+                    devbanTask.complete()
 
                     HapticManager.shared.playSuccessNotification()
                     SoundManager.shared.playSuccessSound()
@@ -51,8 +49,7 @@ struct DevbanTaskPreviewView: View
             {
                 Button
                 {
-                    // TODO: uncomplete
-//                    devbanTask.uncomplete()
+                    devbanTask.uncomplete()
 
                     HapticManager.shared.playSuccessNotification()
                 }
@@ -109,7 +106,7 @@ struct DevbanTaskPreviewView: View
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
-                    if devbanTask.hasDeadline
+                    if (devbanTask.hasDeadline)
                     {
                         let displayString: String = "Deadline: \(devbanTask.deadline.formattedDeadline())"
                         let isPast: Bool = devbanTask.deadline < Date()
@@ -193,24 +190,6 @@ struct DevbanTaskPreviewView: View
             Rectangle()
                 .frame(width: 6)
                 .foregroundStyle(devbanTask.difficulty.getColor())
-        }
-        .alert(
-            "Comfirm delete?",
-            isPresented: $showDeleteAlert,
-        )
-        {
-            Button("Delete", role: .destructive)
-            {
-                // TODO: delete
-            }
-            Button("Cancel", role: .cancel)
-            {
-                showDeleteAlert = false
-            }
-        }
-        message:
-        {
-            Text("This action is permanant and cannot be undone.")
         }
     }
 }

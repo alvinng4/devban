@@ -41,21 +41,6 @@ struct HomeView: View
                         )
                         { _ in
                             DevbanTaskListView(
-                                devbanTasks: [
-                                    DevbanTask(
-                                        id: UUID().uuidString,
-                                        teamId: DevbanUserContainer.shared.getTeamId() ?? "",
-                                        title: "Test",
-                                        description: "test",
-                                        createdDate: Date(),
-                                        progress: 20,
-                                        status: .todo,
-                                        difficulty: .hard,
-                                        isPinned: true,
-                                        hasDeadline: false,
-                                        deadline: Date(),
-                                    ),
-                                ],
                                 status: .todo,
                                 navPath: $navPath,
                             )
@@ -69,7 +54,6 @@ struct HomeView: View
                         )
                         { _ in
                             DevbanTaskListView(
-                                devbanTasks: [],
                                 status: .inProgress,
                                 navPath: $navPath,
                             )
@@ -83,7 +67,6 @@ struct HomeView: View
                         )
                         { _ in
                             DevbanTaskListView(
-                                devbanTasks: [],
                                 status: .completed,
                                 navPath: $navPath,
                             )

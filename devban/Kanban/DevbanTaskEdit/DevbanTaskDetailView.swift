@@ -11,6 +11,7 @@ struct DevbanTaskDetailView: View
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @State private var viewModel: DevbanTaskEditViewModel
+    @State private var showDeleteAlert: Bool = false
     @FocusState private var isTextFocused: Bool
 
     var body: some View
@@ -52,10 +53,24 @@ struct DevbanTaskDetailView: View
 
                         Spacer()
 
+                        // Delete Button
+                        Button
+                        {
+                            showDeleteAlert = true
+                            HapticManager.shared.playWarningNotification()
+                        }
+                        label:
+                        {
+                            Image(systemName: "trash")
+                                .toolBarButtonImage()
+                        }
+                        .buttonStyle(ShadowedBorderRoundedRectangleButtonStyle())
+
                         // Pin button
                         Button
                         {
-                            viewModel.togglePin()
+                            viewModel.devbanTask.isPinned.toggle()
+                            viewModel.updateIsPinned()
                         }
                         label:
                         {
@@ -82,7 +97,7 @@ struct DevbanTaskDetailView: View
                         .buttonStyle(ShadowedBorderRoundedRectangleButtonStyle())
                     }
 
-                    Text("Task")
+                    Text("New task")
                         .customTitle()
 
                     DevbanTaskEditView(
@@ -108,6 +123,25 @@ struct DevbanTaskDetailView: View
                         NeobrutalismConstants.mainContentPaddingVerticalRegular,
                 )
                 .frame(maxWidth: .infinity, alignment: .center) // For scroll bar to be on edge
+            }
+            .alert(
+                "Confirm delete",
+                isPresented: $showDeleteAlert,
+            )
+            {
+                Button("Delete", role: .destructive)
+                {
+                    viewModel.deleteTask()
+                    dismiss()
+                }
+                Button("Cancel", role: .cancel)
+                {
+                    showDeleteAlert = false
+                }
+            }
+            message:
+            {
+                Text("This action is permanant and cannot be undone.")
             }
         }
         .navigationBarBackButtonHidden(true)
