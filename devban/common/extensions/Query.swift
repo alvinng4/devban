@@ -1,3 +1,4 @@
+import Combine
 import FirebaseFirestore
 import FirebaseSharedSwift
 
@@ -11,6 +12,26 @@ extension Query
         { document in
             return try document.data(as: T.self, decoder: Query.customDecoder)
         }
+    }
+
+    func addSnapshotListener<T: Decodable>(as _: T.Type) -> (AnyPublisher<[T], Error>, ListenerRegistration)
+    {
+        let publisher = PassthroughSubject<[T], Error>()
+
+        let listener = self.addSnapshotListener
+        { querySnapshot, _ in
+            guard let documents = querySnapshot?.documents
+            else
+            {
+                print("No documents")
+                return
+            }
+
+            let products: [T] = documents.compactMap { try? $0.data(as: T.self, decoder: Query.customDecoder) }
+            publisher.send(products)
+        }
+
+        return (publisher.eraseToAnyPublisher(), listener)
     }
 
     private static var customDecoder: Firestore.Decoder

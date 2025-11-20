@@ -2,15 +2,13 @@ import SwiftUI
 
 struct DevbanTaskListView: View
 {
-    init(devbanTasks: [DevbanTask], status: DevbanTask.Status, navPath: Binding<NavigationPath>)
+    init(status: DevbanTask.Status, navPath: Binding<NavigationPath>)
     {
-        self.devbanTasks = devbanTasks
-        self.status = status
+        self.viewModel = .init(status: status)
         _navPath = navPath
     }
 
-    private let devbanTasks: [DevbanTask]
-    private let status: DevbanTask.Status
+    @State private var viewModel: DevbanTaskListViewModel
     @Binding private var navPath: NavigationPath
 
     var body: some View
@@ -21,7 +19,7 @@ struct DevbanTaskListView: View
             { _ in
                 List
                 {
-                    ForEach(devbanTasks, id: \.self)
+                    ForEach(viewModel.devbanTasks, id: \.self)
                     { devbanTask in
                         DevbanTaskPreviewView(
                             devbanTask: devbanTask,
@@ -35,7 +33,17 @@ struct DevbanTaskListView: View
                         {
                             Button("Delete")
                             {
-                                // TODO: Implement this
+                                Task
+                                {
+                                    do
+                                    {
+                                        try await DevbanTask.deleteTask(id: devbanTask.id)
+                                    }
+                                    catch
+                                    {
+                                        print(error.localizedDescription)
+                                    }
+                                }
                             }
                             .tint(.red)
                         }
@@ -93,7 +101,7 @@ struct DevbanTaskListView: View
             {
                 Button
                 {
-                    switch (status)
+                    switch (viewModel.status)
                     {
                         case .todo:
                             navPath.append("New Task Todo")

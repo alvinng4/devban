@@ -20,22 +20,22 @@ final class DevbanTaskEditViewModel
         )
 
         self.devbanTask = newTask
+        self.isNewTask = true
         self.difficultyValue = newTask.difficulty.getDifficultyValue()
-        self.deadline = newTask.deadline
     }
 
     init(devbanTask: DevbanTask)
     {
         self.devbanTask = devbanTask
+        self.isNewTask = false
         self.difficultyValue = devbanTask.difficulty.getDifficultyValue()
-        self.deadline = devbanTask.deadline
     }
 
     var devbanTask: DevbanTask
+    var isNewTask: Bool
     var difficultyValue: Double
-    var deadline: Date
 
-    func updateDifficulty()
+    func updateDifficultyUI()
     {
         switch (Int(difficultyValue.rounded()))
         {
@@ -54,26 +54,184 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    func updateIsPinned()
+    {
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["is_pinned": devbanTask.isPinned],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func updateTitle()
+    {
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["title": devbanTask.title],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func updateDescription()
+    {
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["description": devbanTask.description],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func updateStatus()
+    {
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["status": devbanTask.status.rawValue],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func updateDifficulty()
+    {
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["difficulty": devbanTask.difficulty.rawValue],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func updateHasDeadline()
+    {
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["has_deadline": devbanTask.hasDeadline],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
     func updateDeadline()
     {
-        devbanTask.deadline = deadline
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["deadline": devbanTask.deadline],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
     }
 
-    func togglePin()
+    func updateProgress()
     {
-        // TODO: togglePIN
+        guard !isNewTask else { return }
+        Task
+        {
+            do
+            {
+                try await DevbanTask.updateDatabaseData(
+                    id: devbanTask.id,
+                    data: ["progress": devbanTask.progress],
+                )
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
     }
 
-    @MainActor
     func saveTask()
     {
-        // TODO: saveTask
-
-        HapticManager.shared.playSuccessNotification()
+        do
+        {
+            try DevbanTask.createNewTask(devbanTask)
+            HapticManager.shared.playSuccessNotification()
+        }
+        catch
+        {
+            print("Save task error: \(error.localizedDescription)")
+        }
     }
 
     func deleteTask()
     {
-        // TODO: deleteTask
+        Task
+        {
+            do
+            {
+                try await DevbanTask.deleteTask(id: devbanTask.id)
+                HapticManager.shared.playSuccessNotification()
+            }
+            catch
+            {
+                print(error.localizedDescription)
+            }
+        }
     }
 }

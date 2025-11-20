@@ -56,7 +56,8 @@ struct DevbanTaskAddView: View
                         // Pin button
                         Button
                         {
-                            viewModel.togglePin()
+                            viewModel.devbanTask.isPinned.toggle()
+                            viewModel.updateIsPinned()
                         }
                         label:
                         {
