@@ -3,7 +3,7 @@ import SwiftUI
 /// Individual day cell in the calendar grid.
 ///
 /// This view displays a single day in the calendar grid, showing the day number and an
-/// indicator if there are events on that day. The cell can be selected and highlights
+/// indicator if there are tasks with deadlines on that day. The cell can be selected and highlights
 /// today's date differently.
 struct CalendarDayCell: View
 {
