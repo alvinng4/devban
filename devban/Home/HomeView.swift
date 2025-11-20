@@ -19,27 +19,21 @@ struct HomeView: View
                     .ignoresSafeArea()
 
                 GeometryReader
-                { geometry in
-                    let width = geometry.size.width
-                    
+                { proxy in
+                    let width = proxy.size.width
+
                     VStack(spacing: 10)
                     {
-                        // Gamification bar always at top
-                        UserGamificationBarView()
-                        
-                        if width > 900
+                        if (width > 900)
                         {
-                            // Wide layout: Discussion + 3 Kanban columns side by side
                             wideLayout
                         }
-                        else if width > 600
+                        else if (width > 600)
                         {
-                            // Medium layout: Discussion left, 3 Kanban columns as tabs on right
                             mediumLayout
                         }
                         else
                         {
-                            // Narrow layout: Everything in tabs (Discussion + 3 Kanban)
                             narrowLayout
                         }
                     }
@@ -80,19 +74,24 @@ struct HomeView: View
             }
         }
     }
-    
+
     // MARK: - Wide Layout (>900px)
-    
+
     private var wideLayout: some View
     {
         HStack(spacing: 25)
         {
-            NeobrutalismRoundedRectangleTabView(
-                options: ["Discussion"],
-                defaultSelection: "Discussion",
-            )
-            { _ in
-                DiscussionView()
+            VStack(spacing: 10)
+            {
+                UserGamificationBarView()
+
+                NeobrutalismRoundedRectangleTabView(
+                    options: ["Discussion"],
+                    defaultSelection: "Discussion",
+                )
+                { _ in
+                    DiscussionView()
+                }
             }
             .frame(maxWidth: 300)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -137,19 +136,24 @@ struct HomeView: View
             .frame(maxHeight: .infinity, alignment: .top)
         }
     }
-    
+
     // MARK: - Medium Layout (600-900px)
-    
+
     private var mediumLayout: some View
     {
         HStack(spacing: 25)
         {
-            NeobrutalismRoundedRectangleTabView(
-                options: ["Discussion"],
-                defaultSelection: "Discussion",
-            )
-            { _ in
-                DiscussionView()
+            VStack(spacing: 10)
+            {
+                UserGamificationBarView()
+
+                NeobrutalismRoundedRectangleTabView(
+                    options: ["Discussion"],
+                    defaultSelection: "Discussion",
+                )
+                { _ in
+                    DiscussionView()
+                }
             }
             .frame(maxWidth: 300)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -162,61 +166,69 @@ struct HomeView: View
                 switch option
                 {
                     case "To-do":
-                        DevbanTaskListView(
+                        return DevbanTaskListView(
                             status: .todo,
                             navPath: $navPath,
                         )
                     case "In Progress":
-                        DevbanTaskListView(
+                        return DevbanTaskListView(
                             status: .inProgress,
                             navPath: $navPath,
                         )
-                    case "Done":
-                        DevbanTaskListView(
+                    default:
+                        return DevbanTaskListView(
                             status: .completed,
                             navPath: $navPath,
                         )
-                    default:
-                        EmptyView()
                 }
             }
-            .frame(maxWidth: .infinity)
             .frame(maxHeight: .infinity, alignment: .top)
         }
     }
-    
+
     // MARK: - Narrow Layout (≤600px)
-    
+
     private var narrowLayout: some View
     {
-        NeobrutalismRoundedRectangleTabView(
-            options: ["Discussion", "To-do", "In Progress", "Done"],
-            defaultSelection: "To-do",
-        )
-        { option in
-            switch option
-            {
-                case "Discussion":
-                    DiscussionView()
-                case "To-do":
-                    DevbanTaskListView(
-                        status: .todo,
-                        navPath: $navPath,
-                    )
-                case "In Progress":
-                    DevbanTaskListView(
-                        status: .inProgress,
-                        navPath: $navPath,
-                    )
-                case "Done":
-                    DevbanTaskListView(
-                        status: .completed,
-                        navPath: $navPath,
-                    )
-                default:
-                    EmptyView()
+        VStack(spacing: 10)
+        {
+            UserGamificationBarView()
+
+            NeobrutalismRoundedRectangleTabView(
+                options: ["Discussion", "To-do", "In Progress", "Done"],
+                defaultSelection: "Discussion",
+            )
+            { option in
+                switch option
+                {
+                    case "Discussion":
+                        return AnyView(
+                            DiscussionView(),
+                        )
+                    case "To-do":
+                        return AnyView(
+                            DevbanTaskListView(
+                                status: .todo,
+                                navPath: $navPath,
+                            ),
+                        )
+                    case "In Progress":
+                        return AnyView(
+                            DevbanTaskListView(
+                                status: .inProgress,
+                                navPath: $navPath,
+                            ),
+                        )
+                    default:
+                        return AnyView(
+                            DevbanTaskListView(
+                                status: .completed,
+                                navPath: $navPath,
+                            ),
+                        )
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
