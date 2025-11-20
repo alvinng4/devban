@@ -92,6 +92,7 @@ struct HomeView: View
                 { _ in
                     DiscussionView()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
             .frame(maxWidth: 300)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -154,6 +155,7 @@ struct HomeView: View
                 { _ in
                     DiscussionView()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
             .frame(maxWidth: 300)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -163,26 +165,31 @@ struct HomeView: View
                 defaultSelection: "To-do",
             )
             { option in
-                switch option
-                {
-                    case "To-do":
-                        return DevbanTaskListView(
+                Group {
+                    if option == "To-do"
+                    {
+                        DevbanTaskListView(
                             status: .todo,
                             navPath: $navPath,
                         )
-                    case "In Progress":
-                        return DevbanTaskListView(
+                    }
+                    else if option == "In Progress"
+                    {
+                        DevbanTaskListView(
                             status: .inProgress,
                             navPath: $navPath,
                         )
-                    default:
-                        return DevbanTaskListView(
+                    }
+                    else
+                    {
+                        DevbanTaskListView(
                             status: .completed,
                             navPath: $navPath,
                         )
+                    }
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
     }
 
@@ -196,36 +203,35 @@ struct HomeView: View
 
             NeobrutalismRoundedRectangleTabView(
                 options: ["Discussion", "To-do", "In Progress", "Done"],
-                defaultSelection: "Discussion",
+                defaultSelection: "To-do",
             )
             { option in
-                switch option
-                {
-                    case "Discussion":
-                        return AnyView(
-                            DiscussionView(),
+                Group {
+                    if option == "Discussion"
+                    {
+                        DiscussionView()
+                    }
+                    else if option == "To-do"
+                    {
+                        DevbanTaskListView(
+                            status: .todo,
+                            navPath: $navPath,
                         )
-                    case "To-do":
-                        return AnyView(
-                            DevbanTaskListView(
-                                status: .todo,
-                                navPath: $navPath,
-                            ),
+                    }
+                    else if option == "In Progress"
+                    {
+                        DevbanTaskListView(
+                            status: .inProgress,
+                            navPath: $navPath,
                         )
-                    case "In Progress":
-                        return AnyView(
-                            DevbanTaskListView(
-                                status: .inProgress,
-                                navPath: $navPath,
-                            ),
+                    }
+                    else
+                    {
+                        DevbanTaskListView(
+                            status: .completed,
+                            navPath: $navPath,
                         )
-                    default:
-                        return AnyView(
-                            DevbanTaskListView(
-                                status: .completed,
-                                navPath: $navPath,
-                            ),
-                        )
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
