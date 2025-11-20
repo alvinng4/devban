@@ -1,5 +1,9 @@
 import SwiftUI
 
+/// The main view of the application that handles routing between authentication and main content.
+///
+/// This view manages the application's initialization, theme updates, and displays different
+/// content based on user authentication and team membership status.
 struct MainView: View
 {
     @Environment(\.colorScheme) private var colorScheme
@@ -51,6 +55,7 @@ struct MainView: View
         }
     }
 
+    /// Returns the appropriate content based on authentication and team membership status.
     private func getMainContent() -> some View
     {
         Group
@@ -101,6 +106,7 @@ struct MainView: View
         }
     }
 
+    /// Updates the theme based on user preferences and system color scheme.
     private func updateTheme()
     {
         ThemeManager.shared.updateTheme(

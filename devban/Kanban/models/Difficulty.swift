@@ -2,6 +2,7 @@ import SwiftUI
 
 extension DevbanTask
 {
+    /// Represents the difficulty level of a task, which determines experience points awarded.
     enum Difficulty: String, Identifiable, Codable, CaseIterable, Comparable
     {
         case veryEasy
@@ -32,6 +33,10 @@ extension DevbanTask
             }
         }
 
+        /// Converts a description string back to a Difficulty value.
+        ///
+        /// - Parameter description: The difficulty description string
+        /// - Returns: The corresponding Difficulty enum value, or nil if not found
         static func descriptionToDifficulty(_ description: String) -> Difficulty?
         {
             switch (description)
@@ -73,6 +78,7 @@ extension DevbanTask
             }
         }
 
+        /// Returns the color associated with this difficulty level.
         func getColor() -> Color
         {
             switch (self)
@@ -90,6 +96,7 @@ extension DevbanTask
             }
         }
 
+        /// Returns the experience points awarded for completing a task of this difficulty.
         func getExp() -> Int
         {
             switch (self)
@@ -107,7 +114,7 @@ extension DevbanTask
             }
         }
 
-        /// For slider
+        /// Returns a numeric value for slider UI components (0.0 to 4.0).
         func getDifficultyValue() -> Double
         {
             switch (self)

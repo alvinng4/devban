@@ -1,14 +1,20 @@
 #if targetEnvironment(macCatalyst)
     import AVFoundation
 
+    /// Manages sound effects for macCatalyst environment.
+    ///
+    /// Provides methods to play audio feedback using AVAudioPlayer,
+    /// respecting user preferences for sound effects.
     final class SoundManager
     {
+        /// Shared singleton instance
         static let shared = SoundManager()
 
         private init() {}
 
         var player: AVAudioPlayer?
 
+        /// Plays a success sound effect if enabled in user settings.
         @MainActor
         func playSuccessSound()
         {
@@ -35,12 +41,18 @@
 #else
     import AudioToolbox
 
+    /// Manages sound effects for iOS environment.
+    ///
+    /// Provides methods to play system sound feedback using AudioToolbox,
+    /// respecting user preferences for sound effects.
     final class SoundManager
     {
+        /// Shared singleton instance
         static let shared = SoundManager()
 
         private init() {}
 
+        /// Plays a success system sound if enabled in user settings.
         @MainActor
         func playSuccessSound()
         {
