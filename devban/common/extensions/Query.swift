@@ -4,6 +4,10 @@ import FirebaseSharedSwift
 
 extension Query
 {
+    /// Fetches documents from Firestore and decodes them to the specified type.
+    ///
+    /// - Parameter type: The Decodable type to decode documents to
+    /// - Returns: An array of decoded objects
     func getDocuments<T: Decodable>(as _: T.Type) async throws -> [T]
     {
         let snapshot = try await self.getDocuments()
@@ -14,6 +18,10 @@ extension Query
         }
     }
 
+    /// Adds a snapshot listener that publishes decoded documents as they change.
+    ///
+    /// - Parameter type: The Decodable type to decode documents to
+    /// - Returns: A tuple containing a publisher for the documents and the listener registration
     func addSnapshotListener<T: Decodable>(as _: T.Type) -> (AnyPublisher<[T], Error>, ListenerRegistration)
     {
         let publisher = PassthroughSubject<[T], Error>()
@@ -34,6 +42,7 @@ extension Query
         return (publisher.eraseToAnyPublisher(), listener)
     }
 
+    /// Firestore decoder configured to convert snake_case to camelCase.
     private static var customDecoder: Firestore.Decoder
     {
         let decoder = Firestore.Decoder()

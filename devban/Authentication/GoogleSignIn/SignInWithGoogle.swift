@@ -10,6 +10,7 @@ import GoogleSignInSwift
 import SwiftUI
 import UIKit
 
+/// Represents the result of a Google Sign-In attempt.
 struct GoogleSignInResult
 {
     let idToken: String
@@ -18,13 +19,17 @@ struct GoogleSignInResult
     let firstName: String?
     let lastName: String?
     let fullName: String?
-//    let profileImageUrl: URL?
 
+    /// Returns the display name, preferring full name over first or last name.
     var displayName: String?
     {
         fullName ?? firstName ?? lastName
     }
 
+    /// Initializes from a Google Sign-In SDK result.
+    ///
+    /// - Parameter result: The result from Google Sign-In
+    /// - Returns: nil if the ID token is missing
     init?(result: GIDSignInResult)
     {
         guard let idToken = result.user.idToken?.tokenString
@@ -39,28 +44,25 @@ struct GoogleSignInResult
         self.firstName = result.user.profile?.givenName
         self.lastName = result.user.profile?.familyName
         self.fullName = result.user.profile?.name
-
-//        let dimension = round(400 * UIScreen.main.scale)
-//
-//        if result.user.profile?.hasImage == true
-//        {
-//            self.profileImageUrl = result.user.profile?.imageURL(withDimension: UInt(dimension))
-//        }
-//        else
-//        {
-//            self.profileImageUrl = nil
-//        }
     }
 }
 
+/// Helper class for managing Google Sign-In operations.
 final class SignInWithGoogleHelper
 {
+    /// Initializes the Google Sign-In helper with a client ID.
+    ///
+    /// - Parameter GIDClientID: The Google Sign-In client ID from Firebase configuration
     init(GIDClientID: String)
     {
         let config = GIDConfiguration(clientID: GIDClientID)
         GIDSignIn.sharedInstance.configuration = config
     }
 
+    /// Initiates the Google Sign-In flow.
+    ///
+    /// - Parameter viewController: Optional view controller to present the sign-in UI from
+    /// - Returns: The Google Sign-In result containing user information and tokens
     @MainActor
     func signIn(viewController: UIViewController? = nil) async throws -> GoogleSignInResult
     {
@@ -81,6 +83,7 @@ final class SignInWithGoogleHelper
         return result
     }
 
+    /// Errors that can occur during Google Sign-In.
     private enum GoogleSignInError: LocalizedError
     {
         case noViewController
