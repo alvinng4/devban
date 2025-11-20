@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View for creating a new task with a form interface.
 struct DevbanTaskAddView: View
 {
     init(status: DevbanTask.Status)

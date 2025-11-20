@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View for creating a new team with a license code.
 struct TeamCreateView: View
 {
     @Environment(\.colorScheme) private var colorScheme
