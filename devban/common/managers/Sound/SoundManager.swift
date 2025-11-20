@@ -34,7 +34,6 @@
     }
 #else
     import AudioToolbox
-    import CloudStorage
 
     final class SoundManager
     {
@@ -46,7 +45,6 @@
         func playSuccessSound()
         {
             guard DevbanUserContainer.shared.getSoundEffectSetting() else { return }
-            guard settingsSoundEffect else { return }
 
             AudioServicesPlaySystemSound(1407)
         }
