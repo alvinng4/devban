@@ -50,7 +50,7 @@ enum AuthenticationHelper
         // Update user last access status to database
         do
         {
-            try await DevbanUser.updateUserStatusToDatabase(uid: user.uid)
+            try await DevbanUser.updateUserStatusToDatabase(uid: user.uid, displayName: user.displayName ?? "")
         }
         catch
         {

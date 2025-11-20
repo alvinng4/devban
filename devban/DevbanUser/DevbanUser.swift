@@ -217,7 +217,7 @@ extension DevbanUser
         }
     }
 
-    static func updateUserStatusToDatabase(uid: String) async throws
+    static func updateUserStatusToDatabase(uid: String, displayName: String) async throws
     {
         let userDoc = DevbanUser.getUserDocument(uid)
         let document = try await userDoc.getDocument()
@@ -226,12 +226,15 @@ extension DevbanUser
         {
             try await DevbanUser.createNewUserProfile(
                 uid: uid,
-                displayName: DevbanUserContainer.shared.authDisplayName ?? "Error",
+                displayName: displayName,
             )
         }
 
         try await DevbanUser.getUserDocument(uid).updateData(
-            ["last_access": Timestamp()],
+            [
+                "displayName": displayName,
+                "last_access": Timestamp()
+            ],
         )
     }
 }
