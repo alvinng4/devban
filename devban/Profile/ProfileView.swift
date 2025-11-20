@@ -32,15 +32,32 @@ struct ProfileView: View
                         Text("Profile")
                             .customTitle()
 
-                        VStack(spacing: 10)
+                        VStack(spacing: 8)
                         {
-                            HStack(spacing: 0)
-                            {
-                                Label("Display Name", systemImage: "person.text.rectangle")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
+                                .font(.system(size: 25))
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                                Text(DevbanUserContainer.shared.authDisplayName ?? "Error")
+                            HStack
+                            {
+                                Text("LEVEL \(DevbanUserContainer.shared.getExp() / 100 + 1)")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundColor(.secondary)
+
+                                Spacer()
+
+                                Text("\(DevbanUserContainer.shared.getExp() % 100) / 100 EXP")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    .foregroundColor(.secondary)
                             }
+
+                            ProgressView(
+                                value: max(0.0, Double(DevbanUserContainer.shared.getExp())),
+                                total: 100.0,
+                            )
+                            .tint(Color("expColor"))
+                            .scaleEffect(y: 1.5)
                         }
                         .padding()
                         .shadowedBorderRoundedRectangle()
