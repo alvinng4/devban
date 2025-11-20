@@ -24,6 +24,27 @@ final class DevbanTaskEditViewModel
         self.difficultyValue = newTask.difficulty.getDifficultyValue()
     }
 
+    init(status: DevbanTask.Status, deadline: Date)
+    {
+        let newTask: DevbanTask = .init(
+            id: UUID().uuidString,
+            teamId: DevbanUserContainer.shared.getTeamId() ?? "Error",
+            title: "",
+            description: "",
+            createdDate: Date(),
+            progress: 0,
+            status: status,
+            difficulty: .easy,
+            isPinned: false,
+            hasDeadline: true,
+            deadline: deadline,
+        )
+
+        self.devbanTask = newTask
+        self.isNewTask = true
+        self.difficultyValue = newTask.difficulty.getDifficultyValue()
+    }
+
     init(devbanTask: DevbanTask)
     {
         self.devbanTask = devbanTask

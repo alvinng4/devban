@@ -7,6 +7,11 @@ struct DevbanTaskAddView: View
         self.viewModel = .init(status: status)
     }
 
+    init(status: DevbanTask.Status, deadline: Date)
+    {
+        self.viewModel = .init(status: status, deadline: deadline)
+    }
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
