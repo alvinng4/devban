@@ -64,8 +64,10 @@ struct SelectedDateEventsView: View
                             {
                                 navPath.append(task)
                             }
+                            .padding(.trailing)
                             .background(Color.gray.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .tint(.primary)
                         }
                     }
                     .padding(.horizontal)

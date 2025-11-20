@@ -19,7 +19,7 @@ final class CalendarViewModel
     {
         selectedDate = Date()
         tasks = []
-        
+
         guard let teamId: String = DevbanUserContainer.shared.getTeamId()
         else
         {
