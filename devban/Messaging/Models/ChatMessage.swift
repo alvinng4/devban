@@ -25,6 +25,7 @@ struct ChatMessage: Codable, Equatable, Identifiable
     }
 
     init(
+        teamId: String? = nil,
         senderId: String,
         content: String,
         sentDate: Date = Date(),
@@ -32,6 +33,7 @@ struct ChatMessage: Codable, Equatable, Identifiable
     )
     {
         id = UUID()
+        self.teamId = teamId
         self.senderId = senderId
         self.content = content
         self.sentDate = sentDate
@@ -39,6 +41,7 @@ struct ChatMessage: Codable, Equatable, Identifiable
     }
 
     let id: UUID
+    let teamId: String?
     let senderId: String
     let content: String
     let sentDate: Date

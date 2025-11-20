@@ -26,11 +26,14 @@ struct HomeView: View
                         {
                             UserGamificationBarView()
 
-                            Text("Discussion")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                                .shadowedBorderRoundedRectangle()
+                            NeobrutalismRoundedRectangleTabView(
+                                options: ["Discussion"],
+                                defaultSelection: "Discussion",
+                            )
+                            { _ in
+                                DiscussionView()
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         }
                         .frame(maxWidth: 300)
                         .frame(maxHeight: .infinity, alignment: .top)
