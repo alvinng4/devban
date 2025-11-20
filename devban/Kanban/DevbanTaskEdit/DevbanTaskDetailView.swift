@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View for viewing and editing an existing task's details.
 struct DevbanTaskDetailView: View
 {
     init(devbanTask: DevbanTask)

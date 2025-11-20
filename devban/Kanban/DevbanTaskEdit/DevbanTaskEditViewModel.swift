@@ -1,8 +1,15 @@
 import SwiftUI
 
+/// View model for creating and editing tasks.
+///
+/// This view model manages task properties and synchronizes changes with Firestore.
+/// It supports both creating new tasks and editing existing ones.
 @Observable
 final class DevbanTaskEditViewModel
 {
+    /// Initializes a new task with the specified status.
+    ///
+    /// - Parameter status: The initial status for the task
     init(status: DevbanTask.Status)
     {
         let newTask: DevbanTask = .init(
@@ -24,6 +31,11 @@ final class DevbanTaskEditViewModel
         self.difficultyValue = newTask.difficulty.getDifficultyValue()
     }
 
+    /// Initializes a new task with a specific deadline.
+    ///
+    /// - Parameters:
+    ///   - status: The initial status for the task
+    ///   - deadline: The deadline date for the task
     init(status: DevbanTask.Status, deadline: Date)
     {
         let newTask: DevbanTask = .init(
@@ -45,6 +57,9 @@ final class DevbanTaskEditViewModel
         self.difficultyValue = newTask.difficulty.getDifficultyValue()
     }
 
+    /// Initializes for editing an existing task.
+    ///
+    /// - Parameter devbanTask: The existing task to edit
     init(devbanTask: DevbanTask)
     {
         self.devbanTask = devbanTask
@@ -52,10 +67,14 @@ final class DevbanTaskEditViewModel
         self.difficultyValue = devbanTask.difficulty.getDifficultyValue()
     }
 
+    /// The task being created or edited
     var devbanTask: DevbanTask
+    /// Whether this is a new task (true) or editing existing (false)
     var isNewTask: Bool
+    /// Numeric value for the difficulty slider UI
     var difficultyValue: Double
 
+    /// Updates the task difficulty based on the slider value.
     func updateDifficultyUI()
     {
         switch (Int(difficultyValue.rounded()))
@@ -75,6 +94,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the pinned status in Firestore.
     func updateIsPinned()
     {
         guard !isNewTask else { return }
@@ -94,6 +114,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the task title in Firestore.
     func updateTitle()
     {
         guard !isNewTask else { return }
@@ -113,6 +134,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the task description in Firestore.
     func updateDescription()
     {
         guard !isNewTask else { return }
@@ -132,6 +154,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the task status in Firestore.
     func updateStatus()
     {
         guard !isNewTask else { return }
@@ -151,6 +174,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the task difficulty in Firestore.
     func updateDifficulty()
     {
         guard !isNewTask else { return }
@@ -170,6 +194,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates whether the task has a deadline in Firestore.
     func updateHasDeadline()
     {
         guard !isNewTask else { return }
@@ -189,6 +214,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the task deadline in Firestore.
     func updateDeadline()
     {
         guard !isNewTask else { return }
@@ -208,6 +234,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Updates the task progress in Firestore.
     func updateProgress()
     {
         guard !isNewTask else { return }
@@ -227,6 +254,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Creates a new task in Firestore and provides haptic feedback.
     func saveTask()
     {
         do
@@ -240,6 +268,7 @@ final class DevbanTaskEditViewModel
         }
     }
 
+    /// Deletes the task from Firestore and provides haptic feedback.
     func deleteTask()
     {
         Task

@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Displays a list of tasks filtered by status with drag-and-drop support.
 struct DevbanTaskListView: View
 {
     init(status: DevbanTask.Status, navPath: Binding<NavigationPath>, isDraggable: Bool = true)

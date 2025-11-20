@@ -4,9 +4,16 @@ import Foundation
 
 extension DevbanTaskListView
 {
+    /// View model for managing a list of tasks with a specific status.
+    ///
+    /// This view model maintains a real-time listener for tasks belonging to the current
+    /// team and filters them by status. Tasks are ordered by pinned status and creation date.
     @Observable
     final class DevbanTaskListViewModel
     {
+        /// Initializes the view model and sets up a Firestore listener for tasks.
+        ///
+        /// - Parameter status: The task status to filter by
         init(status: DevbanTask.Status)
         {
             self.status = status
@@ -48,7 +55,9 @@ extension DevbanTaskListView
 
         private var cancellables: Set<AnyCancellable> = .init()
         private var devbanTasksListener: ListenerRegistration?
+        /// The list of tasks for the current status
         private(set) var devbanTasks: [DevbanTask] = []
+        /// The status filter for this list
         let status: DevbanTask.Status
     }
 }

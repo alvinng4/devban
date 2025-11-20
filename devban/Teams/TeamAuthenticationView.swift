@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View for team authentication, allowing users to create or join a team.
 struct TeamAuthenticationView: View
 {
     @Environment(\.colorScheme) private var colorScheme

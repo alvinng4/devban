@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View for user profile and settings management.
 struct ProfileView: View
 {
     @Environment(\.colorScheme) private var colorScheme

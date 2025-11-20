@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Displays a preview of a task in a list with completion checkbox and navigation.
 struct DevbanTaskPreviewView: View
 {
     init(

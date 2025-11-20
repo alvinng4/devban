@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View for joining an existing team using an invite code.
 struct TeamJoinView: View
 {
     @Environment(\.colorScheme) private var colorScheme

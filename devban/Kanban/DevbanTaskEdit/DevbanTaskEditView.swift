@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Shared form view for editing task properties like title, description, and difficulty.
 struct DevbanTaskEditView: View
 {
     @Environment(\.colorScheme) private var colorScheme

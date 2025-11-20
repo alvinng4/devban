@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Displays the user's gamification progress bar with level and experience points.
 struct UserGamificationBarView: View
 {
     let exp: Int = DevbanUserContainer.shared.getExp()
