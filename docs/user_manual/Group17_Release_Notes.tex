@@ -1,0 +1,304 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx} % To include graphics 
+\usepackage[tbtags]{amsmath} % tbtags to make eq number at last line
+\usepackage{amssymb}
+\usepackage{booktabs} % Better tables
+\usepackage{cases} % For cases with separate labels
+\usepackage{hyperref}% For cross-referencing
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+\usepackage{parskip} % To remove indentation and set paragraph spacing
+\usepackage[margin=1in]{geometry}
+\usepackage{listings} % To write code
+\usepackage{xcolor} % To write color text/math by \textcolor{color}{text}
+\usepackage{enumitem} % Better list environment
+\usepackage{fancyhdr} % For custom headers and footers
+
+%%%%%%%%%% Configure fancy headers %%%%%%%%%%
+\pagestyle{fancy}
+
+% Title
+\title{CSCI3100 Project Release Notes}
+\author{
+    \textbf{Group 17} \\[1em]
+    \begin{tabular}{ll}
+        Ng Ching Yin & (1155175606) \\
+        Lam Hoi Chun & (1155192755) \\
+        Lai Wing Fai & (1155177159) \\
+        Zou Zhi Hong & (1155204947)
+    \end{tabular}
+}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% Table of contents
+{
+    \hypersetup{linkcolor=black}
+    \tableofcontents
+}
+
+\newpage
+
+% Document Revision History
+\section{Document Revision History}
+\begin{table}[h]
+    \centering
+    \caption{Document Revision History}
+    \begin{tabular}{p{1.5cm} p{6cm} p{2cm} p{3cm}}
+        \toprule
+        Version & Revised By & Revision Date & Comments \\
+        \midrule
+        1.0.0 & Group 17 & \today & Initial release notes \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:docs_rev_hist}
+\end{table}
+
+\section{Release Information}
+
+\begin{itemize}
+    \item \textbf{Version}: 1.0.0
+    \item \textbf{Release Date}: \today
+    \item \textbf{Platform}: iOS 17.0 or later
+    \item \textbf{Development Team}: Group 17, CSCI3100 Project (CUHK)
+\end{itemize}
+
+\section{Introduction}
+
+\textbf{Devban} is a collaborative task management application designed specifically for development teams. This initial release (v1.0.0) combines Kanban-style task organization, calendar scheduling, AI-powered assistance, and gamification elements to help teams track and complete their work efficiently.
+
+\section{What's New in Version 1.0.0}
+
+This is the initial release of Devban, featuring a comprehensive set of tools for team collaboration and task management.
+
+\subsection{Core Features}
+
+\subsubsection{Authentication and User Management}
+\begin{itemize}
+    \item \textbf{Email/Password Authentication}: Secure sign-up and sign-in with email and password
+    \item \textbf{Google Sign-In}: Quick authentication using Google accounts
+    \item \textbf{Password Recovery}: Forgot password functionality with email reset
+    \item \textbf{Account Management}: User profile management and account deletion
+\end{itemize}
+
+\subsubsection{Team Collaboration}
+\begin{itemize}
+    \item \textbf{Team Creation}: Create new teams with custom names and optional license IDs
+    \item \textbf{Team Joining}: Join existing teams using invite codes
+    \item \textbf{Invite Code System}: Generate time-limited invite codes (7-day validity) for team members
+    \item \textbf{Team Roles}: Admin and Member roles with appropriate permissions
+    \item \textbf{Team Information}: View team details, member count, and role information
+\end{itemize}
+
+\subsubsection{Kanban Board}
+\begin{itemize}
+    \item \textbf{Three-Column Layout}: Organize tasks in To-do, In Progress, and Done columns
+    \item \textbf{Task Creation}: Create tasks with comprehensive details:
+    \begin{itemize}
+        \item Title and description (Markdown supported)
+        \item Difficulty levels (Very Easy, Easy, Normal, Hard, Very Hard)
+        \item Progress tracking (0-100\%)
+        \item Deadline assignment
+        \item Task pinning
+    \end{itemize}
+    \item \textbf{Task Management}: View, edit, and delete tasks
+    \item \textbf{Drag and Drop}: Move tasks between columns (on wide screens)
+    \item \textbf{Responsive Layout}: Adapts to different screen sizes (iPhone, iPad)
+\end{itemize}
+
+\subsubsection{Calendar Integration}
+\begin{itemize}
+    \item \textbf{Monthly Calendar View}: Visual representation of task deadlines
+    \item \textbf{Date Selection}: Tap dates to view associated tasks
+    \item \textbf{Task Visualization}: Visual indicators for dates with deadlines
+    \item \textbf{Quick Task Creation}: Create tasks directly from the calendar view
+    \item \textbf{Navigation}: Easy month-to-month navigation with Today button
+\end{itemize}
+
+\subsubsection{AI Assistant (AskLLM)}
+\begin{itemize}
+    \item \textbf{LLM-Powered Chat}: Interactive AI assistant for development help
+    \item \textbf{Streaming Responses}: Real-time response generation
+    \item \textbf{Code Syntax Highlighting}: Properly formatted code blocks with syntax highlighting
+    \item \textbf{Markdown Support}: Rich text formatting in responses
+    \item \textbf{Conversation Management}: Clear context, restart conversation, and stop generation
+    \item \textbf{Session History}: Maintain conversation context during active sessions
+\end{itemize}
+
+\subsubsection{Team Discussion}
+\begin{itemize}
+    \item \textbf{Real-Time Messaging}: Communicate with team members instantly
+    \item \textbf{Markdown Support}: Format messages with Markdown
+    \item \textbf{Message History}: View chronological message history
+    \item \textbf{User Attribution}: See who sent each message with timestamps
+\end{itemize}
+
+\subsubsection{Gamification System}
+\begin{itemize}
+    \item \textbf{Experience Points (EXP)}: Earn EXP by completing tasks
+    \item \textbf{Difficulty-Based Rewards}: 
+    \begin{itemize}
+        \item Very Easy: 5 EXP
+        \item Easy: 10 EXP
+        \item Normal: 20 EXP
+        \item Hard: 40 EXP
+        \item Very Hard: 80 EXP
+    \end{itemize}
+    \item \textbf{Level System}: Level up based on accumulated EXP (Level = (EXP / 100) + 1)
+    \item \textbf{Progress Tracking}: Visual progress bar showing EXP and level progress
+    \item \textbf{User Profile}: Display current level and experience in profile
+\end{itemize}
+
+\subsubsection{User Interface and Experience}
+\begin{itemize}
+    \item \textbf{Tab-Based Navigation}: Four main tabs (Home, Calendar, AskLLM, Profile)
+    \item \textbf{Adaptive Layout}: Responsive design for different screen sizes
+    \item \textbf{Theme Customization}: Multiple color themes (Blue, Green, Orange, etc.)
+    \item \textbf{Dark Mode Support}: Auto, Dark, or Light mode options
+    \item \textbf{Sound Effects}: Optional sound feedback for actions
+    \item \textbf{Haptic Feedback}: Tactile feedback for interactions
+    \item \textbf{Neobrutalism UI}: Modern, bold design aesthetic
+\end{itemize}
+
+\section{Technical Specifications}
+
+\subsection{System Requirements}
+\begin{itemize}
+    \item \textbf{iOS}: iOS 17.0 or later
+    \item \textbf{Device}: iPhone or iPad
+    \item \textbf{Internet Connection}: Required for all features
+    \item \textbf{Firebase Account}: Required for backend services
+\end{itemize}
+
+\subsection{Technology Stack}
+\begin{itemize}
+    \item \textbf{Platform}: SwiftUI (iOS)
+    \item \textbf{Language}: Swift 6.2
+    \item \textbf{Backend}: Firebase (Authentication, Firestore)
+    \item \textbf{Architecture}: MVVM (Model-View-ViewModel)
+    \item \textbf{Dependencies}:
+    \begin{itemize}
+        \item Firebase iOS SDK (v12.5.0+)
+        \item Google Sign-In iOS (v9.0.0+)
+        \item swift-markdown-ui (v2.4.1+)
+        \item Splash (v0.16.0+) for syntax highlighting
+    \end{itemize}
+\end{itemize}
+
+\section{Key Capabilities}
+
+\subsection{Task Management}
+\begin{itemize}
+    \item Create, read, update, and delete tasks
+    \item Organize tasks in Kanban columns
+    \item Set deadlines and track progress
+    \item Assign difficulty levels
+    \item Pin important tasks
+    \item View tasks in calendar format
+\end{itemize}
+
+\subsection{Collaboration}
+\begin{itemize}
+    \item Real-time task synchronization across team members
+    \item Team-wide discussion channel
+    \item Shared task visibility
+    \item Team-based organization
+\end{itemize}
+
+\subsection{Productivity Tools}
+\begin{itemize}
+    \item AI assistant for development questions
+    \item Calendar visualization of deadlines
+    \item Progress tracking and gamification
+    \item Markdown support for rich text
+\end{itemize}
+
+\section{Getting Started}
+
+\subsection{Initial Setup}
+\begin{enumerate}
+    \item Download and install the application
+    \item Launch the app and create an account or sign in with Google
+    \item Create a new team or join an existing team using an invite code
+    \item Start creating tasks and collaborating with your team
+\end{enumerate}
+
+\subsection{Quick Start Guide}
+\begin{itemize}
+    \item \textbf{Create Your First Task}: Navigate to Home tab, tap the ``+'' button in any column
+    \item \textbf{Set a Deadline}: Use the Calendar tab to visualize and manage task deadlines
+    \item \textbf{Ask for Help}: Use the AskLLM tab to get AI assistance with development questions
+    \item \textbf{Collaborate}: Use the Discussion section in the Home tab to communicate with your team
+    \item \textbf{Customize}: Visit the Profile tab to adjust settings, theme, and preferences
+\end{itemize}
+
+\section{Known Limitations}
+
+\begin{itemize}
+    \item \textbf{Team Membership}: Users can only belong to one team at a time
+    \item \textbf{Offline Support}: Limited offline functionality; internet connection required for most operations
+    \item \textbf{Platform Support}: Currently available only for iOS devices
+    \item \textbf{Invite Codes}: Invite codes expire after 7 days and can only be used once
+    \item \textbf{Task Assignments}: Tasks are team-scoped but don't have individual assignees in this version
+\end{itemize}
+
+\section{Performance and Reliability}
+
+\subsection{Data Synchronization}
+\begin{itemize}
+    \item Real-time synchronization using Firebase Firestore
+    \item Automatic conflict resolution
+    \item Optimistic UI updates for better responsiveness
+\end{itemize}
+
+\subsection{Security}
+\begin{itemize}
+    \item Firebase Authentication for secure user management
+    \item Encrypted data transmission
+    \item Firestore security rules for data access control
+    \item OAuth 2.0 for Google Sign-In
+\end{itemize}
+
+\section{User Feedback and Support}
+
+\subsection{Reporting Issues}
+If you encounter any issues or have suggestions for improvement, please contact:
+\begin{itemize}
+    \item \textbf{Email}: \href{mailto:csci3100group17@gmail.com}{csci3100group17@gmail.com}
+    \item \textbf{Project}: CSCI3100 at The Chinese University of Hong Kong
+\end{itemize}
+
+When reporting issues, please include:
+\begin{itemize}
+    \item Device model and iOS version
+    \item App version (1.0.0)
+    \item Steps to reproduce the issue
+    \item Screenshots if applicable
+    \item Error messages (if any)
+\end{itemize}
+
+\section{Future Enhancements}
+
+While not included in this release, potential future enhancements may include:
+\begin{itemize}
+    \item Task assignment to individual team members
+    \item Task comments and attachments
+    \item Multiple team membership
+    \item Enhanced offline support
+    \item Task templates and recurring tasks
+    \item Advanced analytics and reporting
+    \item Mobile app for Android
+    \item Web application version
+\end{itemize}
+
+\section{Acknowledgments}
+
+This application was developed as part of the CSCI3100 course project at The Chinese University of Hong Kong by Group 17.
+
+\section{License}
+
+Please refer to the LICENSE file in the project repository for licensing information.
+
+\end{document}
+
