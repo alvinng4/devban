@@ -1,0 +1,246 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx} % To include graphics 
+\usepackage[tbtags]{amsmath} % tbtags to make eq number at last line
+\usepackage{amssymb}
+\usepackage{booktabs} % Better tables
+\usepackage{cases} % For cases with separate labels
+\usepackage{hyperref}% For cross-referencing
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+\usepackage{parskip} % To remove indentation and set paragraph spacing
+\usepackage[margin=0.5in]{geometry}
+\usepackage{listings} % To write code
+\usepackage{xcolor} % To write color text/math by \textcolor{color}{text}
+\usepackage{enumitem} % Better list environment
+\usepackage{fancyhdr} % For custom headers and footers
+
+%%%%%%%%%% Configure fancy headers %%%%%%%%%%
+\pagestyle{fancy}
+
+% Title
+\title{Devban User Manual \& Release Notes}
+\author{
+    \textbf{Group 17} \\[1em]
+    \begin{tabular}{ll}
+        Ng Ching Yin & (1155175606) \\
+        Lam Hoi Chun & (1155192755) \\
+        Lai Wing Fai & (1155177159) \\
+        Zou Zhi Hong & (1155204947)
+    \end{tabular}
+}
+\date{\today}
+
+\begin{document}
+\linespread{0.9}\selectfont
+\maketitle
+
+\section{Introduction}
+
+\textbf{Devban} is a collaborative task management application designed specifically for development teams. This initial release (v1.0.0) combines Kanban-style task organization, calendar scheduling, AI-powered assistance, and gamification elements to help teams track and complete their work efficiently.
+
+\textbf{Version}: 1.0.0 | \textbf{Platform}: iOS 17.0 or later | \textbf{Release Date}: \today
+
+\section{Building and Setup}
+
+\subsection{System Requirements}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{iOS}: iOS 17.0 or later
+    \item \textbf{Device}: iPhone or iPad
+    \item \textbf{Internet Connection}: Required for all features
+    \item \textbf{Firebase Account}: Required for backend services
+\end{itemize}
+
+\subsection{Technology Stack}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Platform}: SwiftUI (iOS)
+    \item \textbf{Language}: Swift 6.2
+    \item \textbf{Backend}: Firebase (Authentication, Firestore)
+    \item \textbf{Architecture}: MVVM (Model-View-ViewModel)
+    \item \textbf{Key Dependencies}: Firebase iOS SDK (v12.5.0+), Google Sign-In iOS (v9.0.0+), swift-markdown-ui (v2.4.1+), Splash (v0.16.0+)
+\end{itemize}
+
+\subsection{Installation}
+\begin{enumerate}[leftmargin=*]
+    \item Download and install the application from the App Store or development build
+    \item Ensure your device meets the system requirements
+    \item Launch the app to begin setup
+\end{enumerate}
+
+\section{Create / Login Account}
+
+\subsection{Account Creation}
+To create a new account:
+\begin{enumerate}[leftmargin=*]
+    \item Launch the app
+    \item Tap ``Sign Up'' on the welcome screen
+    \item Choose one of the following methods:
+    \begin{itemize}
+        \item \textbf{Email/Password}: Enter your email address and create a secure password
+        \item \textbf{Google Sign-In}: Tap the Google Sign-In button for quick authentication
+    \end{itemize}
+    \item Complete the registration process
+\end{enumerate}
+
+\subsection{Login}
+To sign in to an existing account:
+\begin{enumerate}[leftmargin=*]
+    \item Launch the app
+    \item Tap ``Sign In'' on the welcome screen
+    \item Enter your credentials:
+    \begin{itemize}
+        \item \textbf{Email/Password}: Enter your registered email and password
+        \item \textbf{Google Sign-In}: Tap the Google Sign-In button
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Password Recovery}
+If you forget your password:
+\begin{enumerate}[leftmargin=*]
+    \item On the login screen, tap ``Forgot Password''
+    \item Enter your registered email address
+    \item Check your email for password reset instructions
+    \item Follow the link to create a new password
+\end{enumerate}
+
+\section{Create / Join Team}
+
+\subsection{Creating a Team}
+To create a new team:
+\begin{enumerate}[leftmargin=*]
+    \item After logging in, navigate to the team selection screen
+    \item Tap ``Create Team''
+    \item Enter a team name (required)
+    \item Optionally enter a license ID
+    \item Tap ``Create'' to finalize
+\end{enumerate}
+
+\textbf{Note}: You will automatically become the team Admin upon creation.
+
+\subsection{Joining a Team}
+To join an existing team:
+\begin{enumerate}[leftmargin=*]
+    \item Obtain an invite code from a team member (7-day validity)
+    \item On the team selection screen, tap ``Join Team''
+    \item Enter the invite code
+    \item Tap ``Join'' to become a team member
+\end{enumerate}
+
+\subsection{Team Management}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Team Roles}: Admin (full permissions) and Member (standard permissions)
+    \item \textbf{Invite Codes}: Generate time-limited invite codes (7-day validity) from team settings
+    \item \textbf{Team Information}: View team details, member count, and your role in the Profile tab
+    \item \textbf{Limitation}: Users can only belong to one team at a time
+\end{itemize}
+
+\section{Core Features}
+
+\subsection{Kanban Board}
+Organize tasks in a three-column layout:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{To-do}: Tasks not yet started
+    \item \textbf{In Progress}: Tasks currently being worked on
+    \item \textbf{Done}: Completed tasks
+\end{itemize}
+
+\textbf{Task Creation}:
+\begin{itemize}[leftmargin=*]
+    \item Tap the ``+'' button in any column
+    \item Enter task title and description (Markdown supported)
+    \item Set difficulty level (Very Easy, Easy, Normal, Hard, Very Hard)
+    \item Set progress (0-100\%)
+    \item Assign a deadline
+    \item Optionally pin important tasks
+\end{itemize}
+
+\textbf{Task Management}:
+\begin{itemize}[leftmargin=*]
+    \item View task details by tapping on any task card
+    \item Edit tasks by tapping the edit button
+    \item Delete tasks from the task detail view
+    \item Drag and drop tasks between columns (on wide screens)
+\end{itemize}
+
+\subsection{Calendar Integration}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Monthly View}: Visual representation of task deadlines
+    \item \textbf{Date Selection}: Tap dates to view associated tasks
+    \item \textbf{Visual Indicators}: Dates with deadlines are highlighted
+    \item \textbf{Quick Creation}: Create tasks directly from the calendar view
+    \item \textbf{Navigation}: Use arrows or ``Today'' button to navigate months
+\end{itemize}
+
+\subsection{AI Assistant (AskLLM)}
+Get development help from an AI-powered assistant:
+\begin{itemize}[leftmargin=*]
+    \item Navigate to the AskLLM tab
+    \item Type your question in the chat interface
+    \item Receive real-time streaming responses
+    \item View code with syntax highlighting
+    \item Use Markdown formatting in responses
+    \item Clear context or restart conversation as needed
+\end{itemize}
+
+\subsection{Team Discussion}
+Communicate with team members:
+\begin{itemize}[leftmargin=*]
+    \item Access Discussion from the Home tab
+    \item Send messages with Markdown formatting
+    \item View chronological message history
+    \item See message sender and timestamps
+    \item Real-time synchronization across all team members
+\end{itemize}
+
+\subsection{Gamification System}
+Earn rewards for completing tasks:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Experience Points (EXP)}: Earned by completing tasks
+    \item \textbf{Difficulty-Based Rewards}:
+    \begin{itemize}
+        \item Very Easy: 5 EXP
+        \item Easy: 10 EXP
+        \item Normal: 20 EXP
+        \item Hard: 40 EXP
+        \item Very Hard: 80 EXP
+    \end{itemize}
+    \item \textbf{Level System}: Level = (EXP / 100) + 1
+    \item \textbf{Progress Tracking}: View EXP and level in Profile tab
+\end{itemize}
+
+\subsection{User Interface}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Tab Navigation}: Home, Calendar, AskLLM, Profile
+    \item \textbf{Theme Customization}: Multiple color themes (Blue, Green, Orange, etc.)
+    \item \textbf{Dark Mode}: Auto, Dark, or Light mode options
+    \item \textbf{Sound Effects}: Optional sound feedback
+    \item \textbf{Haptic Feedback}: Tactile feedback for interactions
+    \item \textbf{Responsive Design}: Adapts to iPhone and iPad screen sizes
+\end{itemize}
+
+\section{Quick Start Guide}
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Create Your First Task}: Navigate to Home tab, tap ``+'' in any column
+    \item \textbf{Set a Deadline}: Use Calendar tab to visualize and manage deadlines
+    \item \textbf{Ask for Help}: Use AskLLM tab for AI assistance
+    \item \textbf{Collaborate}: Use Discussion section in Home tab to communicate
+    \item \textbf{Customize}: Visit Profile tab to adjust settings and theme
+\end{enumerate}
+
+\section{Known Limitations}
+
+\begin{itemize}[leftmargin=*]
+    \item Users can only belong to one team at a time
+    \item Limited offline functionality; internet connection required
+    \item Currently available only for iOS devices
+    \item Invite codes expire after 7 days and can only be used once
+    \item Tasks are team-scoped but don't have individual assignees
+\end{itemize}
+
+\section{Support}
+
+For issues or suggestions, contact: \href{mailto:csci3100group17@gmail.com}{csci3100group17@gmail.com}
+
+When reporting issues, please include: device model, iOS version, app version (1.0.0), steps to reproduce, screenshots, and error messages.
+
+\end{document}
+
