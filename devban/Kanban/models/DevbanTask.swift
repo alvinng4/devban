@@ -89,6 +89,18 @@ extension DevbanTask
             .getDocuments(as: DevbanTask.self)
     }
 
+    /// Retrieves a devbanTask from Firestore.
+    ///
+    /// - Parameter id: The task's unique identifier
+    /// - Returns: The DevbanTask object
+    static func getDevbanTask(_ id: String) async throws -> DevbanTask
+    {
+        return try await DevbanTask.getTaskDocument(id).getDocument(
+            as: DevbanTask.self,
+            decoder: decoder,
+        )
+    }
+
     /// Marks the task as completed and awards experience points to the user.
     func complete()
     {

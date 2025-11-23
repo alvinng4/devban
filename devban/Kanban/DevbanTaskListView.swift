@@ -77,6 +77,18 @@ struct DevbanTaskListView: View
                                         {
                                             do
                                             {
+                                                let devbanTask: DevbanTask = try await DevbanTask.getDevbanTask(
+                                                    splitString[1],
+                                                )
+                                                if (viewModel.status == .completed)
+                                                {
+                                                    DevbanUserContainer.shared.addExp(devbanTask.difficulty.getExp())
+                                                }
+                                                else if (devbanTask.status == .completed)
+                                                {
+                                                    DevbanUserContainer.shared.addExp(-devbanTask.difficulty.getExp())
+                                                }
+
                                                 try await DevbanTask.updateDatabaseData(
                                                     id: splitString[1],
                                                     data: ["status": viewModel.status.rawValue],
