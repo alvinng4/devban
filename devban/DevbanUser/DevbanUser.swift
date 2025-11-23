@@ -302,7 +302,7 @@ extension DevbanUser
         try await DevbanUser.getUserDocument(uid).updateData(
             [
                 "displayName": displayName,
-                "last_access": Timestamp()
+                "last_access": Timestamp(),
             ],
         )
     }

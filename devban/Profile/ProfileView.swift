@@ -54,7 +54,7 @@ struct ProfileView: View
                             }
 
                             ProgressView(
-                                value: max(0.0, Double(DevbanUserContainer.shared.getExp())),
+                                value: max(0.0, Double(DevbanUserContainer.shared.getExp() % 100)),
                                 total: 100.0,
                             )
                             .tint(Color("expColor"))
