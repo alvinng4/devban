@@ -11,6 +11,7 @@
 		2BD91B6C2EDD5F1800DD2B60 /* CalendarEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD91B672EDD5F1800DD2B60 /* CalendarEventTests.swift */; };
 		2BD91CED2EDD801E00DD2B60 /* AuthenticationViewModelTests.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD91CEC2EDD801700DD2B60 /* AuthenticationViewModelTests.swift.swift */; };
 		2BD91CEF2EDD80AF00DD2B60 /* SignUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD91CEE2EDD80A600DD2B60 /* SignUpViewModelTests.swift */; };
+		2BD91FF02EDE075700DD2B60 /* ChatMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD91FEF2EDE074E00DD2B60 /* ChatMessageTests.swift */; };
 		7A2660342EB750F000CE97BD /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 7A2660332EB750F000CE97BD /* GoogleSignIn */; };
 		7A2660362EB750F000CE97BD /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7A2660352EB750F000CE97BD /* GoogleSignInSwift */; };
 		7A64DFB52EC602EF008E77CC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A64DFB42EC602EF008E77CC /* FirebaseFirestore */; };
@@ -37,6 +38,7 @@
 		2BD91B682EDD5F1800DD2B60 /* CalendarViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModelTests.swift; sourceTree = "<group>"; };
 		2BD91CEC2EDD801700DD2B60 /* AuthenticationViewModelTests.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModelTests.swift.swift; sourceTree = "<group>"; };
 		2BD91CEE2EDD80A600DD2B60 /* SignUpViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModelTests.swift; sourceTree = "<group>"; };
+		2BD91FEF2EDE074E00DD2B60 /* ChatMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageTests.swift; sourceTree = "<group>"; };
 		7A867CB12EA72C3D00C4C6B1 /* devban.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = devban.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ABEAE7A2EA7C54700106B30 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,6 +102,7 @@
 		2BD91B6A2EDD5F1800DD2B60 /* devbanTests */ = {
 			isa = PBXGroup;
 			children = (
+				2BD91FEE2EDE073E00DD2B60 /* Messaging */,
 				2BD91CEB2EDD800000DD2B60 /* Authentication */,
 				2BD91B692EDD5F1800DD2B60 /* Calendar */,
 			);
@@ -113,6 +116,14 @@
 				2BD91CEC2EDD801700DD2B60 /* AuthenticationViewModelTests.swift.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		2BD91FEE2EDE073E00DD2B60 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				2BD91FEF2EDE074E00DD2B60 /* ChatMessageTests.swift */,
+			);
+			path = Messaging;
 			sourceTree = "<group>";
 		};
 		7A64DFB32EC602EF008E77CC /* Frameworks */ = {
@@ -268,6 +279,7 @@
 				2BD91B6B2EDD5F1800DD2B60 /* CalendarViewModelTests.swift in Sources */,
 				2BD91CEF2EDD80AF00DD2B60 /* SignUpViewModelTests.swift in Sources */,
 				2BD91B6C2EDD5F1800DD2B60 /* CalendarEventTests.swift in Sources */,
+				2BD91FF02EDE075700DD2B60 /* ChatMessageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
