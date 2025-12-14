@@ -66,8 +66,9 @@ struct ChatMessagesView: View
                         )
                     }
 
+                    // Fix bug: Disable user input preview before send the message.
                     // MARK: Render user input preview.
-
+/*
                     if let userInput,
                        !userInput.isEmptyOrWhitespace(),
                        let uid = DevbanUserContainer.shared.getUid()
@@ -81,7 +82,7 @@ struct ChatMessagesView: View
                             ),
                         )
                     }
-
+*/
                     // MARK: Invisible element for scrolling purpose.
 
                     Color.clear
