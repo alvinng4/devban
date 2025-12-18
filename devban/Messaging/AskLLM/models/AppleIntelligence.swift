@@ -24,13 +24,13 @@ extension AskLLMView
                 case .available:
                     nil
                 case .unavailable(.deviceNotEligible):
-                    "Error: Your device is not eligible for Apple Intelligence."
+                    "Your device is not eligible for Apple Intelligence."
                 case .unavailable(.appleIntelligenceNotEnabled):
-                    "Error: To use this feature, please turn on Apple Intelligence."
+                    "To use this feature, please turn on Apple Intelligence."
                 case .unavailable(.modelNotReady):
-                    "Error: Model is not ready. Please try again later."
+                    "Model is not ready. Please try again later."
                 default:
-                    "Error: Apple Intelligence / LLM model is unavailable for unknown reason."
+                    "Apple Intelligence / LLM model is unavailable for unknown reason."
             }
 
             if let msg
