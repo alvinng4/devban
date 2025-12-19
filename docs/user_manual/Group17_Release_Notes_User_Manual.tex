@@ -22,6 +22,9 @@
 % \usepackage{algpseudocode}
 \usepackage{float} % For floating figure
 \usepackage{subcaption} % For subfigures
+\usepackage[none]{hyphenat} % To prevent a word across two line
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 
 %%%%%%%%%% Configure fancy headers %%%%%%%%%%
 \pagestyle{fancy}
@@ -74,18 +77,49 @@
 %     \tableofcontents
 % }
 
-\textbf{Version}: 1.0.0 | \textbf{Platform}: iOS / iPadOS / macOS 26.0 or later | \textbf{Release Date}: \today
+% Document Revision History
+% Update this only before pull request, don't update every commit
+\section*{Document Revision History}
+\begin{table}[h]
+    \centering
+    \caption{Document Revision History}
+    \begin{tabular}{p{1.5cm} p{6cm} p{4cm} p{3cm}}
+        \toprule
+        Version & Revised By & Revision Date & Comments \\
+        \midrule
+        0.0.1 & Ng Ching Yin, Lam Hoi Chun & \today & Initial release \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:docs_rev_hist}
+\end{table}
 
 \section{Introduction}
 
-\textbf{Devban} is a collaborative task management application designed specifically
-for development teams. This initial \linebreak release (v1.0.0) combines Kanban-style task
-organization, calendar scheduling, AI-powered assistance, and \linebreak gamification elements
+\textbf{devban} is a collaborative task management application designed specifically
+for development teams. It combines Kanban task
+organization, calendar scheduling, team discussion and LLM chat interface
 to help teams track and complete their work efficiently.
 
+\begin{center}
+    \fbox{%
+        \begin{minipage}{0.9\linewidth}
+            \textbf{Note}: Messages to testers are wrapped in boxes.
+            These are to be removed in official user manual.
+        \end{minipage}
+    }
+\end{center}
+
 \section{Building and Setup}
+\begin{center}
+    \fbox{%
+        \begin{minipage}{0.8\linewidth}
+            Ideally the app should be distributed via App Store,
+            but since this is just a school project it is not feasible to get it published.
+        \end{minipage}
+    }
+\end{center}
 Here is a step-by-step guide to build devban on your Mac (See Figure \ref{fig:Xcode}).
-(Ideally the app should be distributed via App Store, but due to many issues it is not possible for this project.)
+
 \begin{enumerate}
     \item Download and install XCode from macOS App Store.
     \item Ensure your device meets the system requirements (iOS / iPadOS / macOS 26.0 or later).
@@ -93,6 +127,14 @@ Here is a step-by-step guide to build devban on your Mac (See Figure \ref{fig:Xc
     \item Go to signing and capabilities. Create a Xcode account and change the team to your account.
     \item Select \verb|My Mac (Mac Catalyst)| and build the application by \verb|Cmd + R| clicking the Run button.
 \end{enumerate}
+\begin{center}
+    \fbox{%
+        \begin{minipage}{0.8\linewidth}
+            \textbf{Note:} Testers don't have to setup the database. The app comes with a public API key that connects to our database automatically.
+        \end{minipage}
+    }
+\end{center}
+
 \begin{figure}[h]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
@@ -117,7 +159,7 @@ Here is a step-by-step guide to build devban on your Mac (See Figure \ref{fig:Xc
 \subsection{Account Creation}
 To create a new account:
 \begin{enumerate}[leftmargin=*]
-    \item Launch the app and click \verb|Create an account| on the welcome screen
+    \item Launch the app and click \verb|Create an account| on the welcome screen.
     \item Choose one of the following methods:
     \begin{itemize}
         \item \textbf{Email/Password}: Enter your email address and create a secure password.
@@ -127,7 +169,7 @@ To create a new account:
 If you chose email/password, a \textbf{verification email} will be sent to your email address.
 
 \subsection{Login}
-Simply follow the graphical interface to login.
+It is similar to account creation. Simply follow the graphical interface to login.
 
 \subsection{Password Recovery}
 If you forget your password, click \verb|Forgot password?| on the login screen and follow the instructions.
@@ -136,18 +178,43 @@ If you forget your password, click \verb|Forgot password?| on the login screen a
 After successful login, you should see a team interface. You must create or join a team in order to use devban.
 
 \subsection{Creating a Team}
-To create a new team, contact us via \url{csci3100group17@gmail.com} to receive a License Key. Then, follow the instructions on the
-interface to create an account.
+\begin{center}
+    \fbox{%
+        \begin{minipage}{0.8\linewidth}
+            For testers, we have prepared five license keys: 
+            \begin{enumerate}
+                \item \texttt{9KYhcpgognwICIlluhsV}
+                \item \texttt{DFtafeHAVlBAl5LOsTlh}
+                \item \texttt{JIR3iHsFJZVWDU9XvaAA}
+                \item \texttt{OiyIbWhzboizdu6Wed3k}
+                \item \texttt{mfJIBSye00mM1IIlK9RZ}
+            \end{enumerate}
+        \end{minipage}
+    }
+\end{center}
+To create a new team, contact us via \url{csci3100group17@gmail.com}. 
+After successful subscription to our service, your team would receive a \textbf{license key}.
+Simply follow the instructions on the interface to create an account. 
 
 \textbf{Note}: The account used will automatically become the team admin upon creation.
 
 \subsection{Joining a Team}
-To join an existing team, ask your admin to obtain an invite code, which will expire in 7 days.
+To join an existing team, ask your admin to generate an invite code, which will expire in 7 days.
 Follow the interface to enter the invite code.
 
 \textbf{For admin}: To generate an invite code, simply navigate by \verb|Profile > Team > Generate Invite Codes|.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{generating_invite_codes.png}
+    \caption{Generating invite codes}
+    \label{fig:generating_invite_codes}
+\end{figure}
+
 \section{Core Features}
+
+\subsection{Team Discussion Board (Home Tab)}
+A place to communicate with team members in real time. Markdown formatting is supported.
 
 \subsection{Kanban Board (Home Tab)}
 Kanban board with task columns (To-do, In Progress, Done)
@@ -180,11 +247,8 @@ Visual representation of kanban task deadlines. Dates with deadline tasks will b
 LLM chat interface with local Apple Intelligence model (more models will be added in the future).
 \begin{itemize}
     \item Support Markdown formatting
-    \item Unlimited rate with Apple Intelligence model (However, this model is not supported on some devices)
+    \item Unlimited rate with Apple Intelligence model (However, this model is not supported on old devices)
 \end{itemize}
-
-\subsection{Team Discussion Board (Home Tab)}
-A place to communicate with team members in real time. Markdown formatting is supported.
 
 \subsection{Gamification System}
 A gamification system is included to boost the motivation for developers.
@@ -217,6 +281,6 @@ customize your settings:
 
 For issues or suggestions, contact: \url{csci3100group17@gmail.com}.
 
-When reporting issues, please include: device model, iOS version, app version (1.0.0), steps to reproduce, screenshots, and error messages.
+When reporting issues, please include: device model, OS version, app version, steps to reproduce, screenshots, and error messages (if any).
 
 \end{document}
