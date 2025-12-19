@@ -2,7 +2,7 @@
 \subsection{Database}
 
 \subsection{User Authentication}
-For reliable user authentication, we cooperates with the external Firebase Authentication service. 
+For reliable user authentication, we adopted the external Firebase Authentication service. 
 
 \subsubsection{Sign up methods}
 We provide the following two methods for user sign up as these are the most common methods:
@@ -10,16 +10,44 @@ We provide the following two methods for user sign up as these are the most comm
     \item Email
     \item Google sign in
 \end{enumerate}
-For email sign up, user must pass the email verification to sign in their account.
+User should provide the following information:
+\begin{itemize}%[leftmargin=*]
+    \item Username
+    \item Email
+    \item Password
+\end{itemize}
+For email sign up, user must pass the email verification to sign in their account to prevent
+abuse.
 
 \subsubsection{Sequence diagram}
 Figure \ref{fig:user_auth_sequence} shows the workflow for user authentication.
-
+Note that the database (Firebase Firestore) is not involved in this process.
+Firebase Auth will automatically store the user credentials and their username.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{assets/user_auth_sequence/user_auth_sequence.pdf}
+    \includegraphics[width=.8\textwidth]{assets/auth/user_auth_sequence/user_auth_sequence.pdf}
     \caption{Sequence diagram for user authentication}
     \label{fig:user_auth_sequence}
+\end{figure}
+
+\subsubsection{UI design}
+Figure \ref{fig:ui_design_auth} shows the UI design for login and sign up.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/auth/login.png}
+        \caption{Login UI}
+        \label{subfig:login_ui}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{assets/auth/sign_up.png}
+        \caption{Sign up UI}
+        \label{subfig:sign_up_ui}
+    \end{subfigure}
+    \caption{UI design for login and sign up}
+    \label{fig:ui_design_auth}
 \end{figure}
 
 \subsubsection{Deleting User Account}
@@ -33,6 +61,13 @@ In order to work together, users must first create a team on devban.
 A license key is required for creating a team. User can contact us via email
 and subscribe to our plans to get a license key. A license key will then be
 manually created by us and stored on the database.
+
+A license key on the database should contain the following data:
+\begin{itemize}%[leftmargin=*]
+    \item \texttt{id} (String): the license key
+    \item \texttt{description} (String): Description containing necessary information.
+    \item \texttt{team\_id} (String): ID of the team that was created by the license key.
+\end{itemize}
 
 \subsubsection{Sequence diagram}
 Figure \ref{fig:team_sequence} shows the workflow for creating and joining a team.

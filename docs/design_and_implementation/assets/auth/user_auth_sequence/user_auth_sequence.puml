@@ -3,18 +3,13 @@
 actor User
 participant "Client App" as App
 participant "Firebase Auth" as Auth
-participant "Database" as DB
 
 == Email Sign-Up ==
 
-User -> App: Submit email & password
+User -> App: Submit username, email & password
 App -> Auth: Create user with email/password
 Auth --> App: User created (unverified)
-Auth --> User: Verification link
-App -> DB: Create user profile
-
-User -> Auth: Click verification link
-Auth --> App: Verification successful
+Auth --> User: Verification link (via email)
 
 == Email Sign-In ==
 
@@ -25,23 +20,14 @@ Auth -> App: User Auth profile (with verification status)
 alt Email NOT verified
     App --> User: Reject login (requires verification)
 else Email verified
-    App -> DB: Fetch user profile
-    DB --> App: User profile data
     App --> User: Login successful
 end
 
 == Google Sign-In (No verification required) ==
 
 User -> App: Tap "Sign in with Google"
-App -> Auth: Google OAuth request
+App -> Auth: Google Auth request
 Auth --> App: Return Google identity (verified)
-
-App -> DB: Check if user profile exists
-alt Profile does NOT exist
-    App -> DB: Create user profile (provider: Google)
-end
-
-DB --> App: User profile data
 App --> User: Login successful
 
 @enduml
