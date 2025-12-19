@@ -1,15 +1,16 @@
+@testable import devban
 import Foundation
 import Testing
-@testable import devban
 
 /// Unit tests for the `CalendarEvent` model.
-struct CalendarEventTests {
-
+struct CalendarEventTests
+{
     // MARK: - Init / stored properties
 
     /// Stores all provided values exactly as given.
     @Test
-    func init_usesProvidedValues() throws {
+    func init_usesProvidedValues() throws
+    {
         let customId = UUID()
         let date = Date()
         let startTime = date
@@ -23,7 +24,7 @@ struct CalendarEventTests {
             date: date,
             startTime: startTime,
             endTime: endTime,
-            isCompleted: isCompleted
+            isCompleted: isCompleted,
         )
 
         #expect(event.id == customId)
@@ -36,12 +37,13 @@ struct CalendarEventTests {
 
     /// Uses documented default values when optional parameters are omitted.
     @Test
-    func init_usesDefaultValuesWhenOmitted() throws {
+    func init_usesDefaultValuesWhenOmitted() throws
+    {
         let date = Date()
 
         let event = CalendarEvent(
             title: "Default event",
-            date: date
+            date: date,
         )
 
         #expect(event.title == "Default event")
@@ -55,12 +57,13 @@ struct CalendarEventTests {
 
     /// Event dated today is flagged as today only.
     @Test
-    func isToday_isTrueOnlyForToday() throws {
+    func isToday_isTrueOnlyForToday() throws
+    {
         let today = Date()
 
         let event = CalendarEvent(
             title: "Today event",
-            date: today
+            date: today,
         )
 
         #expect(event.isToday == true)
@@ -70,14 +73,15 @@ struct CalendarEventTests {
 
     /// Event dated yesterday is flagged as past only.
     @Test
-    func isPast_isTrueForYesterday() throws {
+    func isPast_isTrueForYesterday() throws
+    {
         let calendar = Calendar.current
         let today = Date()
         let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
 
         let event = CalendarEvent(
             title: "Yesterday event",
-            date: yesterday
+            date: yesterday,
         )
 
         #expect(event.isToday == false)
@@ -87,14 +91,15 @@ struct CalendarEventTests {
 
     /// Event dated tomorrow is flagged as future only.
     @Test
-    func isFuture_isTrueForTomorrow() throws {
+    func isFuture_isTrueForTomorrow() throws
+    {
         let calendar = Calendar.current
         let today = Date()
         let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
 
         let event = CalendarEvent(
             title: "Tomorrow event",
-            date: tomorrow
+            date: tomorrow,
         )
 
         #expect(event.isToday == false)
@@ -104,14 +109,15 @@ struct CalendarEventTests {
 
     /// Far past dates are still treated as past.
     @Test
-    func isPast_isTrueForFarPastDate() throws {
+    func isPast_isTrueForFarPastDate() throws
+    {
         let calendar = Calendar.current
         let today = Date()
         let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: today)!
 
         let event = CalendarEvent(
             title: "Old event",
-            date: thirtyDaysAgo
+            date: thirtyDaysAgo,
         )
 
         #expect(event.isToday == false)
@@ -121,14 +127,15 @@ struct CalendarEventTests {
 
     /// Far future dates are still treated as future.
     @Test
-    func isFuture_isTrueForFarFutureDate() throws {
+    func isFuture_isTrueForFarFutureDate() throws
+    {
         let calendar = Calendar.current
         let today = Date()
         let thirtyDaysFromNow = calendar.date(byAdding: .day, value: 30, to: today)!
 
         let event = CalendarEvent(
             title: "Future event",
-            date: thirtyDaysFromNow
+            date: thirtyDaysFromNow,
         )
 
         #expect(event.isToday == false)
@@ -138,13 +145,14 @@ struct CalendarEventTests {
 
     /// Completion status does not change date flags.
     @Test
-    func isCompleted_doesNotAffectDateFlags() throws {
+    func isCompleted_doesNotAffectDateFlags() throws
+    {
         let today = Date()
 
         let event = CalendarEvent(
             title: "Completed today",
             date: today,
-            isCompleted: true
+            isCompleted: true,
         )
 
         #expect(event.isToday == true)

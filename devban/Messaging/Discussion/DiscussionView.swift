@@ -133,7 +133,7 @@ struct DiscussionView: View
                         Image(systemName: "link")
                             .textEditorToolBarButtonImage()
                     }
-                    
+
                     Spacer()
 
                     // Remove keyboard

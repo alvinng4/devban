@@ -48,9 +48,11 @@ final class CalendarViewModel
             }
             .store(in: &cancellables)
     }
+
     /// Test-only initializer that skips Firebase listeners.
     /// Use this in unit tests to provide a fixed selected date and task list.
-    init(selectedDate: Date, tasks: [DevbanTask]) {
+    init(selectedDate: Date, tasks: [DevbanTask])
+    {
         self.selectedDate = selectedDate
         self.tasks = tasks
         self.tasksListener = nil
