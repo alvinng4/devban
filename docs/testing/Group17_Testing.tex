@@ -84,16 +84,267 @@
         \toprule
         Version & Revised By & Revision Date & Comments \\
         \midrule
-        0.0.1 & nil & nil & Initial release \\
+        0.0.1 & Lai Wing Fai & 19 Dec 2025 & Initial draft \\
         \bottomrule
     \end{tabular}
     \label{tab:docs_rev_hist}
 \end{table}
 
+
 % Introduction
 \section{Introduction}
 
 \subsection{Purpose}
+This document describes the testing process and strategies adopted during the development of the devban project. It serves as a guide for current and future developers to understand the testing approach, coverage, and key test cases designed to evaluate the system's functionalities.
+
+\subsection{Scope}
+This testing document covers unit testing performed on the iOS mobile application. The primary focus is on testing individual components, including data models and ViewModels, to ensure correctness of business logic and state management.
+
+
+\section{Testing Overview}
+
+\subsection{Testing Framework}
+The project utilizes the Swift Testing framework, which is the modern testing infrastructure for Swift introduced by Apple. Key characteristics include:
+\begin{itemize}
+    \item Declarative test syntax using the \texttt{@Test} attribute
+    \item Expressive assertions with \texttt{\#expect()} macro
+    \item Support for parameterized testing
+    \item Better integration with Xcode and Swift concurrency
+\end{itemize}
+
+\subsection{Testing Strategy}
+The testing strategy follows a component-based approach, where each model and ViewModel is tested independently. The tests are organized into the following categories:
+
+\begin{itemize}
+    \item \textbf{Model Testing} — Verifying data structures, initialization, computed properties, and business logic
+    \item \textbf{ViewModel Testing} — Ensuring correct state management, input validation, and user interaction handling
+\end{itemize}
+
+
+\section{Test Coverage}
+
+\subsection{Components Covered}
+The following components have been tested:
+
+\begin{table}[h]
+    \centering
+    \caption{Tested Components}
+    \begin{tabular}{p{4.5cm} p{2.5cm} p{6cm}}
+        \toprule
+        Component & Type & Test File \\
+        \midrule
+        \texttt{ChatMessage} & Model & \texttt{ChatMessageTests.swift} \\
+        \texttt{CalendarEvent} & Model & \texttt{CalendarEventTests.swift} \\
+        \texttt{Authentication\-ViewModel} & ViewModel & \texttt{AuthenticationViewModel\-Tests.swift} \\
+        \texttt{SignUpViewModel} & ViewModel & \texttt{SignUpViewModelTests.swift} \\
+        \texttt{CalendarViewModel} & ViewModel & \texttt{CalendarViewModelTests.swift} \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:tested_components}
+\end{table}
+
+\subsection{Components Not Covered}
+The following components are not covered in the current testing phase:
+
+\begin{itemize}
+    \item \textbf{UI/View Layer} — SwiftUI views and visual components (requires UI testing framework)
+    \item \textbf{Network Layer} — API calls and network communication (requires mock server or integration tests)
+    \item \textbf{Database Operations} — Firebase/database interactions (requires mocking or integration tests)
+    \item \textbf{Third-party Integrations} — External services and SDKs
+\end{itemize}
+
+\textbf{Rationale:} The focus of this testing phase is on unit testing core business logic. UI testing and integration testing are planned for future iterations but are excluded from this phase due to time constraints and the need to establish a solid foundation of unit tests first.
+
+
+\section{Representative Test Cases}
+
+\subsection{ChatMessage Model Tests}
+
+\subsubsection{Test Case: Unique ID Generation}
+\textbf{Objective:} Verify that each \texttt{ChatMessage} instance is assigned a unique identifier.
+
+\textbf{Rationale:} Unique identifiers are critical for distinguishing messages in the chat system, enabling operations like deletion, editing, and message tracking.
+
+\textbf{Test Method:}
+\begin{lstlisting}[language=Swift, caption=Unique ID Test]
+@Test
+func init_generatesUniqueIds() throws {
+    let message1 = ChatMessage(...)
+    let message2 = ChatMessage(...)
+    #expect(message1.id != message2.id)
+}
+\end{lstlisting}
+
+\textbf{Expected Result:} Two messages created with identical parameters should have different \texttt{id} values.
+
+
+\subsection{CalendarEvent Model Tests}
+
+\subsubsection{Test Case: Date Flag Validation}
+\textbf{Objective:} Ensure that the computed properties \texttt{isToday}, \texttt{isPast}, and \texttt{isFuture} correctly categorize events based on their date.
+
+\textbf{Rationale:} These flags are used throughout the UI to display events in different sections and apply different visual styles. Incorrect categorization would lead to user confusion and poor UX.
+
+\textbf{Test Method:}
+\begin{lstlisting}[language=Swift, caption=Date Flag Test]
+@Test
+func isToday_isTrueOnlyForToday() throws {
+    let today = Date()
+    let event = CalendarEvent(title: "Today event", 
+                              date: today)
+    #expect(event.isToday == true)
+    #expect(event.isPast == false)
+    #expect(event.isFuture == false)
+}
+\end{lstlisting}
+
+\textbf{Test Approach:} Multiple test cases cover today, yesterday, tomorrow, and far future/past dates to ensure comprehensive validation of the date categorization logic.
+
+
+\subsection{AuthenticationViewModel Tests}
+
+\subsubsection{Test Case: Input Validation}
+\textbf{Objective:} Validate that the \texttt{isInputValid()} method correctly identifies valid and invalid email/password combinations.
+
+\textbf{Rationale:} Input validation prevents users from attempting to log in with incomplete credentials, improving user experience and reducing unnecessary API calls.
+
+\textbf{Test Method:}
+\begin{lstlisting}[language=Swift, caption=Input Validation Test]
+@Test
+func isInputValid_isFalseWhenEmailOrPasswordIsEmpty() 
+    throws {
+    let sut = makeSUT()
+    sut.email = ""
+    sut.password = "password123"
+    #expect(sut.isInputValid() == false)
+    
+    sut.email = " "
+    sut.password = " "
+    #expect(sut.isInputValid() == false)
+}
+\end{lstlisting}
+
+\textbf{Expected Behavior:} Empty strings or whitespace-only inputs should return \texttt{false}, while non-empty credentials should return \texttt{true}.
+
+
+\subsection{SignUpViewModel Tests}
+
+\subsubsection{Test Case: Display Name Length Validation}
+\textbf{Objective:} Verify that display names exceeding 64 characters are rejected.
+
+\textbf{Rationale:} Enforcing a maximum length prevents database storage issues and ensures consistent UI rendering across different screen sizes.
+
+\textbf{Test Method:}
+\begin{lstlisting}[language=Swift, caption=Display Name Validation]
+@Test
+func isDisplayNameInputValid_isFalseWhenTooLong() 
+    throws {
+    let sut = makeSUT()
+    sut.displayName = String(repeating: "a", count: 64)
+    #expect(sut.isDiaplayNameInputValid() == false)
+}
+\end{lstlisting}
+
+\textbf{Boundary Testing:} Tests validate behavior at the boundary (exactly 64 characters) to ensure the validation logic correctly enforces the limit.
+
+\subsubsection{Test Case: Dismiss or Alert Logic}
+\textbf{Objective:} Ensure that the sign-up view dismisses directly when no input is provided, but shows an alert when partial input exists.
+
+\textbf{Rationale:} This prevents accidental data loss when users have already entered information but try to exit the view.
+
+\textbf{Test Method:}
+\begin{lstlisting}[language=Swift, caption=Dismiss Logic Test]
+@Test
+func dismissOrShowAlert_dismissesWhenNoAuthInput() 
+    throws {
+    let sut = makeSUT()
+    sut.email = ""
+    sut.password = ""
+    sut.dismissOrShowAlert()
+    #expect(sut.dismiss == true)
+    #expect(sut.isPresentReturnAlert == false)
+}
+\end{lstlisting}
+
+
+\subsection{CalendarViewModel Tests}
+
+\subsubsection{Test Case: Month Navigation}
+\textbf{Objective:} Verify that \texttt{previousMonth()} and \texttt{nextMonth()} correctly adjust the selected date by one month.
+
+\textbf{Rationale:} Month navigation is a core feature of the calendar interface. Incorrect date calculation would confuse users and break the calendar functionality.
+
+\textbf{Test Method:}
+\begin{lstlisting}[language=Swift, caption=Month Navigation Test]
+@Test
+func nextMonth_movesDateForwardOneMonth() throws {
+    let calendar = Calendar.current
+    let initialDate = calendar.date(from: 
+        DateComponents(year: 2024, month: 5, day: 15))!
+    let viewModel = CalendarViewModel(
+        selectedDate: initialDate, tasks: [])
+    
+    viewModel.nextMonth()
+    
+    let expectedDate = calendar.date(from: 
+        DateComponents(year: 2024, month: 6, day: 15))!
+    #expect(calendar.isDate(viewModel.selectedDate, 
+            inSameDayAs: expectedDate))
+}
+\end{lstlisting}
+
+\textbf{Edge Case Consideration:} While the current tests use mid-month dates, future tests should validate behavior at month boundaries (e.g., January 31 → February 28/29).
+
+
+\section{Testing Approach}
+
+\subsection{Test Structure}
+Each test file follows a consistent structure:
+\begin{enumerate}
+    \item \textbf{Helper Methods} — Factory functions (e.g., \texttt{makeSUT()}) to create fresh instances with default state
+    \item \textbf{Grouped Tests} — Related tests are organized with descriptive comments indicating the category
+    \item \textbf{Descriptive Naming} — Test function names follow the pattern \texttt{methodName\_expectedBehavior}
+\end{enumerate}
+
+\subsection{Assertion Strategy}
+The tests utilize the \texttt{\#expect()} macro from Swift Testing framework, which provides:
+\begin{itemize}
+    \item Clear failure messages showing actual vs expected values
+    \item Type-safe comparisons
+    \item Better integration with Swift's modern syntax
+\end{itemize}
+
+
+\section{Test Execution and Results}
+All tests are executed through Xcode's testing infrastructure. As of the current version:
+\begin{itemize}
+    \item \textbf{Total Test Cases:} 24
+    \item \textbf{Passing Tests:} 24
+    \item \textbf{Failing Tests:} 0
+    \item \textbf{Code Coverage:} Not measured (future work)
+\end{itemize}
+
+
+\section{Limitations and Known Issues}
+
+\subsection{Current Limitations}
+While the current test suite covers the core business logic, the following limitations exist:
+\begin{itemize}
+    \item \textbf{No Code Coverage Metrics} — Code coverage has not been measured quantitatively in this phase
+    \item \textbf{Limited Edge Case Testing} — Some edge cases (e.g., month boundaries in date calculations, leap years) have not been thoroughly tested
+    \item \textbf{No Performance Testing} — Tests focus on correctness rather than performance characteristics
+\end{itemize}
+
+\subsection{Testing Scope Constraints}
+Due to project timeline and resource constraints, the following testing areas were deprioritized:
+\begin{itemize}
+    \item UI/visual testing
+    \item Integration testing with Firebase backend
+    \item End-to-end user workflow testing
+    \item Accessibility testing
+\end{itemize}
+
+These constraints were accepted as the primary goal was to establish a solid foundation of unit tests for the core business logic components.
 
 
 % \appendix
