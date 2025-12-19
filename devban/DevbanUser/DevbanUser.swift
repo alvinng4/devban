@@ -28,6 +28,8 @@ struct DevbanUser: Codable
     private var hapticEffectOn: Bool?
     /// User's experience points for gamification
     private var exp: Int?
+    /// Whether chat input preview is enabled
+    private var chatInputPreviewEnabled: Bool?
 }
 
 extension DevbanUser
@@ -172,6 +174,27 @@ extension DevbanUser
             catch
             {
                 print("DevbanUser.setHapticEffectSetting: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Returns whether chat input preview is enabled, defaulting to true.
+    func getChatInputPreviewSetting() -> Bool {
+        return chatInputPreviewEnabled ?? true
+    }
+
+    /// Updates the user's chat input preview preference in Firestore.
+    func setChatInputPreviewSetting(_ option: Bool) {
+        let data: [String: Any] = [
+            "chat_input_preview_enabled": option,
+        ]
+        
+        let uid: String = self.uid
+        Task {
+            do {
+                try await DevbanUser.updateDatabaseData(uid: uid, data: data)
+            } catch {
+                print("DevbanUser.setChatInputPreviewSetting: \(error.localizedDescription)")
             }
         }
     }
