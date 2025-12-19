@@ -1,0 +1,89 @@
+\section{Identified Risks, Assumptions and Constraints}
+\subsection{Identified Risks}
+\begin{table}[h]
+    \centering
+    \caption{Identified Risks}
+    \begin{tabular}{p{1cm} | p{3.5cm} | p{1.8cm} | p{3cm} | p{1.3cm} | p{3cm}}
+        \toprule
+        Risk No. 
+        & Description 
+        & Likelihood 
+        & Impact 
+        & Rating 
+        & Possible Resolutions \\
+        
+        \midrule
+        R1 
+        & LLM third-party API failure
+        & Medium
+        & Slows down development progress
+        & Low 
+        & Use multiple LLM providers \\
+
+        \midrule
+        R2
+        & LLM abuse; high API cost
+        & High
+        & Increase expense significantly
+        & High
+        & Limit API usage by plan; Provide local LLM with unlimited usage\\
+
+        \midrule
+        R3
+        & Local devices or out-of-sync user seeing conflicting information
+        & High
+        & User confusion and mistrust in the system
+        & High
+        & Implement sync recovery mechanism \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:docs_identified_risks}
+\end{table}
+
+\subsection{Assumptions}
+\begin{table}[h]
+    \centering
+    \caption{Assumptions}
+    \begin{tabular}{p{2cm} p{3.5cm} p{10cm}}
+        \toprule
+        Assumption No. 
+        & Title 
+        & Description \\
+
+        \midrule
+        A1
+        & Apple minimum OS version 
+        & iOS 26, iPadOS 26, and macOS 26  \\
+
+        \midrule
+        A2
+        & Internet connectivity
+        & User should have reliable internet access for collaboration \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:docs_assumptions}
+\end{table}
+
+\subsection{Constraints}
+\begin{enumerate}
+    \item Development Team Expertise: The system shall be developed by
+    CSCI3100 students as part of their course project. The design and
+    implementation are constrained by the students' current knowledge
+    of technologies, databases, and software engineering principles, 
+    and must be completed within a single academic semester.
+    \item Budget Constraints: The project has no monetary budget for
+    proprietary software licenses, API
+    calls, or cloud hosting services. The system must be built exclusively
+    with free or open-source technologies and frameworks.
+    \item LLM Integration Limitation: The integration of the Large Language
+    Model (LLM) chat interface is dependent on the availability and usage
+    limits of a free-tier or publicly accessible LLM API (e.g., OpenAI GPT,
+    Llama). The system cannot guarantee unlimited or high-volume usage without
+    incurring costs.
+    \item Scope Creep Control: To ensure timely delivery for the semester's end,
+    the project scope is fixed upon the agreement of the initial requirements.
+    Any proposed additional features will be deferred to a hypothetical "Phase 2" and will
+    not be considered for the initial release.
+\end{enumerate}
