@@ -1,0 +1,32 @@
+@startuml
+
+actor "Logged In User" as User
+participant "Client App" as App
+participant "Database" as DB
+
+== Create team ==
+
+User -> App: Submit team name and LicenseKey
+App -> DB: Fetch LicenseKey information
+DB -> App: Return LicenseKey information
+alt LicenseKey NOT valid
+    App --> User: Reject team creation
+else LicenseKey valid
+    App --> DB: Redeem the LicenseKey
+    App --> DB: Create team & Make user admin
+    App --> User: Success
+end
+== Join team ==
+
+User -> App: Submit InviteCode
+App -> DB: Fetch InviteCode information
+DB -> App: Return InviteCode information
+alt InviteCode NOT valid
+    App --> User: Reject joining team
+else InviteCode valid
+    App --> DB: Redeem the InviteCode
+    App --> DB: Update User & Team info
+    App --> User: Success
+end
+
+@enduml
