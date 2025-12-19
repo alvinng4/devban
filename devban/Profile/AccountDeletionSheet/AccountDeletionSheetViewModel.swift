@@ -56,6 +56,7 @@ extension AccountDeletionSheetView
                 {
                     try await AuthenticationHelper.deleteAccount()
                     showSpecialMessage("Done! Your account is deleted.")
+                    try await Task.sleep(for: .seconds(1))
                 }
                 catch
                 {
