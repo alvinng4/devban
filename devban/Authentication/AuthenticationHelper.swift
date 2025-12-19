@@ -208,9 +208,13 @@ enum AuthenticationHelper
             )
         }
 
-        try await user.delete()
+        /// 1. Delete user document from Firestore (Auth still exists)
         try await DevbanUser.deleteUser(uid: user.uid)
+        /// 2. Remove user from team document (Auth still exists)
         try await DevbanTeam.deleteUser(teamId: teamID, uid: user.uid)
+        /// 3. Delete user from Firebase Auth
+        try await user.delete()
+        /// 4. Update auth status (Back to login page)
         await AuthenticationHelper.updateUserAuthStatus()
     }
 }
