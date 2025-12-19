@@ -16,12 +16,14 @@ rectangle "GUI" as GUI
 
 package "Singleton" {
   component "UX components\n(Theme, Audio, etc.)" as UX
-  component "User Container" as Auth
+  component "User Container" as UserContainer
 }
 
-package "ViewModel / Model" as Core {
+package "Core Components (MVVM)" as Core {
+  component "Auth" as Auth
   component "Kanban" as Kanban
   component "Calendar" as Calendar
+  component "Discussion" as Discussion
   component "LLM" as LLM
 }
 
@@ -31,7 +33,9 @@ cloud "LLM Provider API" as LLMAPI #F0F7F0
 
 ' GUI -> Services
 GUI --> UX
+GUI --> UserContainer
 GUI --> Auth
+GUI --> Discussion
 GUI --> Kanban
 GUI --> Calendar
 GUI --> LLM
@@ -41,8 +45,10 @@ Auth --> UMS
 Auth --> DB
 
 ' Persistence
+UserContainer --> DB
 Kanban --> DB
 Calendar --> DB
+Discussion --> DB
 
 ' LLM integration
 LLM --> DB : LLM chat history

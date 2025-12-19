@@ -1,0 +1,46 @@
+\section{Design And Implementation}
+\subsection{Database}
+
+\subsection{User Authentication}
+For reliable user authentication, we cooperates with the external Firebase Authentication service. 
+
+\subsubsection{Sign up methods}
+We provide the following two methods for user sign up as these are the most common methods:
+\begin{enumerate}
+    \item Email
+    \item Google sign in
+\end{enumerate}
+For email sign up, user must pass the email verification to sign in their account.
+
+\subsubsection{Sequence diagram}
+Figure \ref{fig:user_auth_sequence} shows the workflow for user authentication.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{assets/user_auth_sequence/user_auth_sequence.pdf}
+    \caption{Sequence diagram for user authentication}
+    \label{fig:user_auth_sequence}
+\end{figure}
+
+\subsubsection{Deleting User Account}
+To protect user privacy, when user initiates account deletion, all of their
+account-related data will be deleted.
+
+\subsection{Teams Management}
+In order to work together, users must first create a team on devban.
+
+\subsubsection{License}
+A license key is required for creating a team. User can contact us via email
+and subscribe to our plans to get a license key. A license key will then be
+manually created by us and stored on the database.
+
+\subsubsection{Sequence diagram}
+Figure \ref{fig:team_sequence} shows the workflow for creating and joining a team.
+
+\subsection{Home (Kanban)}
+
+\subsection{Calendar}
+
+\subsection{AskLLM}
+
+
