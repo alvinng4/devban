@@ -109,7 +109,7 @@ extension AuthenticationView
                     let signInResult: GoogleSignInResult = try await helper.signIn()
                     try await AuthenticationHelper.signInWithGoogle(googleSignInResult: signInResult)
                     waitingServerResponse = false
-                    resetMessage()
+                    showSpecialMessage("Success! You should be navigated very soon...")
                 }
                 catch
                 {
