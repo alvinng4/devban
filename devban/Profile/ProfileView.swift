@@ -148,99 +148,63 @@ struct ProfileView: View
                                 {
                                     Divider()
 
-                                    HStack(spacing: 0)
-                                    {
+                                    /// Preferred color scheme picker
+                                    HStack(spacing: 0) {
                                         Label("Dark mode", systemImage: "moon")
                                             .frame(maxWidth: .infinity, alignment: .leading)
-
-                                        Menu
-                                        {
-                                            Picker(
-                                                selection: Binding(
-                                                    get: {
-                                                        DevbanUserContainer.shared.getPreferredColorScheme()
-                                                    },
-                                                    set: { DevbanUserContainer.shared.setPreferredColorScheme($0) },
-                                                ),
-                                            )
-                                            {
-                                                Text("Auto")
-                                                    .tag(ThemeManager.PreferredColorScheme.auto)
-
-                                                Text("Dark")
-                                                    .tag(ThemeManager.PreferredColorScheme.dark)
-
-                                                Text("Light")
-                                                    .tag(ThemeManager.PreferredColorScheme.light)
-                                            }
-                                            label:
-                                            {
-                                                Label("Dark mode", systemImage: "moon")
-                                            }
+                                        
+                                        Picker(
+                                            selection: Binding(
+                                                get: { DevbanUserContainer.shared.getPreferredColorScheme() },
+                                                set: { DevbanUserContainer.shared.setPreferredColorScheme($0) }
+                                            ),
+                                            label: Text("Dark mode")
+                                        ) {
+                                            Text("Auto").tag(ThemeManager.PreferredColorScheme.auto)
+                                            Text("Dark").tag(ThemeManager.PreferredColorScheme.dark)
+                                            Text("Light").tag(ThemeManager.PreferredColorScheme.light)
                                         }
-                                        label:
-                                        {
-                                            HStack(spacing: 5)
-                                            {
-                                                Text(DevbanUserContainer.shared.getPreferredColorScheme().rawValue)
-                                                Image(systemName: "chevron.up.chevron.down")
-                                            }
-                                        }
-                                        .onChange(of: DevbanUserContainer.shared.getPreferredColorScheme())
-                                        {
-                                            ThemeManager.shared.updateTheme(
-                                                theme: DevbanUserContainer.shared.getTheme(),
-                                                colorScheme: colorScheme,
-                                                preferredColorScheme: DevbanUserContainer.shared
-                                                    .getPreferredColorScheme(),
-                                            )
-                                        }
+                                        .pickerStyle(.segmented)  
                                     }
 
-                                    Divider()
-
-                                    HStack(spacing: 0)
-                                    {
-                                        Label("Theme", systemImage: "paintpalette")
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                                        Menu
-                                        {
-                                            Picker(
-                                                selection: Binding(
-                                                    get: { DevbanUserContainer.shared.getTheme() },
-                                                    set: { DevbanUserContainer.shared.setTheme($0) },
-                                                ),
-                                            )
-                                            {
-                                                ForEach(ThemeManager.DefaultTheme.allCases)
-                                                { themeCase in
-                                                    Text(themeCase.rawValue)
-                                                        .tag(themeCase)
-                                                }
-                                            }
-                                            label:
-                                            {
-                                                Label("Theme", systemImage: "paintpalette")
-                                            }
-                                        }
-                                        label:
-                                        {
-                                            HStack(spacing: 5)
-                                            {
-                                                Text(DevbanUserContainer.shared.getTheme().rawValue)
-                                                Image(systemName: "chevron.up.chevron.down")
-                                            }
-                                        }
-                                    }
-                                    .onChange(of: DevbanUserContainer.shared.getTheme())
-                                    {
+                                    .onChange(of: DevbanUserContainer.shared.getPreferredColorScheme()) {
                                         ThemeManager.shared.updateTheme(
                                             theme: DevbanUserContainer.shared.getTheme(),
                                             colorScheme: colorScheme,
                                             preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
                                         )
                                     }
+
+
+                                    Divider()
+
+                                    /// Theme picker
+                                    HStack(spacing: 0) {
+                                        Label("Theme", systemImage: "paintpalette")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                        Picker(
+                                            selection: Binding(
+                                                get: { DevbanUserContainer.shared.getTheme() },
+                                                set: { DevbanUserContainer.shared.setTheme($0) }
+                                            ),
+                                            label: Text("Theme")
+                                        ) {
+                                            ForEach(ThemeManager.DefaultTheme.allCases) { themeCase in
+                                                Text(themeCase.rawValue).tag(themeCase)
+                                            }
+                                        }
+                                        .pickerStyle(.segmented)  
+                                    }
+
+                                    .onChange(of: DevbanUserContainer.shared.getTheme()) {
+                                        ThemeManager.shared.updateTheme(
+                                            theme: DevbanUserContainer.shared.getTheme(),
+                                            colorScheme: colorScheme,
+                                            preferredColorScheme: DevbanUserContainer.shared.getPreferredColorScheme(),
+                                        )
+                                    }
+
 
                                     Divider()
 
