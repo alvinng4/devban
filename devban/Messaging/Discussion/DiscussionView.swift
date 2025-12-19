@@ -36,6 +36,104 @@ struct DiscussionView: View
 
                 HStack(spacing: 16)
                 {
+                    // Bold
+                    Button
+                    {
+                        TextEditingHelper.addBold(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(systemName: "bold")
+                            .textEditorToolBarButtonImage(width: 13.0, height: 13.0)
+                    }
+
+                    // italic
+                    Button
+                    {
+                        TextEditingHelper.addItalic(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(systemName: "italic")
+                            .textEditorToolBarButtonImage(width: 13.0, height: 13.0)
+                    }
+
+                    // strike-through
+                    Button
+                    {
+                        TextEditingHelper.addStrikeThrough(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(systemName: "strikethrough")
+                            .textEditorToolBarButtonImage(width: 15.0, height: 15.0)
+                    }
+
+                    // in-line code
+                    Button
+                    {
+                        TextEditingHelper.addInlineCode(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(.codeSymbol)
+                            .textEditorToolBarButtonImage()
+                    }
+
+                    // unordered list
+                    Button
+                    {
+                        TextEditingHelper.addUnorderedList(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(systemName: "list.bullet")
+                            .textEditorToolBarButtonImage()
+                    }
+
+                    // check list
+                    Button
+                    {
+                        TextEditingHelper.addCheckList(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(systemName: "checklist")
+                            .textEditorToolBarButtonImage()
+                    }
+
+                    // link
+                    Button
+                    {
+                        TextEditingHelper.addLink(
+                            text: $viewModel.userInput,
+                            selectedRange: $viewModel.userInputSelectedRange,
+                        )
+                    }
+                    label:
+                    {
+                        Image(systemName: "link")
+                            .textEditorToolBarButtonImage()
+                    }
+                    
                     Spacer()
 
                     // Remove keyboard

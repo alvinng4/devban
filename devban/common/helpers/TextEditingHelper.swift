@@ -17,9 +17,12 @@ enum TextEditingHelper
     )
     {
         let nsText: NSString = NSString(string: text.wrappedValue)
+        let currentRange: NSRange = selectedRange.wrappedValue
+        let textLength: Int = nsText.length
 
-        guard (selectedRange.wrappedValue.location != NSNotFound),
               ((selectedRange.wrappedValue.location + selectedRange.wrappedValue.length) <= nsText.length)
+        guard (currentRange.location != NSNotFound),
+              ((currentRange.location + currentRange.length) <= textLength)
         else
         {
             return
@@ -42,7 +45,7 @@ enum TextEditingHelper
         }
 
         // Empty selection
-        else if (selectedRange.wrappedValue.length == 0)
+        else if (currentRange.length == 0)
         {
             "\(preMarker)\(placeholder)\(postMarker)"
         }
@@ -53,9 +56,9 @@ enum TextEditingHelper
             "\(preMarker)\(selectedText)\(postMarker)"
         }
 
-        text.wrappedValue = nsText.replacingCharacters(in: selectedRange.wrappedValue, with: newText)
+        text.wrappedValue = nsText.replacingCharacters(in: currentRange, with: newText)
         selectedRange.wrappedValue = NSRange(
-            location: selectedRange.wrappedValue.location,
+            location: currentRange.location,
             length: newText.count,
         )
     }
