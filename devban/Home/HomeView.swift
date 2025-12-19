@@ -38,6 +38,7 @@ struct HomeView: View
                         }
                     }
                     .frame(maxWidth: NeobrutalismConstants.maxWidthExtraLarge)
+                    .frame(maxWidth: .infinity, alignment: .center)
                     .padding(
                         .horizontal,
                         isCompact ?
@@ -94,7 +95,7 @@ struct HomeView: View
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
-            .frame(maxWidth: 300)
+            .frame(maxWidth: 600)
             .frame(maxHeight: .infinity, alignment: .top)
 
             NeobrutalismRoundedRectangleTabView(
