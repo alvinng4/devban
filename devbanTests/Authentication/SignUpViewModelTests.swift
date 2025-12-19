@@ -1,14 +1,15 @@
+@testable import devban
 import Foundation
 import Testing
-@testable import devban
 
 /// Unit tests for the `SignUpView.SignUpViewModel`.
-struct SignUpViewModelTests {
-
+struct SignUpViewModelTests
+{
     // MARK: - Helpers
 
     /// Creates a fresh `SignUpViewModel` with default state.
-    private func makeSUT() -> SignUpView.SignUpViewModel {
+    private func makeSUT() -> SignUpView.SignUpViewModel
+    {
         SignUpView.SignUpViewModel()
     }
 
@@ -16,7 +17,8 @@ struct SignUpViewModelTests {
 
     /// Returns true when email and password are non-empty and non-whitespace.
     @Test
-    func isAuthInputValid_isTrueForNonEmptyEmailAndPassword() throws {
+    func isAuthInputValid_isTrueForNonEmptyEmailAndPassword() throws
+    {
         let sut = makeSUT()
         sut.email = "user@example.com"
         sut.password = "password123"
@@ -26,7 +28,8 @@ struct SignUpViewModelTests {
 
     /// Returns false when email or password is empty or whitespace only.
     @Test
-    func isAuthInputValid_isFalseWhenEmailOrPasswordIsEmpty() throws {
+    func isAuthInputValid_isFalseWhenEmailOrPasswordIsEmpty() throws
+    {
         let sut = makeSUT()
 
         sut.email = ""
@@ -46,7 +49,8 @@ struct SignUpViewModelTests {
 
     /// Returns true when display name is non-empty and shorter than 64 characters.
     @Test
-    func isDisplayNameInputValid_isTrueForNonEmptyShortName() throws {
+    func isDisplayNameInputValid_isTrueForNonEmptyShortName() throws
+    {
         let sut = makeSUT()
         sut.displayName = "Valid name"
 
@@ -55,7 +59,8 @@ struct SignUpViewModelTests {
 
     /// Returns false when display name is empty or whitespace only.
     @Test
-    func isDisplayNameInputValid_isFalseWhenEmptyOrWhitespace() throws {
+    func isDisplayNameInputValid_isFalseWhenEmptyOrWhitespace() throws
+    {
         let sut = makeSUT()
 
         sut.displayName = ""
@@ -67,7 +72,8 @@ struct SignUpViewModelTests {
 
     /// Returns false when display name has 64 or more characters.
     @Test
-    func isDisplayNameInputValid_isFalseWhenTooLong() throws {
+    func isDisplayNameInputValid_isFalseWhenTooLong() throws
+    {
         let sut = makeSUT()
         sut.displayName = String(repeating: "a", count: 64)
 
@@ -78,7 +84,8 @@ struct SignUpViewModelTests {
 
     /// Disables submit when any input is invalid or waiting for server response.
     @Test
-    func disableSubmit_isTrueWhenInputInvalidOrWaiting() throws {
+    func disableSubmit_isTrueWhenInputInvalidOrWaiting() throws
+    {
         let sut = makeSUT()
         sut.email = ""
         sut.password = ""
@@ -96,7 +103,8 @@ struct SignUpViewModelTests {
 
     /// Keeps submit enabled when all inputs are valid and not waiting for server response.
     @Test
-    func disableSubmit_isFalseWhenAllValidAndNotWaiting() throws {
+    func disableSubmit_isFalseWhenAllValidAndNotWaiting() throws
+    {
         let sut = makeSUT()
         sut.email = "user@example.com"
         sut.password = "password123"
@@ -110,7 +118,8 @@ struct SignUpViewModelTests {
 
     /// Dismisses directly when email and password are empty or whitespace.
     @Test
-    func dismissOrShowAlert_dismissesWhenNoAuthInput() throws {
+    func dismissOrShowAlert_dismissesWhenNoAuthInput() throws
+    {
         let sut = makeSUT()
         sut.email = ""
         sut.password = ""
@@ -123,7 +132,8 @@ struct SignUpViewModelTests {
 
     /// Shows return alert when there is any auth input.
     @Test
-    func dismissOrShowAlert_showsAlertWhenAuthInputPresent() throws {
+    func dismissOrShowAlert_showsAlertWhenAuthInputPresent() throws
+    {
         let sut = makeSUT()
         sut.email = "user@example.com"
         sut.password = ""
@@ -134,4 +144,3 @@ struct SignUpViewModelTests {
         #expect(sut.isPresentReturnAlert == true)
     }
 }
-

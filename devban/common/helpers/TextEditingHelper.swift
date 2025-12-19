@@ -20,7 +20,6 @@ enum TextEditingHelper
         let currentRange: NSRange = selectedRange.wrappedValue
         let textLength: Int = nsText.length
 
-              ((selectedRange.wrappedValue.location + selectedRange.wrappedValue.length) <= nsText.length)
         guard (currentRange.location != NSNotFound),
               ((currentRange.location + currentRange.length) <= textLength)
         else

@@ -1,14 +1,15 @@
+@testable import devban
 import Foundation
 import Testing
-@testable import devban
 
 /// Unit tests for the `AuthenticationView.AuthenticationViewModel`.
-struct AuthenticationViewModelTests {
-
+struct AuthenticationViewModelTests
+{
     // MARK: - Helpers
 
     /// Creates a fresh `AuthenticationViewModel` with default state.
-    private func makeSUT() -> AuthenticationView.AuthenticationViewModel {
+    private func makeSUT() -> AuthenticationView.AuthenticationViewModel
+    {
         AuthenticationView.AuthenticationViewModel()
     }
 
@@ -16,7 +17,8 @@ struct AuthenticationViewModelTests {
 
     /// Returns true when both email and password are non-empty and non-whitespace.
     @Test
-    func isInputValid_isTrueForNonEmptyEmailAndPassword() throws {
+    func isInputValid_isTrueForNonEmptyEmailAndPassword() throws
+    {
         let sut = makeSUT()
         sut.email = "user@example.com"
         sut.password = "password123"
@@ -26,7 +28,8 @@ struct AuthenticationViewModelTests {
 
     /// Returns false when email or password is empty or whitespace only.
     @Test
-    func isInputValid_isFalseWhenEmailOrPasswordIsEmpty() throws {
+    func isInputValid_isFalseWhenEmailOrPasswordIsEmpty() throws
+    {
         let sut = makeSUT()
 
         sut.email = ""
@@ -46,7 +49,8 @@ struct AuthenticationViewModelTests {
 
     /// Disables submit when input is invalid.
     @Test
-    func disableSubmit_isTrueWhenInputInvalid() throws {
+    func disableSubmit_isTrueWhenInputInvalid() throws
+    {
         let sut = makeSUT()
         sut.email = ""
         sut.password = ""
@@ -56,7 +60,8 @@ struct AuthenticationViewModelTests {
 
     /// Keeps submit enabled when input is valid and not waiting for server response.
     @Test
-    func disableSubmit_isFalseWhenInputValidAndNotWaiting() throws {
+    func disableSubmit_isFalseWhenInputValidAndNotWaiting() throws
+    {
         let sut = makeSUT()
         sut.email = "user@example.com"
         sut.password = "password123"
@@ -68,7 +73,8 @@ struct AuthenticationViewModelTests {
 
     /// Sets the forget-password alert flag to true.
     @Test
-    func forgetPassword_setsAlertFlag() throws {
+    func forgetPassword_setsAlertFlag() throws
+    {
         let sut = makeSUT()
         #expect(sut.isPresentForgetPasswordAlert == false)
 
@@ -79,7 +85,8 @@ struct AuthenticationViewModelTests {
 
     /// Shows an error message when confirmForgetPassword is called with an empty email.
     @Test
-    func confirmForgetPassword_withEmptyEmail_showsErrorMessage() throws {
+    func confirmForgetPassword_withEmptyEmail_showsErrorMessage() throws
+    {
         let sut = makeSUT()
         sut.email = ""
 
@@ -92,7 +99,8 @@ struct AuthenticationViewModelTests {
 
     /// Shows a success message when confirmForgetPassword is called with a valid email.
     @Test
-    func confirmForgetPassword_withValidEmail_showsSuccessMessage() throws {
+    func confirmForgetPassword_withValidEmail_showsSuccessMessage() throws
+    {
         let sut = makeSUT()
         sut.email = "user@example.com"
 
