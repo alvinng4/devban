@@ -164,7 +164,7 @@ struct ProfileView: View
                                             Text("Dark").tag(ThemeManager.PreferredColorScheme.dark)
                                             Text("Light").tag(ThemeManager.PreferredColorScheme.light)
                                         }
-                                        .pickerStyle(.segmented)  
+                                        .pickerStyle(.menu)  
                                     }
 
                                     .onChange(of: DevbanUserContainer.shared.getPreferredColorScheme()) {
@@ -194,7 +194,7 @@ struct ProfileView: View
                                                 Text(themeCase.rawValue).tag(themeCase)
                                             }
                                         }
-                                        .pickerStyle(.segmented)  
+                                        .pickerStyle(.menu)  
                                     }
 
                                     .onChange(of: DevbanUserContainer.shared.getTheme()) {
