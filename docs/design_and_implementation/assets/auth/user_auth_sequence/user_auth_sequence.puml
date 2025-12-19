@@ -1,0 +1,33 @@
+@startuml
+
+actor User
+participant "Client App" as App
+participant "Firebase Auth" as Auth
+
+== Email Sign-Up ==
+
+User -> App: Submit username, email & password
+App -> Auth: Create user with email/password
+Auth --> App: User created (unverified)
+Auth --> User: Verification link (via email)
+
+== Email Sign-In ==
+
+User -> App: Sign in with email & password
+App -> Auth: Authenticate credentials
+Auth -> App: User Auth profile (with verification status)
+
+alt Email NOT verified
+    App --> User: Reject login (requires verification)
+else Email verified
+    App --> User: Login successful
+end
+
+== Google Sign-In (No verification required) ==
+
+User -> App: Tap "Sign in with Google"
+App -> Auth: Google Auth request
+Auth --> App: Return Google identity (verified)
+App --> User: Login successful
+
+@enduml
