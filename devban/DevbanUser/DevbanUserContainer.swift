@@ -244,4 +244,21 @@ final class DevbanUserContainer
         self.team = nil
         self.user?.teamId = nil
     }
+    
+    /// get the user's chat input preview preference
+    func getChatInputPreviewSetting() -> Bool {
+        return user?.getChatInputPreviewSetting() ?? true
+    }
+
+    /// set the user's chat input preview preference
+    func setChatInputPreviewSetting(_ option: Bool) {
+        guard let user else { return }
+        user.setChatInputPreviewSetting(option)
+        Task {
+            self.user = try await DevbanUser.getUser(user.uid)
+        }
+    }
+
 }
+
+

@@ -261,6 +261,23 @@ struct ProfileView: View
 
                                     Divider()
 
+                                    /// Chat input preview toggle
+                                    HStack(spacing: 0) {
+                                        Label("Show input preview", systemImage: "eye")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                        Toggle(
+                                            "",
+                                            isOn: Binding(
+                                                get: { DevbanUserContainer.shared.getChatInputPreviewSetting() },
+                                                set: { DevbanUserContainer.shared.setChatInputPreviewSetting($0) },
+                                            ),
+                                        )
+                                        .fixedSize()
+                                    }
+
+                                    Divider()
+
                                     HStack(spacing: 0)
                                     {
                                         Label("Haptic effects", systemImage: "iphone.gen1.radiowaves.left.and.right")
