@@ -20,6 +20,9 @@
 % \renewcommand\qedsymbol{$\blacksquare$}
 % \usepackage{algorithm}
 % \usepackage{algpseudocode}
+\usepackage[none]{hyphenat} % To prevent a word across two line
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 
 %%%%%%%%%% Configure fancy headers %%%%%%%%%%
 \pagestyle{fancy}
@@ -66,17 +69,9 @@
 \begin{document}
 \maketitle
 
-% Table of contents
-{
-    \hypersetup{linkcolor=black}
-    \tableofcontents
-}
-
-\newpage
-
 % Document Revision History
 % Update this only before pull request, don't update every commit
-\section{Document Revision History}
+\section*{Document Revision History}
 \begin{table}[h]
     \centering
     \caption{Document Revision History}
@@ -84,282 +79,22 @@
         \toprule
         Version & Revised By & Revision Date & Comments \\
         \midrule
-        0.0.1 & Ng Ching Yin, Lam Hoi Chun, Zou Zhi Hong & 11 Nov 2025 & Initial release \\
+        0.0.1 & Ng Ching Yin, Lam Hoi Chun, Zou Zhi Hong & \today & Initial release \\
         \bottomrule
     \end{tabular}
     \label{tab:docs_rev_hist}
 \end{table}
 
-% Introduction
-\section{Introduction}
+% Table of contents
+{
+    \hypersetup{linkcolor=black}
+    \tableofcontents
+}
 
-\subsection{Purpose}
-
-This document defines the user requirements for the new software project management
-tool for the Demon Slayers Corps. This document will serve as a basis for both
-stakeholders and developers in subsequent development activities.
-
-\subsection{Project Background}
-
-In a realm where demon slayers fought valiantly against the forces of darkness, the boss of
-the Demon Slayer Corps struggled with managing their software projects, leading to chaotic
-battles and the tragic loss of many brave warriors. Recognizing the dire need for better
-organization, Kei, the CSCI3100 lecturer, and his eager students decided to step in, determined
-to create a robust software project management tool tailored specifically for the Demon Slayers.
-
-With their combined skills in coding and project management, they envisioned a system that
-would streamline communication, track progress, and allocate resources effectively, ultimately
-empowering the slayers to focus on their true mission: vanquishing demons and protecting
-humanity.
-
-\subsection{Business Objectives}
-The high-level business objectives for the project are to:
-\begin{enumerate}
-    \item reduce inefficiency in task and resource allocation, including
-    \begin{itemize}%[leftmargin=*]
-        \item[(a)] average time from task creation to assignment;
-        \item[(b)] workload variance across team members;
-    \end{itemize}
-    \item track mission and development progress in real time;
-    \item streamline communication among developers;
-    \item provide useful tools to facilitate software development;
-\end{enumerate}
-
-\subsection{Project Scope}
-The new project management tool aims to streamline software team coordination by 
-providing task tracking, calendar scheduling, discussion, and an LLM chat interface to accelerate
-development workflows.
-
-The major functions to be provided by the tool are listed below:
-\begin{enumerate}
-    \item Kanban board for task management and progress tracking;
-    \item Calendar to track and visualize deadlines;
-    \item Discussion system to streamline communication among developers;
-    \item LLM chat interface to speed up development progress;
-\end{enumerate}
-
-\section{Identified Risks, Assumptions and Constraints}
-\subsection{Identified Risks}
-\begin{table}[h]
-    \centering
-    \caption{Identified Risks}
-    \begin{tabular}{p{1cm} | p{3.5cm} | p{1.8cm} | p{3cm} | p{1.3cm} | p{3cm}}
-        \toprule
-        Risk No. 
-        & Description 
-        & Likelihood 
-        & Impact 
-        & Rating 
-        & Possible Resolutions \\
-        
-        \midrule
-        R1 
-        & LLM third-party API failure
-        & Medium
-        & Slows down \text{development} progress
-        & Low 
-        & Use \text{multiple} LLM providers; Alert \text{system} to detect \text{failure} \\
-
-        \midrule
-        R2
-        & LLM abuse; high API cost
-        & High
-        & Increase API expense significantly
-        & High
-        & Limit API usage by plan; \\
-
-        \midrule
-        R3
-        & Local devices / out-of-sync user seeing conflicting information
-        & High
-        & User confusion and mistrust in the system
-        & High
-        & Warn user when out-of-sync; \text{Implement} sync \text{recovery} mechanism \\
-
-        \bottomrule
-    \end{tabular}
-    \label{tab:docs_identified_risks}
-\end{table}
-
-\subsection{Assumptions}
-\begin{table}[h]
-    \centering
-    \caption{Assumptions}
-    \begin{tabular}{p{2cm} p{3.5cm} p{10cm}}
-        \toprule
-        Assumption No. 
-        & Title 
-        & Description \\
-
-        \midrule
-        A1
-        & Apple minimum OS version 
-        & iOS 26, iPadOS 26, and macOS 26  \\
-
-        \bottomrule
-    \end{tabular}
-    \label{tab:docs_assumptions}
-\end{table}
-
-\subsection{Constraints}
-\begin{enumerate}
-    \item Development Team Expertise: The system shall be developed by
-    CSCI3100 students as part of their course project. The design and
-    implementation are constrained by the students' current knowledge
-    of technologies, databases, and software engineering principles, 
-    and must be completed within a single academic semester.
-    \item Budgetary Constraints: The project has no monetary budget for
-    proprietary software licenses, Application Programming Interface (API)
-    calls, or cloud hosting services. The system must be built exclusively
-    with free or open-source technologies and frameworks.
-    \item LLM Integration Limitation: The integration of the Large Language
-    Model (LLM) chat interface is dependent on the availability and usage
-    limits of a free-tier or publicly accessible LLM API (e.g., OpenAI GPT,
-    Llama). The system cannot guarantee unlimited or high-volume usage without
-    incurring costs.
-    \item Scope Creep Control: To ensure timely delivery for the semester's end,
-    the project scope is fixed upon the agreement of the initial requirements.
-    Any proposed additional features will be deferred to a hypothetical "Phase 2" and will
-    not be considered for the initial release.
-\end{enumerate}
-
-\section{Functional Requirements}
-\label{sec:functional_requirements}
-
-\begin{enumerate}
-    \item \textbf{User Accounts and Authentication}
-    \begin{enumerate}[label=\textbf{FR1-\arabic*.}, leftmargin=2cm]
-        \item The system shall allow users to register, sign in, and sign out using email and password.
-        \item The system shall support password reset via email.
-        \item The system shall support basic roles: Admin and Member.
-        \item The system should support common sign in methods (e.g. Google sign in).
-        \item The system shall allow users to delete their account.
-    \end{enumerate}
-
-    \item \textbf{Workspaces and Teams}
-    \begin{enumerate}[label=\textbf{FR2-\arabic*.}, leftmargin=2cm]
-        \item The system shall provide Workspaces (organization/team scope).
-        \item Admins shall be able to invite/remove members and assign roles per Workspace.
-    \end{enumerate}
-
-    \item \textbf{Kanban Board and Task Management}
-    \begin{enumerate}[label=\textbf{FR3-\arabic*.}, leftmargin=2cm]
-        \item The system shall provide a Kanban board with drag-and-drop functionality.
-        \item Users shall be able to create, read, update, and delete tasks.
-        \item Tasks shall support fields: title, description, status, difficulty, tags, deadlines.
-    \end{enumerate}
-
-    \item \textbf{Discussion and Collaboration}
-    \begin{enumerate}[label=\textbf{FR4-\arabic*.}, leftmargin=2cm]
-        \item Each task shall have a comment thread supporting @mentions and attachments.
-        \item The system shall support Markdown formatting for comments (headings, lists, code blocks).
-    \end{enumerate}
-
-    \item \textbf{Real-time Updates and Collaboration}
-    \begin{enumerate}[label=\textbf{FR5-\arabic*.}, leftmargin=2cm]
-        \item Board and task updates made by one user shall appear for other online users in near real-time.
-        \item The system shall display an out-of-sync warning if a client falls behind and provide a manual refresh action.
-    \end{enumerate}
-
-    \item \textbf{Calendar and Scheduling}
-    \begin{enumerate}[label=\textbf{FR6-\arabic*.}, leftmargin=2cm]
-        \item The system shall provide monthly calendar views of task deadlines.
-    \end{enumerate}
-
-    \item \textbf{LLM Chat Interface}
-    \begin{enumerate}[label=\textbf{FR7-\arabic*.}, leftmargin=2cm]
-        \item The system shall provide a personal LLM chat interface.
-        \item The system shall rate-limit LLM requests per user and per workspace to control costs.
-        \item The system shall support configuring multiple LLM providers and failover when one provider is unavailable.
-        \item The system shall store chat history per project and allow exporting a conversation.
-    \end{enumerate}
-
-    \item \textbf{Offline Tolerance and Sync Recovery}
-    \begin{enumerate}[label=\textbf{FR8-\arabic*.}, leftmargin=2cm]
-        \item The system shall allow reading recently viewed boards/tasks when offline.
-        \item Edits made offline shall be queued and synced when connectivity is restored.
-    \end{enumerate}
-
-    \item \textbf{Administration}
-    \begin{enumerate}[label=\textbf{FR9-\arabic*.}, leftmargin=2cm]
-        \item Admins shall be able to configure workspace settings, LLM provider keys, LLM quotas, and feature flags.
-        \item Admins shall be able to deactivate users and transfer project ownership.
-    \end{enumerate}
-\end{enumerate}
-
-
-\section{Non-Functional Requirements}
-\label{sec:non_functional_requirements}
-
-\begin{enumerate}
-    \item \textbf{Performance}
-    \begin{enumerate}[label=\textbf{NFR1-\arabic*.}, leftmargin=2cm]
-        \item Initial application load shall be under 2.5 seconds on a mid-range laptop/phone.
-        \item 95\% of API requests shall complete within 500 ms under normal load; 99\% within 1 s.
-        \item Real-time updates shall propagate to connected clients within 2 seconds.
-    \end{enumerate}
-
-    \item \textbf{Availability}
-    \begin{enumerate}[label=\textbf{NFR2-\arabic*.}, leftmargin=2cm]
-        \item The system should achieve 99\% monthly uptime.
-        \item Planned maintenance windows shall be announced in advance and limited to 2 hours/week.
-    \end{enumerate}
-
-    \item \textbf{Reliability and Data Integrity}
-    \begin{enumerate}[label=\textbf{NFR3-\arabic*.}, leftmargin=2cm]
-        \item Create/update/delete operations shall be atomic and durable.
-        \item The system shall prevent or resolve conflicting edits.
-    \end{enumerate}
-
-    \item \textbf{Scalability}
-    \begin{enumerate}[label=\textbf{NFR4-\arabic*.}, leftmargin=2cm]
-        \item The system should support at least 50 concurrent active users per workspace without violating performance targets.
-        \item The system should support up to 20,000 tasks per project.
-    \end{enumerate}
-
-    \item \textbf{Privacy and LLM Data Handling}
-    \begin{enumerate}[label=\textbf{NFR5-\arabic*.}, leftmargin=2cm]
-        \item The system shall minimize personal data collection to what is strictly necessary.
-        \item The system shall not send secrets or access tokens to LLM providers; task content sent to LLMs shall be user-initiated.
-    \end{enumerate}
-
-    \item \textbf{Usability}
-    \begin{enumerate}[label=\textbf{NFR6-\arabic*.}, leftmargin=2cm]
-        \item New users shall be able to create a project, a board, and a task within 5 minutes without training.
-        \item Common operations (create task, assign, move columns) shall require no more than 3 clicks from the board view.
-        \item Provide keyboard shortcuts for frequent actions (e.g., create task, quick search).
-    \end{enumerate}
-
-    \item \textbf{Compatibility and Cross-Platform Support}
-    \begin{enumerate}[label=\textbf{NFR7-\arabic*.}, leftmargin=2cm]
-        \item The application shall be available on all major platforms, including Windows, Linux, macOS, iOS, Android and iPadOS.
-        \item The UI shall be responsive for desktop, tablet, and mobile breakpoints.
-    \end{enumerate}
-
-    \item \textbf{Observability and Alerting}
-    \begin{enumerate}[label=\textbf{NFR8-\arabic*.}, leftmargin=2cm]
-        \item Basic metrics (request rates, error rates, latency) shall be collected and viewable by developers.
-        \item Alerts shall trigger on sustained LLM provider failures, error spikes, and elevated latency.
-    \end{enumerate}
-
-    \item \textbf{Deployment and Portability}
-    \begin{enumerate}[label=\textbf{NFR9-\arabic*.}, leftmargin=2cm]
-        \item The system should provide a containerized deployment.
-        \item A developer environment shall be bootstrapped in under 15 minutes with documented steps.
-    \end{enumerate}
-
-    \item \textbf{Internationalization and Time Zones}
-    \begin{enumerate}[label=\textbf{NFR10-\arabic*.}, leftmargin=2cm]
-        \item All dates/times shall be stored in UTC and displayed in the user's local time zone.
-        \item The UI shall support localization.
-    \end{enumerate}
-
-    \item \textbf{Data Retention and Deletion}
-    \begin{enumerate}[label=\textbf{NFR11-\arabic*.}, leftmargin=2cm]
-        \item Users must be able to request deletion of their personal data; requests should be fulfilled within 7 days. 
-    \end{enumerate}
-\end{enumerate}
-
+\input{introduction}
+\input{identified_risks}
+\input{functional_requirements}
+\input{nonfunctional_requirements}
 
 % \appendix
 % \addcontentsline{toc}{section}{Appendix}

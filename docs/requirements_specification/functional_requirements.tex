@@ -1,0 +1,57 @@
+\section{Functional Requirements}
+\label{sec:functional_requirements}
+
+\begin{enumerate}
+    \item \textbf{User Accounts and Authentication}
+    \begin{enumerate}[label=\textbf{FR1-\arabic*.}, leftmargin=2cm]
+        \item The system shall allow users to register, sign in, and sign out using email and password.
+        \item The system shall support password reset via email.
+        \item The system should support common sign in methods (e.g. Google sign in).
+        \item The system shall allow users to delete their account.
+    \end{enumerate}
+
+    \item \textbf{Workspaces and Teams}
+    \begin{enumerate}[label=\textbf{FR2-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide Workspaces (organization/team scope).
+        \item The system shall support basic roles: Team Admin and Team Member.
+        \item Admins shall be able to invite/remove members and assign roles per Workspace.
+    \end{enumerate}
+
+    \item \textbf{Kanban Board and Task Management}
+    \begin{enumerate}[label=\textbf{FR3-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide a Kanban board with drag-and-drop functionality.
+        \item Users shall be able to create, read, update, and delete tasks.
+        \item Tasks shall support fields: title, description, status, difficulty, deadlines.
+    \end{enumerate}
+
+    \item \textbf{Discussion and Collaboration}
+    \begin{enumerate}[label=\textbf{FR4-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide a window for real time team communication.
+        \item The system shall support Markdown formatting for comments (headings, lists, code blocks).
+    \end{enumerate}
+
+    \item \textbf{Real-time Updates and Collaboration}
+    \begin{enumerate}[label=\textbf{FR5-\arabic*.}, leftmargin=2cm]
+        \item Board and task updates made by one user shall appear for other online users in near real-time.
+        \item The system shall display an out-of-sync warning if a client falls behind and provide a manual refresh action.
+    \end{enumerate}
+
+    \item \textbf{Calendar and Scheduling}
+    \begin{enumerate}[label=\textbf{FR6-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide monthly calendar views of task deadlines.
+    \end{enumerate}
+
+    \item \textbf{LLM Chat Interface}
+    \begin{enumerate}[label=\textbf{FR7-\arabic*.}, leftmargin=2cm]
+        \item The system shall provide a personal LLM chat interface.
+        \item The system shall rate-limit LLM requests per user and per workspace to control costs.
+        \item The system shall support configuring multiple LLM providers and failover when one provider is unavailable.
+        \item The system shall store chat history per project and allow exporting a conversation.
+    \end{enumerate}
+
+    \item \textbf{Offline Tolerance and Sync Recovery}
+    \begin{enumerate}[label=\textbf{FR8-\arabic*.}, leftmargin=2cm]
+        \item The system shall allow reading recently viewed boards/tasks when offline.
+        \item Edits made offline shall be queued and synced when connectivity is restored.
+    \end{enumerate}
+\end{enumerate}

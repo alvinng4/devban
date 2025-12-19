@@ -1,0 +1,71 @@
+\section{Non-Functional Requirements}
+\label{sec:non_functional_requirements}
+
+\begin{enumerate}
+    \item \textbf{Performance}
+    \begin{enumerate}[label=\textbf{NFR1-\arabic*.}, leftmargin=2cm]
+        \item Initial application load shall be under 2.5 seconds on a mid-range laptop/phone.
+        \item 95\% of API requests shall complete within 500 ms under normal load; 99\% within 1 s.
+        \item Real-time updates shall propagate to connected clients within 2 seconds.
+    \end{enumerate}
+
+    \item \textbf{Availability}
+    \begin{enumerate}[label=\textbf{NFR2-\arabic*.}, leftmargin=2cm]
+        \item The system should achieve 99\% monthly uptime.
+        \item Planned maintenance windows shall be announced in advance and limited to 2 hours/week.
+    \end{enumerate}
+
+    \item \textbf{Reliability and Data Integrity}
+    \begin{enumerate}[label=\textbf{NFR3-\arabic*.}, leftmargin=2cm]
+        \item Create/update/delete operations shall be atomic and durable.
+        \item The system shall prevent or resolve conflicting edits.
+    \end{enumerate}
+
+    \item \textbf{Scalability}
+    \begin{enumerate}[label=\textbf{NFR4-\arabic*.}, leftmargin=2cm]
+        \item The system should support at least 50 concurrent active users per workspace without violating performance targets.
+        \item The system should support up to 20,000 tasks per project.
+    \end{enumerate}
+
+    \item \textbf{Privacy and LLM Data Handling}
+    \begin{enumerate}[label=\textbf{NFR5-\arabic*.}, leftmargin=2cm]
+        \item The system shall minimize personal data collection to what is strictly necessary.
+        \item The system shall not send secrets or access tokens to LLM providers; task content sent to LLMs shall be user-initiated.
+    \end{enumerate}
+
+    \item \textbf{Usability}
+    \begin{enumerate}[label=\textbf{NFR6-\arabic*.}, leftmargin=2cm]
+        \item New users shall be able to create a project, a board, and a task within 5 minutes without training.
+        \item Common operations (create task, assign, move columns) shall require no more than 3 clicks from the board view.
+        \item Provide keyboard shortcuts for frequent actions (e.g., create task, quick search).
+    \end{enumerate}
+
+    \item \textbf{Compatibility and Cross-Platform Support}
+    \begin{enumerate}[label=\textbf{NFR7-\arabic*.}, leftmargin=2cm]
+        \item The application shall be extendable to all major platforms in the future, including Windows, Linux and Android.
+        \item The UI shall be responsive for desktop, tablet, and mobile breakpoints.
+    \end{enumerate}
+
+    \item \textbf{Observability and Alerting}
+    \begin{enumerate}[label=\textbf{NFR8-\arabic*.}, leftmargin=2cm]
+        \item Basic metrics (request rates, error rates, latency) shall be collected and viewable by developers.
+        \item Alerts shall trigger on sustained LLM provider failures, error spikes, and elevated latency.
+    \end{enumerate}
+
+    \item \textbf{Deployment and Portability}
+    \begin{enumerate}[label=\textbf{NFR9-\arabic*.}, leftmargin=2cm]
+        \item The system should provide a containerized deployment.
+        \item A developer environment shall be bootstrapped in under 15 minutes with documented steps.
+    \end{enumerate}
+
+    \item \textbf{Internationalization and Time Zones}
+    \begin{enumerate}[label=\textbf{NFR10-\arabic*.}, leftmargin=2cm]
+        \item All dates/times shall be stored in UTC and displayed in the user's local time zone.
+        \item The UI shall support localization.
+    \end{enumerate}
+
+    \item \textbf{Data Retention and Deletion}
+    \begin{enumerate}[label=\textbf{NFR11-\arabic*.}, leftmargin=2cm]
+        \item Users must be able to request deletion of their personal data; requests should be fulfilled within 7 days. 
+    \end{enumerate}
+\end{enumerate}
