@@ -1,1 +1,49 @@
-\subsection{Home (Kanban)}
+\subsection{Kanban}
+Kanban is a visual task management method for team collaboration. 
+
+\subsubsection{Features}
+Below are some features for Kanban:
+\begin{itemize}%[leftmargin=*]
+    \item Difficulty: User should be able to set the difficulty of the task (e.g. easy / hard)
+    for resource allocation and gamification purpose.
+    \item Gamification: User completing the task should gain experience based on difficulty level.
+    \item Status: User should be able to set the status of the task for tracking, including to-do,
+    in progress and completed.
+    \item Progress bar: User should be able to see a progress bar and set the completion progress.
+    \item Deadline: User should be able to set the deadline of a task.
+    \item Pin: User should be able to pin important / urgent tasks. 
+    \item Graphical Interface:
+    \begin{itemize}%[leftmargin=*]
+        \item User should be able to drag a bar to set the difficulty; Each difficulty should have different color
+        \item User should be able to drag a bar to set the completion progress
+        \item User should be able to drag the task between columns to change status
+        \item User should be able to click on a checkbox to complete a task
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Kanban Tasks}
+A Kanban task on the database should contain the following fields:
+\begin{itemize}%[leftmargin=*]
+    \item \texttt{id} (String): UUID of the task
+    \item \texttt{team\_id} (String): UUID for the team
+    \item \texttt{title} (String): Title of the task
+    \item \texttt{description} (String): Description of the task
+    \item \texttt{difficulty} (String): Difficulty of the task (e.g. easy / hard)
+    \item \texttt{status} (String): Status of the task (to-do, in progress or completed)
+    \item \texttt{progress} (Int): Percentage progress of the task
+    \item \texttt{has\_deadline} (Bool): Whether the task has deadline
+    \item \texttt{deadline} (TimeStamp): Deadline of the task
+    \item \texttt{is\_pinned} (Bool): Whether the task is pinned
+\end{itemize}
+
+\subsubsection{Sequence diagram}
+Sequence diagram is not provided for this section since every action is simple CRUD from database.
+
+\subsubsection{UI design}
+Figure \ref{fig:ui_home} shows the UI design for Kanban.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{assets/ui_home.png}
+    \caption{UI design for devban Home page}
+    \label{fig:ui_home}
+\end{figure}
