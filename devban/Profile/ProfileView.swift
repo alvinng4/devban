@@ -12,6 +12,9 @@ struct ProfileView: View
     @State private var showAccountDeletionSheetView: Bool = false
     @State private var settingsIsGeneralExpanded: Bool = false
     @State private var settingsIsAccountExpanded: Bool = false
+    @State private var showTeamMembersSheet: Bool = false
+    @State private var isTeamMembersExpanded: Bool = false
+
 
     var body: some View
     {
@@ -92,18 +95,28 @@ struct ProfileView: View
 
                             HStack(spacing: 0)
                             {
-                                Label("Number of members", systemImage: "number.circle")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                if let numberOfMembers = DevbanUserContainer.shared.getTeamMembersCount()
-                                {
-                                    Text("\(numberOfMembers)")
-                                }
-                                else
-                                {
-                                    Text("Error")
+                                Label("Members", systemImage: "person.2.circle")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                HStack(spacing: 8) {
+                                    if let numberOfMembers = DevbanUserContainer.shared.getTeamMembersCount()
+                                    {
+                                        Text("\(numberOfMembers)")
+                                    }
+                                    else
+                                    {
+                                        Text("Error")
+                                    }
+                                    
+                                    Image(systemName: isTeamMembersExpanded ? "chevron.up" : "chevron.down")
+                                        .font(.system(size: 12, weight: .semibold))
                                 }
                             }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                showTeamMembersSheet = true
+                            }
+
 
                             Divider()
 
@@ -443,5 +456,24 @@ struct ProfileView: View
         {
             GenerateInviteCodeSheetView()
         }
+        .sheet(isPresented: $showTeamMembersSheet) 
+        {
+            TeamMembersSheetView(
+                currentUserUID: DevbanUserContainer.shared.getUid(),
+                currentUserRole: DevbanUserContainer.shared.getUserTeamRole()?.rawValue,
+                teamId: DevbanUserContainer.shared.getTeamId()
+            )
+        }
+
+        .onChange(of: showTeamMembersSheet) { oldValue, newValue in
+            if oldValue == true && newValue == false {
+                Task {
+                    if let teamId = DevbanUserContainer.shared.getTeamId() {
+                        try await DevbanUserContainer.shared.setTeam(id: teamId)
+                    }
+                }
+            }
+        }
+
     }
 }

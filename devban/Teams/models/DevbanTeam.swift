@@ -134,4 +134,45 @@ extension DevbanTeam
 
         return id
     }
+
+    /// Transfer Admin privileges
+    /// - Parameters:
+    ///   - teamId: The team ID
+    ///   - fromUid: The current Admin's UID
+    ///   - toUid: The new Admin's UID
+    static func transferAdmin(teamId: String, fromUid: String, toUid: String) async throws {
+        // use transaction to ensure data consistency
+        try await Firestore.firestore().runTransaction({ transaction, errorPointer in
+            let teamRef = DevbanTeam.getTeamDocument(teamId)
+            
+            do {
+                // change the new Admin's role
+                transaction.updateData(
+                    ["members.\(toUid)": "admin"],
+                    forDocument: teamRef
+                )
+                
+                // change the old Admin's role to member
+                transaction.updateData(
+                    ["members.\(fromUid)": "member"],
+                    forDocument: teamRef
+                )
+                
+                return nil
+            } catch {
+                errorPointer?.pointee = error as NSError
+                return nil
+            }
+        })
+    }
+
+    /// Fetches the list of team members with their roles.
+    /// - Parameter id: The team ID
+    /// - Returns: Returns [(uid, role)] array
+    static func getTeamMembersWithDetails(id: String) async throws -> [(uid: String, role: String)] {
+        let team = try await DevbanTeam.getTeam(id)
+        return team.members.map { (uid: $0.key, role: $0.value.rawValue) }
+    }
+
+
 }

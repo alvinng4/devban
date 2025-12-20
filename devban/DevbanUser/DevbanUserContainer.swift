@@ -1,4 +1,5 @@
 import FirebaseAuth
+import FirebaseFirestore
 import SwiftUI
 
 /// A singleton container managing the current user's authentication state and profile data.
@@ -20,6 +21,8 @@ final class DevbanUserContainer
     var loggedIn: Bool = false
     /// Whether the user profile has been created in the database
     var isUserProfileCreated: Bool = false
+    /// Whether the user's team data has been loaded
+    var isTeamLoaded: Bool = false
     /// The current user's profile data
     private var user: DevbanUser?
     /// The current user's team data
@@ -29,6 +32,11 @@ final class DevbanUserContainer
     var authUid: String?
     var authEmail: String?
     var authDisplayName: String?
+
+    /// Firestore listeners for real-time updates
+    private var userListener: ListenerRegistration?
+    private var teamListener: ListenerRegistration?
+    private var userDeletionListener: ListenerRegistration?
 
     /// Whether the user is a member of a team
     var hasTeam: Bool
@@ -66,6 +74,7 @@ final class DevbanUserContainer
     /// Logs out the current user and clears all cached data.
     func logoutUser()
     {
+        removeListeners()
         loggedIn = false
         isUserProfileCreated = false
         user = nil
@@ -81,6 +90,15 @@ final class DevbanUserContainer
     func setTeam(id: String) async throws
     {
         self.team = try await DevbanTeam.getTeam(id)
+
+        DispatchQueue.main.async {
+            self.isTeamLoaded = true
+            
+            // setup listeners for real-time updates
+            self.setupTeamListener()
+            self.setupUserDeletionCheck()
+        }
+        
     }
 
     /// Returns the name of the user's current team.
@@ -244,7 +262,7 @@ final class DevbanUserContainer
         self.team = nil
         self.user?.teamId = nil
     }
-    
+
     /// get the user's chat input preview preference
     func getChatInputPreviewSetting() -> Bool {
         return user?.getChatInputPreviewSetting() ?? true
@@ -258,6 +276,85 @@ final class DevbanUserContainer
             self.user = try await DevbanUser.getUser(user.uid)
         }
     }
+
+    /// check if the current user is an admin of the team
+    func isCurrentUserAdmin() -> Bool {
+        guard let user = user,
+            let team = team else { return false }
+        
+        return team.members[user.uid] == .admin
+    }
+
+    /// get the list of team members with their roles
+    func getTeamMembers() -> [(uid: String, role: String)] {
+        guard let team = team else { return [] }
+        
+        return team.members.map { (uid: $0.key, role: $0.value.rawValue) }
+    }
+
+    private func setupTeamListener() {
+        guard let teamId = team?.id ?? getTeamId() else { return }
+        
+        teamListener?.remove()
+        
+        // listen for real-time updates to the team document
+        teamListener = DevbanTeam.getTeamDocument(teamId)
+            .addSnapshotListener { [weak self] snapshot, error in
+                guard let self = self else { return }
+                guard let document = snapshot else { return }
+                
+                do {
+                    let team = try document.data(as: DevbanTeam.self)
+                    DispatchQueue.main.async {
+                        self.team = team
+                    }
+                } catch {
+                    print("Error: \(error)")
+                }
+            }
+    }
+
+    private func setupUserDeletionCheck() {
+        guard let teamId = team?.id ?? getTeamId() else { return }
+        
+        userDeletionListener?.remove()
+        
+        // listen for real-time updates to the team document to check if the user has been removed
+        userDeletionListener = DevbanTeam.getTeamDocument(teamId)
+            .addSnapshotListener { [weak self] snapshot, error in
+                guard let self = self else { return }
+                guard let user = self.user else { return } 
+                guard let document = snapshot else { return }
+                
+                do {
+                    let team = try document.data(as: DevbanTeam.self)
+                    
+                    // check if the user is still a member of the team
+                    if !team.members.keys.contains(user.uid) {
+                        print("🚨 User has been removed!")
+                        
+                        // automatically log out the user
+                        DispatchQueue.main.async {
+                             self.logoutUser()
+                        }
+                    }
+                } catch {
+                    print("Error: \(error)")
+                }
+            }
+    }
+
+    /// Removes all Firestore listeners to prevent memory leaks.
+    private func removeListeners() {
+        userListener?.remove()
+        teamListener?.remove()
+        userDeletionListener?.remove()
+        
+        userListener = nil
+        teamListener = nil
+        userDeletionListener = nil
+    }
+
 
 }
 
