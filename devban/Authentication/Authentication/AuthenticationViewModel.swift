@@ -48,6 +48,9 @@ extension AuthenticationView
         /// Flag to present the forget password alert.
         var isPresentForgetPasswordAlert: Bool = false
 
+        /// Delay duration before dismissing the view after successful login (in nanoseconds).
+        private let dismissDelayDuration: UInt64 = 1_700_000_000 // 1.7 s
+
         /// Initiates the email/password sign-in process asynchronously.
         /// Validates input, shows waiting message, and calls the helper for authentication.
         /// Updates UI states on success or error.
@@ -74,7 +77,10 @@ extension AuthenticationView
                         password: password,
                     )
                     waitingServerResponse = false
-                    showSpecialMessage("Success! You should be navigated very soon...")
+
+                    // Show success message and trigger login animation
+                    NotificationCenter.default.post(name: .loginSuccessAnimation, object: nil)
+
                 }
                 catch
                 {
@@ -109,7 +115,9 @@ extension AuthenticationView
                     let signInResult: GoogleSignInResult = try await helper.signIn()
                     try await AuthenticationHelper.signInWithGoogle(googleSignInResult: signInResult)
                     waitingServerResponse = false
-                    showSpecialMessage("Success! You should be navigated very soon...")
+
+                    NotificationCenter.default.post(name: .loginSuccessAnimation, object: nil)
+
                 }
                 catch
                 {
