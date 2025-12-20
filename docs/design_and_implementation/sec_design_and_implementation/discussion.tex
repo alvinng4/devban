@@ -1,0 +1,29 @@
+\subsection{Team discussion}
+\label{sec:team_discussion}
+Team discussion is a chat interface to facilitate team collaboration.
+
+\subsubsection{Features}
+\label{subsec:team_discussion_features}
+Below are some features for team discussion:
+\begin{itemize}%[leftmargin=*]
+    \item Chat messages should update in real time
+    \item Chat messages should provide Markdown support
+    \item Chat messages should have code block rendering and syntax highlighting
+\end{itemize}
+
+\subsubsection{ChatMessage model}
+Chat messages should be stored on the database to enable user viewing the chat history.
+It should has the following fields:
+\begin{itemize}%[leftmargin=*]
+    \item \texttt{id} (String): Message UUID
+    \item \texttt{content} (String): Message content
+    \item \texttt{message\_type}: Type of the message, such as "system", "user", "assistantResponse" 
+    \item \texttt{sender\_id}: Sender user id
+    \item \texttt{sent\_date}: Message sent date
+\end{itemize}
+
+\subsubsection{Sequence diagram}
+Sequence diagram is not provided for this section since every action is simple CRUD from database.
+
+\subsubsection{UI design}
+Figure \ref{fig:ui_home} shows the UI design for team discussion.

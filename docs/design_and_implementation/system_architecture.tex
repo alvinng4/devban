@@ -2,7 +2,7 @@
 
 \subsection{Architectural Patterns}
 \subsubsection{Model-View-ViewModel (MVVM)}
-The application will follow the Model-View-ViewModel design pattern, where
+The main components will follow the Model-View-ViewModel design pattern, where
 View represents the graphical user interface (GUI), Model controls the business logic and data, and
 ViewModel acts as a middleman to control the view updates and forward user requests to the model.
 
@@ -10,7 +10,7 @@ This pattern enables separation of business logic and user interface, enhances c
 and makes the application easier to test and maintain.
 
 \subsubsection{Singleton}
-For some simple UX components, for example \verb|ThemeManager| for themes and \verb|AudioManager| 
+For some simple UX components, such as \verb|ThemeManager| for themes and \verb|AudioManager| 
 for sound effects, we simply use global singleton classes in order to ensure update to all views 
 and the APIs are accessible to all components.
 
@@ -19,14 +19,11 @@ information could be accessed globally. In the future, this should be modified t
 injection pattern for better testability.
 
 \subsection{Decomposition Description}
-Figure \ref{fig:decomposition_description} shows a high level decomposition of the components in devban. 
-Users interact with the system via a GUI, which forward the actions to the view models and models.
-The view models will then update the views according to the action and the data from database.
-
-Some external services are used to extend the system capabilities:
+Figure \ref{fig:decomposition_description} shows a high level decomposition of the components in devban,
+where users interact with the system via a GUI. Some external services are used to extend the system capabilities:
 \begin{itemize}%[leftmargin=*]
     \item Firebase Authentication are used to provide secure user authentication;
-    \item Firebase Firestore are used as an online realtime database;
+    \item Firebase Firestore are used as an online real time database;
     \item LLM Provider API are used to obtain access to advanced LLM models;
 \end{itemize}
 The details for each components will be discussed in the following sections.

@@ -1,0 +1,49 @@
+\subsection{AskLLM}
+AskLLM is a LLM chatting interface to speed up user's development progress.
+It is similar to team discussion (see section \ref{sec:team_discussion}) except the messages are sent to query a LLM agent.
+
+\subsubsection{Models}
+Currently, we provide the Apple Intelligence model, which comes with the latest
+Apple OS (iOS 26 / iPadOS 26 / macOS 26). 
+\begin{itemize}%[leftmargin=*]
+    \item Benefits:
+    \begin{itemize}%[leftmargin=*]
+        \item Local inference provides privacy and unlimited query quota
+        \item Offers offline availability
+    \end{itemize}
+    \item Drawbacks:
+    \begin{itemize}
+        \item Low quality responses due to small model size on local devices
+        \item Unavailability on older devices
+    \end{itemize}
+\end{itemize}
+We only provide a single model due to development time and budget constraint. Since this is not a
+technical difficulty, we can simply include more APIs to offer other choices
+to users in the future.
+
+\subsubsection{Features}
+Below are some features for AskLLM:
+\begin{itemize}%[leftmargin=*]
+    \item User should be able to view chat records
+    \item User should be able to clear context for the current LLM session
+    \item User should be able to clear all previous messages and start a new session
+    \item Other features similar to team discussion are mentioned in section \ref{subsec:team_discussion_features}
+\end{itemize}
+
+\subsubsection{Sequence diagram}
+Figure \ref{fig:askLLM_sequence} shows the sequence diagram for AskLLM.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/askLLM/askLLM_sequence.pdf}
+    \caption{Sequence diagram for AskLLM}
+    \label{fig:askLLM_sequence}
+\end{figure}
+
+\subsubsection{UI design}
+Figure \ref{fig:ui_askLLM} shows the UI design for AskLLM.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{assets/askLLM/ui_askLLM.png}
+    \caption{UI design for AskLLM}
+    \label{fig:ui_askLLM}
+\end{figure}
