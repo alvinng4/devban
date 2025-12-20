@@ -53,6 +53,7 @@ struct TeamMemberManagementView: View {
             // management actions (only for Admins)
             if isCurrentUserAdmin && !isCurrentUser {
                 HStack(spacing: 12) {
+                    /*
                     Button(role: .destructive) {
                         onRemove()
                     } label: {
@@ -60,7 +61,7 @@ struct TeamMemberManagementView: View {
                             .font(.caption)
                     }
                     .buttonStyle(.bordered)
-                    
+                    */
                     Button {
                         onTransferAdmin()
                     } label: {
