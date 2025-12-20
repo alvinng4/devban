@@ -11,19 +11,39 @@ Apple OS (iOS 26 / iPadOS 26 / macOS 26).
     \end{itemize}
     \item Drawbacks:
     \begin{itemize}
-        \item Low quality response due to small model size on local devices
-        \item Not available on older devices
+        \item Low quality responses due to small model size on local devices
+        \item Unavailability on older devices
     \end{itemize}
 \end{itemize}
 We only provide a single model due to development time and budget constraint. Since this is not a
-technical difficulty, we can simply include more APIs to offer more choices
+technical difficulty, we can simply include more APIs to offer other choices
 to users in the future.
+
+\subsubsection{AskLLM Transcript}
+Transcripts should be stored on the database to enable user viewing the chat history.
+It should has the following fields:
+\begin{itemize}%[leftmargin=*]
+    \item \texttt{id} (String): Message UUID
+    \item \texttt{content} (String): Message content
+    \item \texttt{message\_type}: Type of the message, such as "assistantGreeting", "assistantResponse", "user" 
+    \item \texttt{sender\_id}: Sender user id
+    \item \texttt{sent\_date}: Message sent date
+\end{itemize}
+
+\subsubsection{Sequence diagram}
+Figure \ref{fig:askLLM_sequence} shows the sequence diagram for AskLLM.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/askLLM/askLLM_sequence.pdf}
+    \caption{Sequence diagram for AskLLM}
+    \label{fig:askLLM_sequence}
+\end{figure}
 
 \subsubsection{UI design}
 Figure \ref{fig:ui_askLLM} shows the UI design for AskLLM.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{assets/ui_askLLM.png}
+    \includegraphics[width=\textwidth]{assets/askLLM/ui_askLLM.png}
     \caption{UI design for AskLLM}
     \label{fig:ui_askLLM}
 \end{figure}

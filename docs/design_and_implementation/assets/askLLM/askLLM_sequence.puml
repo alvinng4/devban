@@ -1,0 +1,25 @@
+@startuml
+
+actor "User" as User
+participant "Client App" as App
+participant "LLM API" as API
+participant "Database" as DB
+
+
+== AskLLM==
+
+App --> DB: Fetch chat transcript
+DB --> App: Return chat transcript
+App --> User: Show chat transcript
+User -> App: Submit Message
+App -> API: Submit Query request
+alt Model NOT available
+    API --> App: Throws error
+    App --> User: Show error message
+else Model available
+    API --> App: Stream LLM response
+    App --> User: Show streaming LLM response
+end
+App --> DB: Update transcript after streaming completed
+
+@enduml
