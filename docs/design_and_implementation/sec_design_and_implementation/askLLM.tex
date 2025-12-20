@@ -1,1 +1,29 @@
 \subsection{AskLLM}
+AskLLM is a LLM chatting interface to speed up user's development progress.
+\subsubsection{Models}
+Currently, we provide the Apple Intelligence model, which comes with the latest
+Apple OS (iOS 26 / iPadOS 26 / macOS 26). 
+\begin{itemize}%[leftmargin=*]
+    \item Benefits:
+    \begin{itemize}%[leftmargin=*]
+        \item Local inference provides privacy and unlimited query quota
+        \item Offers offline availability
+    \end{itemize}
+    \item Drawbacks:
+    \begin{itemize}
+        \item Low quality response due to small model size on local devices
+        \item Not available on older devices
+    \end{itemize}
+\end{itemize}
+We only provide a single model due to development time and budget constraint. Since this is not a
+technical difficulty, we can simply include more APIs to offer more choices
+to users in the future.
+
+\subsubsection{UI design}
+Figure \ref{fig:ui_askLLM} shows the UI design for AskLLM.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{assets/ui_askLLM.png}
+    \caption{UI design for AskLLM}
+    \label{fig:ui_askLLM}
+\end{figure}
