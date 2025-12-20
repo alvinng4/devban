@@ -1,5 +1,7 @@
 \subsection{AskLLM}
 AskLLM is a LLM chatting interface to speed up user's development progress.
+It is similar to team discussion (see section \ref{sec:team_discussion}) except the messages are sent to query a LLM agent.
+
 \subsubsection{Models}
 Currently, we provide the Apple Intelligence model, which comes with the latest
 Apple OS (iOS 26 / iPadOS 26 / macOS 26). 
@@ -18,17 +20,6 @@ Apple OS (iOS 26 / iPadOS 26 / macOS 26).
 We only provide a single model due to development time and budget constraint. Since this is not a
 technical difficulty, we can simply include more APIs to offer other choices
 to users in the future.
-
-\subsubsection{AskLLM Transcript}
-Transcripts should be stored on the database to enable user viewing the chat history.
-It should has the following fields:
-\begin{itemize}%[leftmargin=*]
-    \item \texttt{id} (String): Message UUID
-    \item \texttt{content} (String): Message content
-    \item \texttt{message\_type}: Type of the message, such as "assistantGreeting", "assistantResponse", "user" 
-    \item \texttt{sender\_id}: Sender user id
-    \item \texttt{sent\_date}: Message sent date
-\end{itemize}
 
 \subsubsection{Sequence diagram}
 Figure \ref{fig:askLLM_sequence} shows the sequence diagram for AskLLM.
