@@ -9,7 +9,7 @@ to implement the features in the application.
 \subsection{Scope}
 
 This document describes the design and implementation details of the devban
-application. Due to time constraint, this document with limit the scope to Apple's platform only.
+application. Due to time constraint, this document will limit the scope to Apple's platform only.
 
 This document will focus on four components: 
 database, users and teams management, UI design and the main features. 
@@ -68,3 +68,10 @@ Each of the components will be explained in details.
     \end{tabular}
     \label{tab:references}
 \end{table}
+
+\subsection{Source Code}
+The source code is available at \url{https://github.com/alvinng4/devban}.
+To promote code quality, (1) all committed code must be formatted by swiftFormat,
+(2) all linting warnings and errors by SwiftLint must be resolved. Furthermore,
+the main branch is protected. Developers must create branches and create
+pull request in order to merge into main.
