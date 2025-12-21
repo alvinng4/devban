@@ -140,6 +140,18 @@ struct AuthenticationView: View {
                 .navigationBarBackButtonHidden(true)
                 .toolbar(.hidden)
                 .scrollContentBackground(.hidden)
+                // Lock the entire page while waiting server response
+                .allowsHitTesting(!viewModel.isPageLocked)
+
+                // Overlay that blocks touches and shows loading
+                if viewModel.isPageLocked {
+                    Color.black
+                        .opacity(0.001) // nearly invisible, but still blocks touches
+                        .ignoresSafeArea()
+
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
             }
             .alert(
                 "Forget password?",
