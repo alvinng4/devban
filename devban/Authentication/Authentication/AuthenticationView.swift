@@ -2,19 +2,22 @@ import GoogleSignIn
 import GoogleSignInSwift
 import SwiftUI
 
-/// A view that handles user authentication, including email/password sign-in, Google sign-in, and forget password
-/// functionality.
+/// A view that handles user authentication, including email/password sign-in, Google sign-in, and password recovery.
 ///
-/// The view displays input fields, buttons, and feedback messages, with navigation to signup.
-/// It is controlled by `AuthenticationViewModel`, which manages validation, API calls, and UI states.
+/// `AuthenticationView` serves as the primary entry point for user login. It provides a structured interface
+/// for users to enter credentials, navigate to sign-up, or recover forgotten passwords via an alert dialog.
 ///
 /// ## Overview
-/// `AuthenticationView` presents a full-screen authentication interface that includes:
-/// - Email and password fields with validation
-/// - Sign-in button and Google sign-in integration
-/// - Forget password alert and signup link
-/// - Dynamic feedback for errors or success
-/// - Adaptive padding based on device size class
+/// The view is wrapped in a `NavigationStack` and utilizes a `ZStack` for background styling.
+/// It delegates business logic, such as validation and API communication, to the `@State` managed `AuthenticationViewModel`.
+///
+/// Key features include:
+/// - **Credential Input:** Text fields for email and password with Neobrutalism styling and validation.
+/// - **Authentication Methods:** Supports both standard email/password login and "Sign in with Google".
+/// - **Password Recovery:** An integrated "Forget password?" button that triggers an alert with an input field for email reset.
+/// - **User Feedback:** Displays dynamic success or error messages directly within the form.
+/// - **Responsive Design:** Adapts layout padding based on the device's horizontal size class (`compact` vs. `regular`).
+/// - **Navigation:** Provides a direct link to `SignUpView` for new user registration.
 struct AuthenticationView: View {
 
     @Environment(\.colorScheme) private var colorScheme
