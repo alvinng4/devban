@@ -21,7 +21,7 @@ Group 17:
 * Lai Wing Fai
 * Lam Hoi Chun
 * Ng Ching Yin
-* Zou Zhi Hong
+* Zou Zhihong
 
 ## Contributing
 
