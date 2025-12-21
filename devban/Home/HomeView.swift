@@ -24,7 +24,7 @@ struct HomeView: View
 
                     VStack(spacing: 10)
                     {
-                        if (width > 900)
+                        if (width > 1250)
                         {
                             wideLayout
                         }

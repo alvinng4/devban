@@ -9,7 +9,8 @@ import SwiftUI
 ///
 /// ## Overview
 /// The view is wrapped in a `NavigationStack` and utilizes a `ZStack` for background styling.
-/// It delegates business logic, such as validation and API communication, to the `@State` managed `AuthenticationViewModel`.
+/// It delegates business logic, such as validation and API communication, to the `@State` managed
+/// `AuthenticationViewModel`.
 ///
 /// Key features include:
 /// - Credential input (email/password)
@@ -18,8 +19,8 @@ import SwiftUI
 /// - Feedback messages
 /// - Responsive padding based on size class
 /// - Navigation to `SignUpView`
-struct AuthenticationView: View {
-
+struct AuthenticationView: View
+{
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     /// The view model that manages authentication states, input validation, and sign-in logic.
@@ -27,20 +28,26 @@ struct AuthenticationView: View {
 
     @FocusState private var isTextFocused: Bool
 
-    var body: some View {
+    var body: some View
+    {
         let isCompact: Bool = (horizontalSizeClass == .compact)
 
-        NavigationStack {
-            ZStack {
+        NavigationStack
+        {
+            ZStack
+            {
                 ThemeManager.shared.backgroundColor
                     .ignoresSafeArea()
 
-                VStack(spacing: 10) {
+                VStack(spacing: 10)
+                {
                     Text("Sign In")
                         .customTitle()
 
-                    VStack(spacing: 20) {
-                        VStack(spacing: 4) {
+                    VStack(spacing: 20)
+                    {
+                        VStack(spacing: 4)
+                        {
                             Text("Email address")
                                 .fontDesign(.rounded)
                                 .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -52,17 +59,20 @@ struct AuthenticationView: View {
                                 .padding(10)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 6)
-                                        .stroke(.tertiary, lineWidth: 1)
+                                        .stroke(.tertiary, lineWidth: 1),
                                 )
                         }
 
-                        VStack(spacing: 4) {
-                            HStack(spacing: 0) {
+                        VStack(spacing: 4)
+                        {
+                            HStack(spacing: 0)
+                            {
                                 Text("Password")
                                     .fontDesign(.rounded)
                                     .frame(maxWidth: .infinity, alignment: .topLeading)
 
-                                Button {
+                                Button
+                                {
                                     viewModel.forgetPassword()
                                 } label: {
                                     Text("Forget password?")
@@ -76,11 +86,12 @@ struct AuthenticationView: View {
                                 .padding(10)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 6)
-                                        .stroke(.tertiary, lineWidth: 1)
+                                        .stroke(.tertiary, lineWidth: 1),
                                 )
                         }
 
-                        Button {
+                        Button
+                        {
                             viewModel.signIn()
                         } label: {
                             Text("Sign In")
@@ -90,14 +101,15 @@ struct AuthenticationView: View {
                                 .frame(height: 55)
                                 .background(
                                     viewModel.disableSubmit()
-                                    ? Color.gray
-                                    : ThemeManager.shared.buttonColor
+                                        ? Color.gray
+                                        : ThemeManager.shared.buttonColor,
                                 )
                                 .cornerRadius(10)
                         }
                         .disabled(viewModel.disableSubmit())
 
-                        if viewModel.isShowMessage {
+                        if viewModel.isShowMessage
+                        {
                             Text(viewModel.message)
                                 .foregroundStyle(viewModel.messageColor)
                         }
@@ -108,15 +120,18 @@ struct AuthenticationView: View {
                             viewModel: GoogleSignInButtonViewModel(
                                 scheme: .dark,
                                 style: .wide,
-                                state: .normal
-                            )
-                        ) {
+                                state: .normal,
+                            ),
+                        )
+                        {
                             viewModel.signInGoogle()
                         }
 
-                        HStack {
+                        HStack
+                        {
                             Text("New User?")
-                            NavigationLink(destination: SignUpView()) {
+                            NavigationLink(destination: SignUpView())
+                            {
                                 Text("Create an account")
                             }
                         }
@@ -128,14 +143,14 @@ struct AuthenticationView: View {
                 .padding(
                     .horizontal,
                     isCompact
-                    ? NeobrutalismConstants.mainContentPaddingHorizontalCompact
-                    : NeobrutalismConstants.mainContentPaddingHorizontalRegular
+                        ? NeobrutalismConstants.mainContentPaddingHorizontalCompact
+                        : NeobrutalismConstants.mainContentPaddingHorizontalRegular,
                 )
                 .padding(
                     .vertical,
                     isCompact
-                    ? NeobrutalismConstants.mainContentPaddingVerticalCompact
-                    : NeobrutalismConstants.mainContentPaddingVerticalRegular
+                        ? NeobrutalismConstants.mainContentPaddingVerticalCompact
+                        : NeobrutalismConstants.mainContentPaddingVerticalRegular,
                 )
                 .navigationBarBackButtonHidden(true)
                 .toolbar(.hidden)
@@ -144,27 +159,28 @@ struct AuthenticationView: View {
                 .allowsHitTesting(!viewModel.isPageLocked)
 
                 // Overlay that blocks touches and shows loading
-                if viewModel.isPageLocked {
+                if viewModel.isPageLocked
+                {
                     Color.black
                         .opacity(0.001) // nearly invisible, but still blocks touches
                         .ignoresSafeArea()
-
-                    ProgressView()
-                        .progressViewStyle(.circular)
                 }
             }
             .alert(
                 "Forget password?",
-                isPresented: $viewModel.isPresentForgetPasswordAlert
-            ) {
+                isPresented: $viewModel.isPresentForgetPasswordAlert,
+            )
+            {
                 TextField("Email address", text: $viewModel.email)
                     .autocorrectionDisabled(true)
 
-                Button("Cancel", role: .cancel) {
+                Button("Cancel", role: .cancel)
+                {
                     viewModel.isPresentForgetPasswordAlert = false
                 }
 
-                Button("Confirm", role: .confirm) {
+                Button("Confirm", role: .confirm)
+                {
                     viewModel.confirmForgetPassword()
                     viewModel.isPresentForgetPasswordAlert = false
                 }
@@ -175,6 +191,7 @@ struct AuthenticationView: View {
     }
 }
 
-#Preview {
+#Preview
+{
     AuthenticationView()
 }
