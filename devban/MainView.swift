@@ -13,7 +13,7 @@ import SwiftUI
 ///   - If logged in but no team: Shows `TeamAuthenticationView`.
 ///   - If fully authenticated: Shows the main `TabView` (Home, Calendar, etc.).
 /// - **Theme Management:** Observes system `colorScheme` changes and user preferences to update the global theme via `ThemeManager`.
-/// - **Global Overlays:** Handles the `LoginSuccessAnimationView` triggered via NotificationCenter.
+/// - **Launch & Login Animation:** Handles the launch animation for both cold starts (for logged-in users) and successful logins.
 struct MainView: View {
     
     @Environment(\.colorScheme) private var colorScheme
@@ -24,8 +24,8 @@ struct MainView: View {
     /// Indicates whether the app has finished its initial data loading and auth checks.
     @State private var isInitialized: Bool = false
 
-    /// Controls the visibility of the login success animation overlay.
-    @State private var showLoginAnimation: Bool = false
+    /// Controls the visibility of the animation overlay.
+    @State private var showAnimation: Bool = false
 
     var body: some View {
         ZStack {
@@ -37,6 +37,8 @@ struct MainView: View {
                     Color(.darkBackground)
                         .ignoresSafeArea()
 
+                    // ProgressView can be removed as animation will cover it,
+                    // but kept for fallback.
                     ProgressView()
                         .tint(.white)
                 }
@@ -45,6 +47,11 @@ struct MainView: View {
                     await AuthenticationHelper.updateUserAuthStatus()
                     updateTheme()
                     isInitialized = true
+                    
+                    // if already logged in, show launch animation
+                    if DevbanUserContainer.shared.loggedIn {
+                        showAnimation = true
+                    }
                 }
             } else {
                 // 2. Main Content Routing
@@ -54,9 +61,13 @@ struct MainView: View {
                     .onChange(of: colorScheme) {
                         updateTheme()
                     }
-                    // React to login status changes (e.g. logout)
-                    .onChange(of: DevbanUserContainer.shared.loggedIn) {
+                    
+                    // React to login state changes
+                    .onChange(of: DevbanUserContainer.shared.loggedIn) { _, isLoggedIn in
                         updateTheme()
+                        if isLoggedIn {
+                            showAnimation = true
+                        }
                     }
                     // Enforce specific color scheme if user overrode system settings
                     .preferredColorScheme(
@@ -68,32 +79,24 @@ struct MainView: View {
             }
 
             // 3. Global Animation Overlay
-            if showLoginAnimation {
+            if showAnimation {
                 LoginSuccessAnimationView {
                     withAnimation {
-                        showLoginAnimation = false
+                        showAnimation = false
                     }
                 }
                 .zIndex(999) // Ensure animation is always on top
                 .transition(.opacity)
             }
         }
-        // Listen for login success event to trigger animation
-        .onReceive(
-            NotificationCenter.default.publisher(
-                for: .loginSuccessAnimation
-            )
-        ) { _ in
-            showLoginAnimation = true
-        }
     }
 
     // MARK: - Private Views
     
+    // Note: The duplicated `loadingView` and `mainContentView` properties are kept
+    // to minimize structural changes as per the request, but are not directly used by the body.
+    
     /// A standalone loading view used during the initialization phase.
-    ///
-    /// Note: This property duplicates the logic inside `body`.
-    /// Ideally, the body should utilize this property to reduce code duplication.
     private var loadingView: some View {
         ZStack {
             Color(.darkBackground).ignoresSafeArea()
@@ -107,8 +110,6 @@ struct MainView: View {
     }
 
     /// The main content wrapper that applies global theme modifiers.
-    ///
-    /// Note: This property duplicates the logic inside `body`.
     private var mainContentView: some View {
         getMainContent()
             .tint(ThemeManager.shared.buttonColor)
@@ -123,11 +124,6 @@ struct MainView: View {
     }
 
     /// Determines the appropriate view hierarchy based on the user's authentication and team status.
-    ///
-    /// - Returns: A view corresponding to the current state:
-    ///   - `AuthenticationView`: If the user is not logged in.
-    ///   - `TeamAuthenticationView`: If logged in but hasn't joined/created a team.
-    ///   - `TabView`: If fully authenticated and part of a team.
     private func getMainContent() -> some View {
         Group {
             if (!DevbanUserContainer.shared.loggedIn) {
@@ -138,27 +134,19 @@ struct MainView: View {
                 // Main App Interface
                 TabView(selection: $selectedTab) {
                     HomeView()
-                        .tabItem {
-                            Label("Home", systemImage: "house")
-                        }
+                        .tabItem { Label("Home", systemImage: "house") }
                         .tag("home")
 
                     CalendarView()
-                        .tabItem {
-                            Label("Calendar", systemImage: "calendar")
-                        }
+                        .tabItem { Label("Calendar", systemImage: "calendar") }
                         .tag("calendar")
 
                     AskLLMView()
-                        .tabItem {
-                            Label("AskLLM", systemImage: "apple.intelligence")
-                        }
+                        .tabItem { Label("AskLLM", systemImage: "apple.intelligence") }
                         .tag("askLLM")
 
                     ProfileView()
-                        .tabItem {
-                            Label("Profile", systemImage: "person.crop.circle")
-                        }
+                        .tabItem { Label("Profile", systemImage: "person.crop.circle") }
                         .tag("profile")
                 }
             }
@@ -166,9 +154,6 @@ struct MainView: View {
     }
 
     /// Refreshes the app's visual theme.
-    ///
-    /// This method synchronizes the `ThemeManager` with the current user preferences stored in
-    /// `DevbanUserContainer` and the current system `colorScheme`.
     private func updateTheme() {
         ThemeManager.shared.updateTheme(
             theme: DevbanUserContainer.shared.getTheme(),
