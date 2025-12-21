@@ -6,219 +6,246 @@ import SwiftUI
 ///
 /// This struct stores user information including authentication details, team membership,
 /// preferences (theme, sound, haptics), and gamification data (experience points).
-/// All data is synchronized with Firestore using automatic snake_case conversion.
-struct DevbanUser: Codable {
-    
+struct DevbanUser: Codable
+{
     /// The unique identifier from Firebase Authentication
     var uid: String
-    
     /// The user's display name
     var displayName: String
-    
     /// Timestamp of the user's last access to the application
     var lastAccess: Date?
-    
     /// Timestamp when the user account was created
     var createdDate: Date?
-    
     /// The ID of the team the user belongs to
     var teamId: String?
-    
     /// User's preferred color scheme (auto, light, or dark)
     private var preferredColorScheme: ThemeManager.PreferredColorScheme?
-    
     /// User's selected theme (blue, green, or orange)
     private var theme: ThemeManager.DefaultTheme?
-    
     /// Whether sound effects are enabled
     private var soundEffectOn: Bool?
-    
     /// Whether haptic feedback is enabled
     private var hapticEffectOn: Bool?
-    
     /// User's experience points for gamification
     private var exp: Int?
-    
     /// Whether chat input preview is enabled
     private var chatInputPreviewEnabled: Bool?
 }
 
-extension DevbanUser {
-    
+extension DevbanUser
+{
     /// Updates the user document in Firestore with the provided data.
     ///
     /// - Parameters:
     ///   - uid: The user's unique identifier
     ///   - data: Dictionary of fields to update
-    static func updateDatabaseData(uid: String, data: [String: Any]) async throws {
+    static func updateDatabaseData(uid: String, data: [String: Any]) async throws
+    {
         try await DevbanUser.getUserDocument(uid).updateData(data)
     }
 
     /// Removes the team association from a user's profile.
     ///
     /// - Parameter uid: The user's unique identifier
-    static func removeTeamFromUser(uid: String) async throws {
+    static func removeTeamFromUser(uid: String) async throws
+    {
         try await DevbanUser.getUserDocument(uid).updateData(
-            ["team_id": FieldValue.delete()]
+            ["team_id": FieldValue.delete()],
         )
     }
 
     /// Deletes a user's document from Firestore.
     ///
     /// - Parameter uid: The user's unique identifier
-    static func deleteUser(uid: String) async throws {
+    static func deleteUser(uid: String) async throws
+    {
         try await DevbanUser.getUserDocument(uid).delete()
     }
 
     /// Returns the user's selected theme, defaulting to blue if not set.
-    func getTheme() -> ThemeManager.DefaultTheme {
+    func getTheme() -> ThemeManager.DefaultTheme
+    {
         return theme ?? .blue
     }
 
     /// Updates the user's theme preference in Firestore.
     ///
     /// - Parameter theme: The theme to apply
-    func setTheme(_ theme: ThemeManager.DefaultTheme) {
+    func setTheme(_ theme: ThemeManager.DefaultTheme)
+    {
         let data: [String: Any] = [
-            "theme": theme.rawValue
+            "theme": theme.rawValue,
         ]
         let uid: String = self.uid
 
-        Task {
-            do {
+        Task
+        {
+            do
+            {
                 try await DevbanUser.updateDatabaseData(uid: uid, data: data)
-            } catch {
-                // Silently fail to avoid UI disruption
+            }
+            catch
+            {
+                print("DevbanUser.setTheme: \(error.localizedDescription)")
             }
         }
     }
 
     /// Returns the user's preferred color scheme, defaulting to auto if not set.
-    func getPreferredColorScheme() -> ThemeManager.PreferredColorScheme {
+    func getPreferredColorScheme() -> ThemeManager.PreferredColorScheme
+    {
         return preferredColorScheme ?? .auto
     }
 
     /// Updates the user's preferred color scheme in Firestore.
     ///
     /// - Parameter preferredColorScheme: The color scheme preference to apply
-    func setPreferredColorScheme(_ preferredColorScheme: ThemeManager.PreferredColorScheme) {
+    func setPreferredColorScheme(_ preferredColorScheme: ThemeManager.PreferredColorScheme)
+    {
         let data: [String: Any] = [
-            "preferred_color_scheme": preferredColorScheme.rawValue
+            "preferred_color_scheme": preferredColorScheme.rawValue,
         ]
         let uid: String = self.uid
 
-        Task {
-            do {
+        Task
+        {
+            do
+            {
                 try await DevbanUser.updateDatabaseData(uid: uid, data: data)
-            } catch {
-                // Silently fail to avoid UI disruption
+            }
+            catch
+            {
+                print("DevbanUser.setPreferredColorScheme: \(error.localizedDescription)")
             }
         }
     }
 
     /// Returns whether sound effects are enabled, defaulting to true.
-    func getSoundEffectSetting() -> Bool {
+    func getSoundEffectSetting() -> Bool
+    {
         return soundEffectOn ?? true
     }
 
     /// Updates the user's sound effect preference in Firestore.
     ///
     /// - Parameter option: Whether sound effects should be enabled
-    func setSoundEffectSetting(_ option: Bool) {
+    func setSoundEffectSetting(_ option: Bool)
+    {
         let data: [String: Any] = [
-            "sound_effect_on": option
+            "sound_effect_on": option,
         ]
         let uid: String = self.uid
 
-        Task {
-            do {
+        Task
+        {
+            do
+            {
                 try await DevbanUser.updateDatabaseData(uid: uid, data: data)
-            } catch {
-                // Silently fail to avoid UI disruption
+            }
+            catch
+            {
+                print("DevbanUser.setSoundEffectSetting: \(error.localizedDescription)")
             }
         }
     }
 
     /// Returns whether haptic feedback is enabled, defaulting to true.
-    func getHapticEffectSetting() -> Bool {
+    func getHapticEffectSetting() -> Bool
+    {
         return hapticEffectOn ?? true
     }
 
     /// Updates the user's haptic feedback preference in Firestore.
     ///
     /// - Parameter option: Whether haptic feedback should be enabled
-    func setHapticEffectSetting(_ option: Bool) {
+    func setHapticEffectSetting(_ option: Bool)
+    {
         let data: [String: Any] = [
-            "haptic_effect_on": option
+            "haptic_effect_on": option,
         ]
         let uid: String = self.uid
 
-        Task {
-            do {
+        Task
+        {
+            do
+            {
                 try await DevbanUser.updateDatabaseData(uid: uid, data: data)
-            } catch {
-                // Silently fail to avoid UI disruption
+            }
+            catch
+            {
+                print("DevbanUser.setHapticEffectSetting: \(error.localizedDescription)")
             }
         }
     }
 
     /// Returns whether chat input preview is enabled, defaulting to true.
-    func getChatInputPreviewSetting() -> Bool {
+    func getChatInputPreviewSetting() -> Bool
+    {
         return chatInputPreviewEnabled ?? true
     }
 
     /// Updates the user's chat input preview preference in Firestore.
-    ///
-    /// - Parameter option: Whether chat input preview should be enabled
-    func setChatInputPreviewSetting(_ option: Bool) {
+    func setChatInputPreviewSetting(_ option: Bool)
+    {
         let data: [String: Any] = [
-            "chat_input_preview_enabled": option
+            "chat_input_preview_enabled": option,
         ]
-        let uid: String = self.uid
 
-        Task {
-            do {
+        let uid: String = self.uid
+        Task
+        {
+            do
+            {
                 try await DevbanUser.updateDatabaseData(uid: uid, data: data)
-            } catch {
-                // Silently fail to avoid UI disruption
+            }
+            catch
+            {
+                print("DevbanUser.setChatInputPreviewSetting: \(error.localizedDescription)")
             }
         }
     }
 
     /// Returns the user's experience points, defaulting to 0.
-    func getExp() -> Int {
+    func getExp() -> Int
+    {
         return exp ?? 0
     }
 
     /// Adds experience points to the user's total and updates Firestore.
     ///
     /// - Parameter expChange: The amount of experience to add (can be negative)
-    func addExp(_ expChange: Int) {
+    func addExp(_ expChange: Int)
+    {
         let data: [String: Any] = [
-            "exp": getExp() + expChange
+            "exp": getExp() + expChange,
         ]
         let uid: String = self.uid
 
-        Task {
-            do {
+        Task
+        {
+            do
+            {
                 try await DevbanUser.updateDatabaseData(uid: uid, data: data)
-            } catch {
-                // Silently fail to avoid UI disruption
+            }
+            catch
+            {
+                print("DevbanUser.setExp: \(error.localizedDescription)")
             }
         }
     }
 }
 
-extension DevbanUser {
-    
+extension DevbanUser
+{
     /// Retrieves a user's complete profile from Firestore.
     ///
     /// - Parameter uid: The user's unique identifier
     /// - Returns: The user's DevbanUser object
-    static func getUser(_ uid: String) async throws -> DevbanUser {
+    static func getUser(_ uid: String) async throws -> DevbanUser
+    {
         return try await DevbanUser.getUserDocument(uid).getDocument(
             as: DevbanUser.self,
-            decoder: decoder
+            decoder: decoder,
         )
     }
 
@@ -226,33 +253,36 @@ extension DevbanUser {
     ///
     /// - Parameter uid: The user's unique identifier
     /// - Returns: The user's display name
-    static func getDisplayName(_ uid: String) async throws -> String {
+    static func getDisplayName(_ uid: String) async throws -> String
+    {
         try await getUser(uid).displayName
     }
 
     /// Returns the Firestore collection reference for users.
-    static func getUserCollection() -> CollectionReference {
+    static func getUserCollection() -> CollectionReference
+    {
         return Firestore.firestore().collection("users")
     }
 
     /// Returns the Firestore document reference for a specific user.
     ///
     /// - Parameter uid: The user's unique identifier
-    static func getUserDocument(_ uid: String) -> DocumentReference {
+    static func getUserDocument(_ uid: String) -> DocumentReference
+    {
         return DevbanUser.getUserCollection().document(uid)
     }
 
     /// Firestore encoder configured to convert camelCase to snake_case.
-    /// This ensures all data written to Firestore uses consistent snake_case naming.
-    private static var encoder: Firestore.Encoder {
+    private static var encoder: Firestore.Encoder
+    {
         let encoder = Firestore.Encoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         return encoder
     }
 
     /// Firestore decoder configured to convert snake_case to camelCase.
-    /// This automatically maps database fields like "display_name" to Swift properties like "displayName".
-    private static var decoder: Firestore.Decoder {
+    private static var decoder: Firestore.Decoder
+    {
         let decoder = Firestore.Decoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
@@ -263,45 +293,46 @@ extension DevbanUser {
     /// - Parameters:
     ///   - uid: The user's unique identifier
     ///   - displayName: The user's display name
-    static func createNewUserProfile(uid: String, displayName: String) async throws {
+    static func createNewUserProfile(uid: String, displayName: String) async throws
+    {
         let userDoc = DevbanUser.getUserDocument(uid)
         let document = try await userDoc.getDocument()
 
-        if !document.exists {
+        if (!document.exists)
+        {
             try userDoc.setData(
                 from: ["uid": uid, "display_name": displayName],
-                merge: true
+                merge: true,
             )
             try await userDoc.updateData(
-                ["created_date": Timestamp()]
+                ["created_date": Timestamp()],
             )
         }
     }
 
     /// Updates the user's authentication status in Firestore, creating a profile if needed.
     ///
-    /// This method ensures the user exists in Firestore with the latest display name
-    /// and updates the last access timestamp. Uses consistent snake_case field names.
-    ///
     /// - Parameters:
     ///   - uid: The user's unique identifier
     ///   - displayName: The user's display name
-    static func updateUserStatusToDatabase(uid: String, displayName: String) async throws {
+    static func updateUserStatusToDatabase(uid: String, displayName: String) async throws
+    {
         let userDoc = DevbanUser.getUserDocument(uid)
         let document = try await userDoc.getDocument()
 
-        if !document.exists {
+        if (!document.exists)
+        {
             try await DevbanUser.createNewUserProfile(
                 uid: uid,
-                displayName: displayName
+                displayName: displayName,
             )
         }
 
         try await DevbanUser.getUserDocument(uid).updateData(
             [
                 "display_name": displayName,
-                "last_access": Timestamp()
-            ]
+                "last_access": Timestamp(),
+            ],
         )
     }
 }

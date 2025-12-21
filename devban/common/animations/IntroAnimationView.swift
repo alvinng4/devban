@@ -1,37 +1,43 @@
 import SwiftUI
 
 // MARK: - Configuration
-struct SlashConfig {
+
+enum SlashConfig
+{
     static let coreColor: Color = .white
     static let edgeColor: Color = Color(red: 0.85, green: 0.95, blue: 1.0)
     static let glowColor: Color = Color(red: 0.6, green: 0.9, blue: 1.0).opacity(0.8)
 }
 
-// MARK: - Login Success Animation View
-struct LoginSuccessAnimationView: View {
-    
+// MARK: - Intro Animation View
+
+struct IntroAnimationView: View
+{
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-    
+
     @State private var slash1Progress: CGFloat = 0
     @State private var slash2Progress: CGFloat = 0
     @State private var slashOpacity: Double = 1
-    
+
     @State private var whiteFlashOpacity: CGFloat = 0
     @State private var textOpacity: CGFloat = 0
     @State private var textScale: CGFloat = 1.5
     @State private var textBlur: CGFloat = 20
-    
+
     @State private var shakeOffset: CGFloat = 0
     @State private var particles: [Particle] = []
-    
+
     let onComplete: () -> Void
-    
-    var body: some View {
-        ZStack {
+
+    var body: some View
+    {
+        ZStack
+        {
             Color.black.ignoresSafeArea()
-            
-            ForEach(particles) { particle in
+
+            ForEach(particles)
+            { particle in
                 Circle()
                     .fill(Color.white)
                     .frame(width: particle.size, height: particle.size)
@@ -39,9 +45,10 @@ struct LoginSuccessAnimationView: View {
                     .opacity(particle.opacity)
                     .blur(radius: 1)
             }
-            
+
             // First Slash
-            Group {
+            Group
+            {
                 CurvedSlashShape(curvature: 100).fill(slashGradient).blur(radius: 20).opacity(0.7)
                 CurvedSlashShape(curvature: 100).fill(coreGradient).blur(radius: 2).blendMode(.screen)
             }
@@ -52,12 +59,13 @@ struct LoginSuccessAnimationView: View {
                 Rectangle()
                     .fill(Color.white)
                     .offset(x: (slash1Progress - 0.5) * 4000)
-                    .rotationEffect(.degrees(-35))
+                    .rotationEffect(.degrees(-35)),
             )
             .opacity(slashOpacity)
-            
+
             // Second Slash
-            Group {
+            Group
+            {
                 CurvedSlashShape(curvature: -100).fill(slashGradient).blur(radius: 20).opacity(0.7)
                 CurvedSlashShape(curvature: -100).fill(coreGradient).blur(radius: 2).blendMode(.screen)
             }
@@ -68,15 +76,15 @@ struct LoginSuccessAnimationView: View {
                 Rectangle()
                     .fill(Color.white)
                     .offset(x: (0.5 - slash2Progress) * 4000)
-                    .rotationEffect(.degrees(35))
+                    .rotationEffect(.degrees(35)),
             )
             .opacity(slashOpacity)
-            
+
             Color.white
                 .opacity(whiteFlashOpacity)
                 .ignoresSafeArea()
                 .blendMode(.plusLighter)
-            
+
             Text("Devban")
                 .font(.system(size: textSize, weight: .black, design: .rounded))
                 .foregroundStyle(.white)
@@ -87,119 +95,140 @@ struct LoginSuccessAnimationView: View {
                 .scaleEffect(textScale)
                 .offset(x: shakeOffset)
         }
-        .task {
+        .task
+        {
             await playAnimation()
         }
     }
 }
 
 // MARK: - Animation Logic
-private extension LoginSuccessAnimationView {
-    
-    var textSize: CGFloat {
+
+private extension IntroAnimationView
+{
+    var textSize: CGFloat
+    {
         (horizontalSizeClass == .regular && verticalSizeClass == .regular) ? 120 : 80
     }
-    
-    var slashGradient: LinearGradient {
+
+    var slashGradient: LinearGradient
+    {
         LinearGradient(
-            gradient: Gradient(colors: [.clear, SlashConfig.glowColor, SlashConfig.edgeColor, SlashConfig.glowColor, .clear]),
+            gradient: Gradient(colors: [
+                .clear,
+                SlashConfig.glowColor,
+                SlashConfig.edgeColor,
+                SlashConfig.glowColor,
+                .clear,
+            ]),
             startPoint: .leading,
-            endPoint: .trailing
+            endPoint: .trailing,
         )
     }
-    
-    var coreGradient: LinearGradient {
+
+    var coreGradient: LinearGradient
+    {
         LinearGradient(
             gradient: Gradient(stops: [
                 .init(color: .clear, location: 0),
                 .init(color: SlashConfig.coreColor, location: 0.2),
                 .init(color: SlashConfig.coreColor, location: 0.8),
-                .init(color: .clear, location: 1)
+                .init(color: .clear, location: 1),
             ]),
             startPoint: .leading,
-            endPoint: .trailing
+            endPoint: .trailing,
         )
     }
 
-    // MARK: - Animation Logic (只顯示 playAnimation 部分)
-    func playAnimation() async {
+    func playAnimation() async
+    {
         generateParticles()
-        
+
         // First Slash
-        await SoundManager.shared.playSlashSound1()
-        
-        withAnimation(.easeOut(duration: 0.15)) {
+        SoundManager.shared.playSlashSound1()
+
+        withAnimation(.easeOut(duration: 0.15))
+        {
             slash1Progress = 1
         }
-        
+
         try? await Task.sleep(nanoseconds: 80_000_000)
-        
+
         // Second Slash
-        await SoundManager.shared.playSlashSound2()
-        
-        withAnimation(.easeOut(duration: 0.15)) {
+        SoundManager.shared.playSlashSound2()
+
+        withAnimation(.easeOut(duration: 0.15))
+        {
             slash2Progress = 1
         }
-        
+
         try? await Task.sleep(nanoseconds: 150_000_000)
-        
+
         // Finalize Animation
-        withAnimation(.easeOut(duration: 0.1)) {
+        withAnimation(.easeOut(duration: 0.1))
+        {
             slashOpacity = 0
             whiteFlashOpacity = 1.0
         }
-        
+
         withAnimation(.spring(response: 0.2, dampingFraction: 0.3)) { shakeOffset = 5 }
-        Task {
+        Task
+        {
             try? await Task.sleep(nanoseconds: 50_000_000)
             withAnimation { shakeOffset = 0 }
         }
-        
-        withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
+
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.6))
+        {
             textOpacity = 1
             textScale = 1
             textBlur = 0
         }
-        
+
         animateParticles()
-        
+
         // white flash fade out
         try? await Task.sleep(nanoseconds: 100_000_000)
-        withAnimation(.easeOut(duration: 0.5)) {
+        withAnimation(.easeOut(duration: 0.5))
+        {
             whiteFlashOpacity = 0
         }
-        
+
         // play success sound
-        await SoundManager.shared.playSuccessSound()
-        
+        SoundManager.shared.playSuccessSound()
+
         // stay for a while before completing
         try? await Task.sleep(nanoseconds: 2_000_000_000)
-        
+
         onComplete()
     }
 
-    
-    func generateParticles() {
+    func generateParticles()
+    {
         let screenCenter = CGPoint(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midY)
-        for _ in 0..<30 {
+        for _ in 0 ..< 30
+        {
             let destinationPoint = CGPoint(
-                x: screenCenter.x + CGFloat.random(in: -300...300),
-                y: screenCenter.y + CGFloat.random(in: -300...300)
+                x: screenCenter.x + CGFloat.random(in: -300 ... 300),
+                y: screenCenter.y + CGFloat.random(in: -300 ... 300),
             )
             let newParticle = Particle(
                 id: UUID(),
                 position: screenCenter,
                 destination: destinationPoint,
-                size: CGFloat.random(in: 2...8),
-                opacity: 1
+                size: CGFloat.random(in: 2 ... 8),
+                opacity: 1,
             )
             particles.append(newParticle)
         }
     }
-    
-    func animateParticles() {
-        for index in particles.indices {
-            withAnimation(.easeOut(duration: 0.6)) {
+
+    func animateParticles()
+    {
+        for index in particles.indices
+        {
+            withAnimation(.easeOut(duration: 0.6))
+            {
                 particles[index].position = particles[index].destination
                 particles[index].opacity = 0
             }
@@ -208,9 +237,12 @@ private extension LoginSuccessAnimationView {
 }
 
 // MARK: - Shapes
-struct CurvedSlashShape: Shape {
+
+struct CurvedSlashShape: Shape
+{
     var curvature: CGFloat
-    func path(in rect: CGRect) -> Path {
+    func path(in rect: CGRect) -> Path
+    {
         var path = Path()
         let width = rect.width, height = rect.height, midY = height / 2
         path.move(to: CGPoint(x: 0, y: midY))
@@ -221,14 +253,11 @@ struct CurvedSlashShape: Shape {
     }
 }
 
-struct Particle: Identifiable {
+struct Particle: Identifiable
+{
     let id: UUID
     var position: CGPoint
     var destination: CGPoint
     var size: CGFloat
     var opacity: Double
-}
-
-#Preview {
-    LoginSuccessAnimationView(onComplete: {})
 }
