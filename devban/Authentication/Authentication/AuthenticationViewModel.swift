@@ -44,6 +44,12 @@ extension AuthenticationView {
 
         private var waitingServerResponse: Bool = false
 
+        /// Exposed state for locking the whole page while waiting server response.
+        /// (Use this in the View with .allowsHitTesting(!viewModel.isPageLocked) or .disabled(viewModel.isPageLocked))
+        var isPageLocked: Bool {
+            waitingServerResponse
+        }
+
         /// Flag to present the forget password alert.
         var isPresentForgetPasswordAlert: Bool = false
 
@@ -53,6 +59,7 @@ extension AuthenticationView {
         /// Validates input, shows waiting message, and calls the helper for authentication.
         /// Updates UI states on success or error.
         func signIn() {
+            guard !waitingServerResponse else { return }   // Prevent double-tap / re-entry
             resetMessage()
 
             guard isInputValid() else {
@@ -64,6 +71,12 @@ extension AuthenticationView {
             showNormalMessage("Waiting server response...")
 
             Task {
+                defer {
+                    Task { @MainActor in
+                        self.waitingServerResponse = false
+                    }
+                }
+
                 do {
                     try await AuthenticationHelper.signInUser(
                         email: email,
@@ -71,12 +84,10 @@ extension AuthenticationView {
                     )
 
                     await MainActor.run {
-                        self.waitingServerResponse = false
                         self.showSpecialMessage("Success! Redirecting...")
                     }
                 } catch {
                     await MainActor.run {
-                        self.waitingServerResponse = false
                         self.showErrorMessage(error.localizedDescription)
                     }
                 }
@@ -87,6 +98,7 @@ extension AuthenticationView {
         /// Retrieves client ID, uses Google helper for sign-in, and authenticates with Firebase.
         /// Handles errors and updates UI feedback.
         func signInGoogle() {
+            guard !waitingServerResponse else { return }   // Prevent double-tap / re-entry
             resetMessage()
 
             guard let clientID: String = FirebaseApp.app()?.options.clientID else {
@@ -100,17 +112,21 @@ extension AuthenticationView {
             showNormalMessage("Waiting server response...")
 
             Task {
+                defer {
+                    Task { @MainActor in
+                        self.waitingServerResponse = false
+                    }
+                }
+
                 do {
                     let signInResult: GoogleSignInResult = try await helper.signIn()
                     try await AuthenticationHelper.signInWithGoogle(googleSignInResult: signInResult)
 
                     await MainActor.run {
-                        self.waitingServerResponse = false
                         self.showSpecialMessage("Success! Redirecting...")
                     }
                 } catch {
                     await MainActor.run {
-                        self.waitingServerResponse = false
                         self.showErrorMessage(error.localizedDescription)
                     }
                 }
@@ -133,11 +149,14 @@ extension AuthenticationView {
 
         /// Triggers the forget password alert presentation.
         func forgetPassword() {
+            guard !waitingServerResponse else { return }   // Lock whole page behavior
             isPresentForgetPasswordAlert = true
         }
 
         /// Confirms and sends a password reset email if the email is valid.
         func confirmForgetPassword() {
+            guard !waitingServerResponse else { return }   // Lock whole page behavior
+
             guard !email.isEmptyOrWhitespace() else {
                 showErrorMessage("Failed to send reset password email. Reason: invalid email address.")
                 return
